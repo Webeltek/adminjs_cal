@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_DATABASE_URL")
+}
+
+model nf_event {
+  id         Int      @id @default(autoincrement())
+  uid        String?  @db.VarChar
+  user_id    Int?
+  title      String?  @db.VarChar
+  bookname   String?  @db.VarChar
+  roomname   String?  @db.VarChar
+  ou         String?  @db.VarChar
+  startmills BigInt?
+  endmills   BigInt?
+  color      String?  @db.VarChar
+  paymntref  String?  @db.VarChar
+  nf_user    nf_user? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "nf_event_userId_id_fkey")
+}
+
+model nf_room {
+  row   Int     @id @default(autoincrement())
+  title String? @unique @db.VarChar
+}
+
+model nf_user {
+  id                 Int          @id @default(autoincrement())
+  user_email         String?      @unique @db.VarChar
+  user_pass_hash     String?      @db.VarChar
+  vipps_sub          String?      @db.VarChar
+  google_sub         String?      @db.VarChar
+  user_is_logged_in  Boolean?
+  user_confirmed     Boolean?
+  user_conf_by_admin Boolean?
+  access_token       String?      @db.VarChar
+  last_seen          String?      @db.VarChar
+  is_admin           Boolean?
+  ou                 String?      @db.VarChar
+  address            String?      @db.VarChar
+  nf_event           nf_event[]
+  nf_payment         nf_payment[]
+}
+
+model nf_book {
+  row   Int     @id @default(autoincrement())
+  title String? @unique @db.VarChar
+}
+
+model nf_payment {
+  id          Int      @id @default(autoincrement())
+  user_id     Int?
+  reference   String?  @unique @db.VarChar
+  vipps_sub   String?  @db.VarChar
+  amount      String?  @db.VarChar
+  bookname    String?  @db.VarChar
+  is_consumed Boolean?
+  nf_user     nf_user? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
+}
