@@ -11,18 +11,19 @@ type startMillsProps = {
 const MillsToHour: FC = (props: BasePropertyProps ) => {
     const { record, property} = props;
     const params = record.params;
-    const timeStampType = property.props.typeMills === 'start'? 'start' : 'end';
-    //console.log("mills-to-hour typeof params.startmills",  params.startmills);
-    const convStartMills = timeStampType === 'start' ? params.startmills : params.endmills;
-    let convDate = moment()
-    if(convStartMills){
-      convDate = moment(parseInt(convStartMills.toString()));
+    if (property.props.typeMills){
+      const timeStampType = property.props.typeMills === 'start'? 'start' : 'end';
+      const convStartMills = timeStampType === 'start' ? params.startmills : params.endmills;
+      let convDate = moment()
+      if(convStartMills){
+        convDate = moment(parseInt(convStartMills.toString()));
+      }
+      //const obj= Intl.DateTimeFormat('no-NO',{ weekday: 'short', year: '2-digit', month: '2-digit',day: '2-digit',hour:'2-digit',minute:'2-digit'});
+      //console.log("mills-to-hour  property.props.typeMills", property.props.typeMills);
+      return ( record.params && <Box>{convDate.format("ddd, DD.MM.YY, HH:mm")}</Box> );
     }
     
-    const obj= Intl.DateTimeFormat('no-NO',{ weekday: 'short', year: '2-digit', month: '2-digit',day: '2-digit',hour:'2-digit',minute:'2-digit'});
-    //console.log("timestamp type ", timeStampType);
-
-  return ( record.params && <Box>{convDate.format("ddd, DD.MM.YY, HH:mm")}</Box> );
 }
+
 
 export default MillsToHour;

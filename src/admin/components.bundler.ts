@@ -27,6 +27,7 @@ export const DONT_TOUCH_THIS_ACTION = add('components/dont-touch-this-action', '
 export const DETAILED_STATS = add('components/detailed-stats', 'DetailedStats');
 export const THUMB = add('components/thumb', 'Thumb');
 export const MILLS_TO_HOUR = add('components/mills-to-hour', 'MillsToHour');
+export const STRIP_HTML_TAG = add('components/strip-html-tag','StripHtmlTag');
 
 /**
  * Pages
