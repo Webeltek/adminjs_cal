@@ -11,7 +11,7 @@ const SidebarResourceSection = ({ resources } : SidebarResourceSectionProps) => 
   const elementsLabels = elements.map((element) => {
     if (element.label==="Mongoose Users"){
       element.label = translateLabel("Mongoose Users");
-      console.log("sidebar-resource-section label",element.label);
+      //console.log("sidebar-resource-section label",element.label);
     }})
   
 

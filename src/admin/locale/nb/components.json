@@ -1,10 +1,10 @@
 {
   "components": {
     "CustomPage": {
-      "header": "Here you can specify a totally custom page",
-      "introduction": "With some data fetched from the backend:",
+      "header": "Her du kan spesifisere custom side",
+      "introduction": "Med noe data fetched fra backend:",
       "ending": "and other interactions like toast :)",
-      "button": "Click me"
+      "button": "Trykk på meg"
     },
     "LanguageSelector": {
       "availableLanguages": {

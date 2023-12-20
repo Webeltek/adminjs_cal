@@ -1,7 +1,7 @@
 {
   "properties": {
-    "nestedDetails.age": "Person age",
-    "nestedDetails.height": "Person height",
+    "nestedDetails.age": "Person alder",
+    "nestedDetails.height": "Person høyde",
     "nestedDetails.nested.extremelyNested": "This nesting is crazy"
   }
 }

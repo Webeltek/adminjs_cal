@@ -1,14 +1,14 @@
 {
   "labels": {
-    "Person": "Staff"
+    "Person": "Person bemanning"
   },
   "actions": {
-    "dontTouchThis": "Don't touch this!!!"
+    "dontTouchThis": "Ikke trykk på den!!!"
   },
   "properties": {
-    "organizationId": "Organization"
+    "organizationId": "Organisasjon"
   },
   "messages": {
-    "youCanSetupGuards": "You can setup guards before an action - just in case."
+    "youCanSetupGuards": "Du kan sette opp guards before an action - just in case."
   }
 }
