@@ -5432,7 +5432,7 @@ __metadata:
 
 "adminjs@patch:adminjs@npm%3A7.5.2#~/.yarn/patches/adminjs-npm-7.5.2-29c95aa307.patch":
   version: 7.5.2
-  resolution: "adminjs@patch:adminjs@npm%3A7.5.2#~/.yarn/patches/adminjs-npm-7.5.2-29c95aa307.patch::version=7.5.2&hash=44c364"
+  resolution: "adminjs@patch:adminjs@npm%3A7.5.2#~/.yarn/patches/adminjs-npm-7.5.2-29c95aa307.patch::version=7.5.2&hash=26bab2"
   dependencies:
     "@adminjs/design-system": "npm:^4.0.0"
     "@babel/core": "npm:^7.21.0"
@@ -5478,7 +5478,7 @@ __metadata:
     xss: "npm:^1.0.14"
   bin:
     admin: cli.js
-  checksum: 7081ce0210022593ebd3bc60799b6b03128fa06a9da0ee95a1d44e432bf32aedea32052906429a2bf8a8bacad858a511d6804c34ff0ac2916b1b5ff6f8e4a174
+  checksum: bdff01e9ccb33ff1d248272e561ea4bb706fae2023ba74d3f4dc7ac55d77b3d71a2ddd8ba3f62168bdd44da0372743bf07c541fe7f2ece956b2979961ae664f5
   languageName: node
   linkType: hard
 

@@ -23,6 +23,8 @@ const noLocale: LocaleTranslations = {
   "labels.stats": "Status",
   "pages.designSystemExamples":"Design System Eksempel",
   "buttons.contactUs": "Kontakt oss",
+  "labels.BigCalHeaderMsg": "Info melding",
+  "labels.SelectableSourceCode": "Link til selectable eksempel source code",
   labels: {
     nf_user: "Bruker",
     nf_event: "Event",

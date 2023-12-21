@@ -5,9 +5,9 @@ import DemoLink from './DemoLink.component.js'
 import events from './events.js'
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment'
-import { ApiClient , RecordActionAPIParams, useTranslation} from 'adminjs'
-
+import { ApiClient , RecordActionAPIParams, useTranslation, ReduxState} from 'adminjs'
 import 'moment/locale/nb'
+import { useSelector } from 'react-redux'
 
 type ApiGetPageResponse = { prismaEvts : evtType[] };
 const api = new ApiClient();
@@ -64,7 +64,9 @@ function Selectable(props) {
     tc,
     tm,
     i18n: { language },
+    translateLabel
   } = useTranslation();
+  const langFromReduxStore=useSelector((state: ReduxState)=>state.locale.language)
 
   async function getAxiousRecordsList() : Promise<evtType[]> {
     const axiosResp = await api.resourceAction({
@@ -147,33 +149,22 @@ function Selectable(props) {
     []
   )
 
-  const { defaultDate, scrollToTime } = useMemo(
-    () => ({
-      defaultDate: moment("2023-12-10T10:00:00").toDate(),
-      scrollToTime: moment("1970-01-01T06:00:00").toDate(),
-    }),
-    []
-  )
-
   return (
     <Fragment>
       <DemoLink fileName="selectable">
         <strong>
-          Click an event to see more info, or drag the mouse over the calendar
-          to select a date/time range.
+          {translateLabel("BigCalHeaderMsg")}
         </strong>
       </DemoLink>
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}
-          defaultDate={defaultDate}
           defaultView={Views.WEEK}
           events={myEvents}
           localizer={localizer}
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleSelectSlot}
           selectable
-          scrollToTime={scrollToTime}
         />
       </div>
     </Fragment>

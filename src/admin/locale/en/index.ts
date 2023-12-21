@@ -22,6 +22,8 @@ const enLocale: LocaleTranslations = {
   "labels.stats": "Stats",
   "pages.designSystemExamples":"Design System Examples",
   "buttons.contactUs": "Contact Us",
+  "labels.BigCalHeaderMsg": "Header message",
+  "labels.SelectableSourceCode": "Link to selectable source code",
   labels: {
     nf_user: "User",
     nf_event: "Event",
