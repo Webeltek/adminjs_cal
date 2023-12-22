@@ -1,7 +1,7 @@
 import { Box, Button, Modal, ModalProps } from '@adminjs/design-system';
 import React, { FC, useCallback, useState } from 'react';
 
-const ModalExample: FC = () => {
+const ModalExample: FC = (props) => {
   const [showModal, setShowModal] = useState(false);
   const handleButtonClick = useCallback(() => setShowModal(true), []);
 

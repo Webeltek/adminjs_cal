@@ -26,18 +26,20 @@ export const CreateNfEventResource: ResourceFunction<{
         }
       },
       startmills : {
+        isDisabled : true,
         type : "string",
         components : {
-          list : MILLS_TO_HOUR
+          list : MILLS_TO_HOUR,
         },
         props : {
           typeMills : "start"
         }
       },
       endmills : {
+        isDisabled : true,
         type : "string",
         components : {
-          list : MILLS_TO_HOUR
+          list : MILLS_TO_HOUR,
         },
         props : {
           typeMills : "end"

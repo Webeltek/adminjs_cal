@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useCallback, useMemo, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { bool } from 'prop-types'
 import { Calendar, Views, CalendarProps, DateLocalizer } from 'react-big-calendar'
 import DemoLink from './DemoLink.component.js'
+import { PickTimeModal } from './pick-time-modal.js'
 import events from './events.js'
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment'
 import { ApiClient , RecordActionAPIParams, useTranslation, ReduxState} from 'adminjs'
 import 'moment/locale/nb'
 import { useSelector } from 'react-redux'
+import { Box, Button, Label, VariantType, Modal,ModalProps} from '@adminjs/design-system'
 
 type ApiGetPageResponse = { prismaEvts : evtType[] };
 const api = new ApiClient();
@@ -111,6 +113,14 @@ function Selectable(props) {
     }); */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
+  
+  const [shModal, setShModal] = useState(false);
+  type ModProps = ModalProps & { shModal: boolean};
+  const modProps : ModProps= {
+    onClose: ()=> setShModal(false),
+    onOverlayClick: ()=> setShModal(false),
+    shModal: shModal
+  }
 
   const handleSelectSlot = useCallback(
     /* ({ start, end }) => {
@@ -128,10 +138,11 @@ function Selectable(props) {
       }
     } */
     ({ start, end }) => {
-      const title = window.prompt('New Event name')
+      const title = null // window.prompt('New Event name')
+      setShModal(true) // 
       const startMillsNum = parseInt(start.getTime().toString());
       const endMillsNum = parseInt(end.getTime().toString());
-      console.log("big-cal-page typeof startMillsNum",typeof startMillsNum);
+      //console.log("big-cal-page typeof startMillsNum",typeof startMillsNum);
       if (title) {
         setEvents((prev) => [...prev,{ start, end, title }]);
         api.getPage<evtType[]>({
@@ -141,13 +152,14 @@ function Selectable(props) {
         })
       }
     } 
-  ,[setEvents])
+  ,[setEvents,setShModal])
   
 
   const handleSelectEvent = useCallback(
     (event) => window.alert(event.title),
     []
   )
+  
 
   return (
     <Fragment>
@@ -156,6 +168,7 @@ function Selectable(props) {
           {translateLabel("BigCalHeaderMsg")}
         </strong>
       </DemoLink>
+      <PickTimeModal {...modProps}/>
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}
