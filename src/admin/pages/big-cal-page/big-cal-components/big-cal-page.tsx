@@ -115,12 +115,20 @@ function Selectable(props) {
   }, [language]);
   
   const [shModal, setShModal] = useState(false);
-  type ModProps = ModalProps & { shModal: boolean};
+  const [startEndObj,setStartEnd]= useState({start:new Date(),end: new Date()});
+  type ModProps = ModalProps & { shModal: boolean, start?: Date,end? : Date};
   const modProps : ModProps= {
     onClose: ()=> setShModal(false),
     onOverlayClick: ()=> setShModal(false),
-    shModal: shModal
+    shModal: shModal,
+    start: startEndObj.start,
+    end: startEndObj.end
   }
+  function activateModal(shModal: boolean, start: Date,end : Date){
+    setShModal(shModal);
+    setStartEnd({start: start,end: end});
+  }
+
 
   const handleSelectSlot = useCallback(
     /* ({ start, end }) => {
@@ -139,7 +147,7 @@ function Selectable(props) {
     } */
     ({ start, end }) => {
       const title = null // window.prompt('New Event name')
-      setShModal(true) // 
+      activateModal(true, start,end) // 
       const startMillsNum = parseInt(start.getTime().toString());
       const endMillsNum = parseInt(end.getTime().toString());
       //console.log("big-cal-page typeof startMillsNum",typeof startMillsNum);
