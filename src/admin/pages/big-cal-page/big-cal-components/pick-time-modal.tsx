@@ -1,4 +1,4 @@
-import { Box, DatePicker,DatePickerProps, Modal, Input, ModalProps} from '@adminjs/design-system'
+import { Box, DatePicker,DatePickerProps, Label, Modal, Input, ModalProps} from '@adminjs/design-system'
 import React, { useState, useCallback } from 'react'
 
 export function PickTimeModal(props){
@@ -32,7 +32,8 @@ export function PickTimeModal(props){
 
         return (
             <Modal {...modalProps}>
-                <Input type="text" variant="default" onChange={setEvtTitle}/> 
+                <Label htmlFor="evtTitle">Inser event title</Label>
+                <Input id="evtTitle" type="text" variant="default"/> 
                 <Box>
                     <DatePicker
                         onChange={handleStartChange}
