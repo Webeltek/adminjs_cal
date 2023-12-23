@@ -116,19 +116,39 @@ function Selectable(props) {
   
   const [shModal, setShModal] = useState(false);
   const [startEndObj,setStartEnd]= useState({start:new Date(),end: new Date()});
-  type ModProps = ModalProps & { shModal: boolean, start?: Date,end? : Date};
+  type ModProps = ModalProps & { 
+    shModal: boolean, 
+    start?: Date,
+    end? : Date, 
+    handleModalSaveEvt: (title:string,start: Date,end: Date)=>void
+  }
   const modProps : ModProps= {
     onClose: ()=> setShModal(false),
     onOverlayClick: ()=> setShModal(false),
     shModal: shModal,
     start: startEndObj.start,
-    end: startEndObj.end
+    end: startEndObj.end,
+    handleModalSaveEvt: saveModalEvt
   }
   function activateModal(shModal: boolean, start: Date,end : Date){
     setShModal(shModal);
     setStartEnd({start: start,end: end});
   }
 
+  function saveModalEvt(title:string,start: Date,end: Date){
+    console.log("big-cal-page title,start,end",title,start,end);
+    const startMillsNum = parseInt(start.getTime().toString());
+    const endMillsNum = parseInt(end.getTime().toString());
+    if (title) {
+      setEvents((prev) => [...prev,{ start, end, title }]);
+      api.getPage<evtType[]>({
+        pageName: 'SelectCalExample2',
+        method: 'post',
+        data : { startmills: startMillsNum, endmills: endMillsNum, title }
+      })
+      setShModal(false)
+    }
+  }
 
   const handleSelectSlot = useCallback(
     /* ({ start, end }) => {
