@@ -7595,6 +7595,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-big-calendar: "npm:^1.8.5"
     react-dom: "npm:^18.2.0"
+    react-hook-form: "npm:^7.49.2"
     react-i18next: "npm:^13.5.0"
     reflect-metadata: "npm:^0.1.13"
     rimraf: "npm:^4.4.1"
@@ -11594,6 +11595,15 @@ __metadata:
   peerDependencies:
     react: ">=16.8.6"
   checksum: bcc312ab39a710d8fa6fb611fde2affb38cf183fa5215d46c78577d88950ecb9181b59e4b57d7683f543d25725a39deb0c2ad9a9f29cab1a44bf4cbca46e6b8e
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.49.2":
+  version: 7.49.2
+  resolution: "react-hook-form@npm:7.49.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 8e2d3209d49a816f08e61a3b1847e9edff5ecb6e5b3cd056780c2331f8bb32aa0b7a2542bece602b415ddd4009023c5d054a27a021dc5014672623d5990853c8
   languageName: node
   linkType: hard
 
