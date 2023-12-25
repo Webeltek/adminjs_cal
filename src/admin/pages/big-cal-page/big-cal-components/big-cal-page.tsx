@@ -2,11 +2,11 @@ import React, { Fragment, useState, useCallback, useMemo, useEffect } from 'reac
 import PropTypes, { bool } from 'prop-types'
 import { Calendar, Views, CalendarProps, DateLocalizer } from 'react-big-calendar'
 import DemoLink from './DemoLink.component.js'
-import { PickTimeModal } from './pick-time-modal.js'
+import { PickTimeModalForm } from './pick-time-form.js'
 import events from './events.js'
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment'
-import { ApiClient , RecordActionAPIParams, useTranslation, ReduxState} from 'adminjs'
+import { ApiClient , RecordActionAPIParams, useTranslation, ReduxState, useModal} from 'adminjs'
 import 'moment/locale/nb'
 import { useSelector } from 'react-redux'
 import { Box, Button, Label, VariantType, Modal,ModalProps} from '@adminjs/design-system'
@@ -114,25 +114,36 @@ function Selectable(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
   
-  const [shModal, setShModal] = useState(false);
+  const { openModal, closeModal } = useModal()
   const [startEndObj,setStartEnd]= useState({start:new Date(),end: new Date()});
-  type ModProps = ModalProps & { 
-    shModal: boolean, 
+  type PickTimeFormProps = { 
     start?: Date,
     end? : Date, 
     handleModalSaveEvt: (title:string,start: Date,end: Date)=>void
   }
-  const modProps : ModProps= {
-    onClose: ()=> setShModal(false),
-    onOverlayClick: ()=> setShModal(false),
-    shModal: shModal,
-    start: startEndObj.start,
-    end: startEndObj.end,
-    handleModalSaveEvt: saveModalEvt
+
+  const modalProps: ModalProps = {
+    variant: 'primary',
+    label: 'Create event',
+    icon: 'Calendar',
+    title: 'Define event parameters',
+    subTitle: 'Insert title',
+    buttons: [
+        { label: 'Cancel', onClick: closeModal }, 
+        { label: 'Save', color: 'danger' , type: "submit"}],
+    onClose : closeModal,
+    onOverlayClick : closeModal,
+    children: PickTimeModalForm({
+      start: startEndObj.start,
+      end: startEndObj.end,
+      handleModalSaveEvt: saveModalEvt,
+    })
   }
+  
   function activateModal(shModal: boolean, start: Date,end : Date){
-    setShModal(shModal);
     setStartEnd({start: start,end: end});
+    console.log("big-cal-page activateModal shModal,modalProps",shModal,modalProps);
+    openModal({modalProps: modalProps})
   }
 
   function saveModalEvt(title:string,start: Date,end: Date){
@@ -146,7 +157,6 @@ function Selectable(props) {
         method: 'post',
         data : { startmills: startMillsNum, endmills: endMillsNum, title }
       })
-      setShModal(false)
     }
   }
 
@@ -180,7 +190,7 @@ function Selectable(props) {
         })
       }
     } 
-  ,[setEvents,setShModal])
+  ,[setEvents])
   
 
   const handleSelectEvent = useCallback(
@@ -196,7 +206,7 @@ function Selectable(props) {
           {translateLabel("BigCalHeaderMsg")}
         </strong>
       </DemoLink>
-      <PickTimeModal {...modProps}/>
+      
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}

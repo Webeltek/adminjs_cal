@@ -7,13 +7,12 @@ type eventType = {
     eventTitle: string
 }
 
-export function PickTimeModal(props){
-    const {onOverlayClick,onClose,shModal,start,end,handleModalSaveEvt} = props;
+export function PickTimeModalForm(props){
+    const {start,end,handleModalSaveEvt} = props;
     const [startDate, setStartDate] = useState<string | null>(start)
     const [endDate, setEndDate] = useState<string | null>(end)
     const { register, handleSubmit, watch, formState: { errors } } = useForm<eventType>();
-    if (shModal){
-        console.log("pick-time-modal shModal,start",shModal,start)
+        console.log("pick-time-modal start",start)
         const handleStartChange = (value) => {
             if (value) setStartDate(value)
             else setStartDate(null)
@@ -25,24 +24,12 @@ export function PickTimeModal(props){
         }
         
         function onSaveEvent(data: eventType){
-            console.log("pick-time-modal data",data)
+            console.log("pick-time-modal data.eventTitle",data.eventTitle)
             handleModalSaveEvt(data.eventTitle,startDate,endDate)
-        }
-        const modalProps: ModalProps = {
-            variant: 'primary',
-            label: 'Create event',
-            icon: 'Calendar',
-            title: 'Define event parameters',
-            subTitle: 'Insert title',
-            buttons: [
-                { label: 'Cancel', onClick: onClose }, 
-                { label: 'Save', color: 'danger' , onClick: onSaveEvent, type: "submit"}],
-            onClose : onClose,
-            onOverlayClick : onOverlayClick    
         }
 
         return (
-            <Modal {...modalProps}>
+            
                 <Box as="form" noValidate onSubmit={handleSubmit(onSaveEvent)}>
                     <Label htmlFor="eventTitle">Inser event title</Label>
                     <Input  id="eventTitle" type="text" variant="default" {...register('eventTitle')}/> 
@@ -63,8 +50,6 @@ export function PickTimeModal(props){
                         />
                     </Box>
                 </Box>
-            </Modal>
         )
-    }
     
 }
