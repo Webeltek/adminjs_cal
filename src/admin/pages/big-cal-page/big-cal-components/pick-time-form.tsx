@@ -2,17 +2,22 @@ import { Box, DatePicker,DatePickerProps, Label,
     Modal, Input, ModalProps, FormGroup} from '@adminjs/design-system'
 import React, { useState, useCallback } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { ReduxState } from 'adminjs'
+import moment from 'moment'
 
 type eventType = {
     eventTitle: string
 }
 
 export function PickTimeModalForm(props){
-    const {start,end,handleModalSaveEvt} = props;
-    const [startDate, setStartDate] = useState<string | null>(start)
-    const [endDate, setEndDate] = useState<string | null>(end)
+    const {handleModalSaveEvt} = props;
+    const start = useSelector((state: ReduxState)=> state);
+    const end = useSelector((state: ReduxState)=> state);
+    const [startDate, setStartDate] = useState<string | null>("")
+    const [endDate, setEndDate] = useState<string | null>("")
     const { register, handleSubmit, watch, formState: { errors } } = useForm<eventType>();
-        console.log("pick-time-modal start",start)
+        console.log("pick-time-form start",start)
         const handleStartChange = (value) => {
             if (value) setStartDate(value)
             else setStartDate(null)

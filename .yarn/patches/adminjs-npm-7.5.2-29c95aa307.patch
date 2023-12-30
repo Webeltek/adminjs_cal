@@ -1,12 +1,309 @@
-diff --git a/lib/locale/ua/translation.json b/lib/locale/ua/translation.json
-index 700677b55ad8747e383ae749f1be2424f4e8b729..9fc2c336c645892c559572f3edd0616c2117e70f 100644
---- a/lib/locale/ua/translation.json
-+++ b/lib/locale/ua/translation.json
-@@ -119,6 +119,6 @@
-     "pageNotFound_title": "Сторінку не знайдено",
-     "pageNotFound_subtitle": "Сторінка <strong>\"{{pageName}}\"</strong> не існує",
-     "componentNotFound_title": "Компонент не вказано",
--    "componentNotFound_subtitle": "Ви повинні вказати компонент, який буде рендерити цей елемент"
-+    "componentNotFound_subtitle": "Ви повинні вказати  компонент, який буде рендерити цей елемент"
-   }
+diff --git a/lib/frontend/store/actions/index.js b/lib/frontend/store/actions/index.js
+index 792e7188572ab818e3ec98054e9fa34922d7d7a9..c16aab967db4fe9010278595a13efa7296beb86c 100644
+--- a/lib/frontend/store/actions/index.js
++++ b/lib/frontend/store/actions/index.js
+@@ -14,3 +14,4 @@ export * from './route-changed.js';
+ export * from './set-current-admin.js';
+ export * from './set-drawer-preroute.js';
+ export * from './set-notice-progress.js';
++export * from './initialize-event.js';
+\ No newline at end of file
+diff --git a/lib/frontend/store/actions/initialize-event.js b/lib/frontend/store/actions/initialize-event.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..153cb68f95cdd60e9a5c0f2ed2d9ce1517584438
+--- /dev/null
++++ b/lib/frontend/store/actions/initialize-event.js
+@@ -0,0 +1,5 @@
++export const INITIALIZE_EVENT = "INITIALIZE_EVENT";
++export const initializeEvent = data => ({
++  type: INITIALIZE_EVENT,
++  data
++});
+\ No newline at end of file
+diff --git a/lib/frontend/store/initialize-store.js b/lib/frontend/store/initialize-store.js
+index 7a45809d446edab1a1fe3ba1961ee7f5c800d9bd..dab508d445049267cefbbed2fc196535c2269d52 100644
+--- a/lib/frontend/store/initialize-store.js
++++ b/lib/frontend/store/initialize-store.js
+@@ -1,4 +1,4 @@
+-import { initializeAssets, initializeBranding, initializeDashboard, initializeLocale, initializePages, initializePaths, initializeResources, initializeTheme, initializeVersions, setCurrentAdmin } from './actions/index.js';
++import { initializeAssets, initializeBranding, initializeDashboard, initializeLocale, initializePages, initializePaths, initializeResources, initializeTheme, initializeVersions, setCurrentAdmin, initializeEvent } from './actions/index.js';
+ import createStore from './store.js';
+ import { getAssets, getBranding, getLocales, getTheme } from '../../backend/utils/options-parser/options-parser.js';
+ import { defaultLocale } from '../../locale/index.js';
+@@ -45,6 +45,10 @@ export const initializeStore = async (admin, currentAdmin) => {
+     app: admin.options.version && admin.options.version.app,
+     admin: admin.options.version && admin.options.version.admin ? adminVersion : undefined
+   }));
++  store.dispatch(initializeEvent({
++    start: new Date().toISOString(),
++    end: new Date().toISOString()
++  }));
+   return store;
+ };
+ export default initializeStore;
+\ No newline at end of file
+diff --git a/lib/frontend/store/reducers/eventReducer.js b/lib/frontend/store/reducers/eventReducer.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..4c7de75280bcb3d62d2ba77c17658d4b042cc9f2
+--- /dev/null
++++ b/lib/frontend/store/reducers/eventReducer.js
+@@ -0,0 +1,12 @@
++import { INITIALIZE_EVENT } from "../actions/initialize-event.js";
++export const eventReducer = (state = {
++  start: "",
++  end: ""
++}, action) => {
++  switch (action.type) {
++    case INITIALIZE_EVENT:
++      return action.data;
++    default:
++      return state;
++  }
++};
+\ No newline at end of file
+diff --git a/lib/frontend/store/reducers/index.js b/lib/frontend/store/reducers/index.js
+index bceee8b31756994eff53907eab9be285c67ceafc..3587da4de687a88d1e8372b245ea6e6ce65e1cdc 100644
+--- a/lib/frontend/store/reducers/index.js
++++ b/lib/frontend/store/reducers/index.js
+@@ -13,3 +13,4 @@ export * from './routerReducer.js';
+ export * from './sessionReducer.js';
+ export * from './themeReducer.js';
+ export * from './versionsReducer.js';
++export * from './eventReducer.js';
+\ No newline at end of file
+diff --git a/lib/frontend/store/store.js b/lib/frontend/store/store.js
+index 98f915c8104a350c16b351eae2637eef2831c65d..08f04f6c81d45040b0a5155e0526cb3fdd2eeffc 100644
+--- a/lib/frontend/store/store.js
++++ b/lib/frontend/store/store.js
+@@ -1,7 +1,7 @@
+ // Note: We are using legacy "createStore"
+ import { composeWithDevToolsDevelopmentOnly } from '@redux-devtools/extension';
+ import { combineReducers, legacy_createStore as createStore } from 'redux';
+-import { assetsReducer, brandingReducer, dashboardReducer, drawerReducer, filterDrawerReducer, localesReducer, modalReducer, noticesReducer, pagesReducer, pathsReducer, resourcesReducer, routerReducer, sessionReducer, themeReducer, versionsReducer } from './reducers/index.js';
++import { assetsReducer, brandingReducer, dashboardReducer, drawerReducer, filterDrawerReducer, localesReducer, modalReducer, noticesReducer, pagesReducer, pathsReducer, resourcesReducer, routerReducer, sessionReducer, themeReducer, versionsReducer, eventReducer } from './reducers/index.js';
+ const reducer = combineReducers({
+   assets: assetsReducer,
+   branding: brandingReducer,
+@@ -17,6 +17,7 @@ const reducer = combineReducers({
+   router: routerReducer,
+   session: sessionReducer,
+   theme: themeReducer,
+-  versions: versionsReducer
++  versions: versionsReducer,
++  event: eventReducer
+ });
+ export default ((initialState = {}) => createStore(reducer, initialState, composeWithDevToolsDevelopmentOnly()));
+\ No newline at end of file
+diff --git a/src/frontend/store/actions/index.ts b/src/frontend/store/actions/index.ts
+index 7671cba9955a37220018c5ad35268c8ceea5e836..b1ad2d978ee3471505bbe0f8425bf7d3d92d7e72 100644
+--- a/src/frontend/store/actions/index.ts
++++ b/src/frontend/store/actions/index.ts
+@@ -14,3 +14,4 @@ export * from './route-changed.js'
+ export * from './set-current-admin.js'
+ export * from './set-drawer-preroute.js'
+ export * from './set-notice-progress.js'
++export * from './initialize-event.js'
+diff --git a/src/frontend/store/actions/initialize-event.ts b/src/frontend/store/actions/initialize-event.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..4f5d42af478075e0a0ad4ffb9ce524802c4f9c61
+--- /dev/null
++++ b/src/frontend/store/actions/initialize-event.ts
+@@ -0,0 +1,12 @@
++
++export const INITIALIZE_EVENT = "INITIALIZE_EVENT"
++
++export type InitializeEventResponse = {
++    type: typeof INITIALIZE_EVENT,
++    data: { start: string,end: string}
++}
++
++export const initializeEvent = (data : {start: string,end: string}): InitializeEventResponse => ({
++    type: INITIALIZE_EVENT,
++    data
++})
+\ No newline at end of file
+diff --git a/src/frontend/store/initialize-store.ts b/src/frontend/store/initialize-store.ts
+index 959c90bc1dc1e6ab0c0f449870a1bc01a7cda952..94164a5f72d51c637c0622fe38a717a4ae3ffc2b 100644
+--- a/src/frontend/store/initialize-store.ts
++++ b/src/frontend/store/initialize-store.ts
+@@ -11,6 +11,7 @@ import {
+   initializeTheme,
+   initializeVersions,
+   setCurrentAdmin,
++  initializeEvent,
+ } from './actions/index.js'
+ import createStore, { ReduxState } from './store.js'
+ 
+@@ -69,6 +70,7 @@ export const initializeStore = async (
+       admin: admin.options.version && admin.options.version.admin ? adminVersion : undefined,
+     }),
+   )
++  store.dispatch(initializeEvent({start: new Date().toISOString(),end: new Date().toISOString()}))
+   return store
  }
+ 
+diff --git a/src/frontend/store/reducers/eventReducer.ts b/src/frontend/store/reducers/eventReducer.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..d835161f64e650dd1b6eddfa3a395ca7bf2b4209
+--- /dev/null
++++ b/src/frontend/store/reducers/eventReducer.ts
+@@ -0,0 +1,21 @@
++import { INITIALIZE_EVENT } from "../actions/initialize-event.js";
++
++export type EventInState = {
++    start : string,
++    end : string
++}
++
++export const eventReducer = (
++    state : { start : string, end: string} = { start: "", end : ""},
++    action : {
++        type: string
++        data : EventInState
++    }
++) => {
++    switch(action.type){
++        case INITIALIZE_EVENT:
++            return action.data
++        default:
++            return state    
++    }
++} 
+\ No newline at end of file
+diff --git a/src/frontend/store/reducers/index.ts b/src/frontend/store/reducers/index.ts
+index a6df5ffefba9870b6ee1fbf1975c02a216f82cd9..75c4e61718bc8039141c5d147b7dba8178db3f83 100644
+--- a/src/frontend/store/reducers/index.ts
++++ b/src/frontend/store/reducers/index.ts
+@@ -13,3 +13,4 @@ export * from './routerReducer.js'
+ export * from './sessionReducer.js'
+ export * from './themeReducer.js'
+ export * from './versionsReducer.js'
++export * from './eventReducer.js'
+diff --git a/src/frontend/store/store.ts b/src/frontend/store/store.ts
+index 4ad81c4b6cc9905803671342bf5021b9216b4ca0..b7215d50a3bc71c0e9f1b4e9804eaffe157778b7 100644
+--- a/src/frontend/store/store.ts
++++ b/src/frontend/store/store.ts
+@@ -19,6 +19,7 @@ import {
+   sessionReducer,
+   themeReducer,
+   versionsReducer,
++  eventReducer,
+   type DashboardInState,
+   type DrawerInState,
+   type FilterDrawerInState,
+@@ -31,6 +32,7 @@ import {
+   type RouterInState,
+   type SessionInState,
+   type ThemeInState,
++  type EventInState
+ } from './reducers/index.js'
+ 
+ export type ReduxState = {
+@@ -49,6 +51,7 @@ export type ReduxState = {
+   session: SessionInState
+   theme?: ThemeInState
+   versions: VersionProps
++  event: EventInState
+ }
+ 
+ const reducer = combineReducers<ReduxState>({
+@@ -67,6 +70,7 @@ const reducer = combineReducers<ReduxState>({
+   session: sessionReducer,
+   theme: themeReducer,
+   versions: versionsReducer,
++  event: eventReducer
+ })
+ 
+ export default (initialState = {}) => createStore(
+diff --git a/types/src/frontend/store/actions/index.d.ts b/types/src/frontend/store/actions/index.d.ts
+index ff22f7ba64fccd4aed3f4cb60cddf1543db8e93f..5003eaabdd566b1023ec93b228d662aa06e24f59 100644
+--- a/types/src/frontend/store/actions/index.d.ts
++++ b/types/src/frontend/store/actions/index.d.ts
+@@ -14,3 +14,4 @@ export * from './route-changed.js';
+ export * from './set-current-admin.js';
+ export * from './set-drawer-preroute.js';
+ export * from './set-notice-progress.js';
++export * from './initialize-event.js';
+diff --git a/types/src/frontend/store/actions/initialize-event.d.ts b/types/src/frontend/store/actions/initialize-event.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..495d902779ae0589dc6a013fc56b3d34628f994c
+--- /dev/null
++++ b/types/src/frontend/store/actions/initialize-event.d.ts
+@@ -0,0 +1,12 @@
++export declare const INITIALIZE_EVENT = "INITIALIZE_EVENT";
++export type InitializeEventResponse = {
++    type: typeof INITIALIZE_EVENT;
++    data: {
++        start: string;
++        end: string;
++    };
++};
++export declare const initializeEvent: (data: {
++    start: string;
++    end: string;
++}) => InitializeEventResponse;
+diff --git a/types/src/frontend/store/reducers/drawerReducer.d.ts b/types/src/frontend/store/reducers/drawerReducer.d.ts
+index 9af880ef79b349dc028f3442ca9fcc2c8457f27a..1b9cdf58c5ed15fc64f251bd83727e437be50cad 100644
+--- a/types/src/frontend/store/reducers/drawerReducer.d.ts
++++ b/types/src/frontend/store/reducers/drawerReducer.d.ts
+@@ -1,10 +1,10 @@
+ import { SetDrawerPreRouteResponse } from '../actions/set-drawer-preroute.js';
+ export type DrawerInState = SetDrawerPreRouteResponse['data'];
+ export declare const drawerReducer: (state: {
+-    previousRoute: Partial<import("react-router").Location> | null;
++    previousRoute: Partial<import("react-router").Location<any>> | null;
+ } | undefined, action: {
+     type: string;
+     data: DrawerInState;
+ }) => {
+-    previousRoute: Partial<import("react-router").Location> | null;
++    previousRoute: Partial<import("react-router").Location<any>> | null;
+ };
+diff --git a/types/src/frontend/store/reducers/eventReducer.d.ts b/types/src/frontend/store/reducers/eventReducer.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..fe0fd45fee9581b1e799540904560de903e61fdc
+--- /dev/null
++++ b/types/src/frontend/store/reducers/eventReducer.d.ts
+@@ -0,0 +1,14 @@
++export type EventInState = {
++    start: string;
++    end: string;
++};
++export declare const eventReducer: (state: {
++    start: string;
++    end: string;
++} | undefined, action: {
++    type: string;
++    data: EventInState;
++}) => {
++    start: string;
++    end: string;
++};
+diff --git a/types/src/frontend/store/reducers/index.d.ts b/types/src/frontend/store/reducers/index.d.ts
+index 0ba1147c1b12351c1b4e4f3b26eeb14411bdf641..80b834ea9dbfcbf88cfe9dd8f14e741437553925 100644
+--- a/types/src/frontend/store/reducers/index.d.ts
++++ b/types/src/frontend/store/reducers/index.d.ts
+@@ -13,3 +13,4 @@ export * from './routerReducer.js';
+ export * from './sessionReducer.js';
+ export * from './themeReducer.js';
+ export * from './versionsReducer.js';
++export * from './eventReducer.js';
+diff --git a/types/src/frontend/store/store.d.ts b/types/src/frontend/store/store.d.ts
+index 6994f51924b2aa0cfeee7e769eb0ea61f7cf96bd..2ddcb6923112dbc41f93cbfc835bbee64f1f5499 100644
+--- a/types/src/frontend/store/store.d.ts
++++ b/types/src/frontend/store/store.d.ts
+@@ -1,5 +1,5 @@
+ import type { Assets, BrandingOptions, VersionProps } from '../../adminjs-options.interface.js';
+-import { type DashboardInState, type DrawerInState, type FilterDrawerInState, type LolcaleInState, type ModalInState, type NoticesInState, type PagesInState, type PathsInState, type ResourcesInState, type RouterInState, type SessionInState, type ThemeInState } from './reducers/index.js';
++import { type DashboardInState, type DrawerInState, type FilterDrawerInState, type LolcaleInState, type ModalInState, type NoticesInState, type PagesInState, type PathsInState, type ResourcesInState, type RouterInState, type SessionInState, type ThemeInState, type EventInState } from './reducers/index.js';
+ export type ReduxState = {
+     assets: Assets;
+     branding: BrandingOptions;
+@@ -16,6 +16,7 @@ export type ReduxState = {
+     session: SessionInState;
+     theme?: ThemeInState;
+     versions: VersionProps;
++    event: EventInState;
+ };
+ declare const _default: (initialState?: {}) => import("redux").Store<import("redux").EmptyObject & ReduxState, import("redux").AnyAction>;
+ export default _default;

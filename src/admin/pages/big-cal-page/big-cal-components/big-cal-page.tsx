@@ -6,10 +6,12 @@ import { PickTimeModalForm } from './pick-time-form.js'
 import events from './events.js'
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment'
-import { ApiClient , RecordActionAPIParams, useTranslation, ReduxState, useModal} from 'adminjs'
+import { ApiClient , RecordActionAPIParams,useTranslation, ReduxState, useModal} from 'adminjs'
+import store from 'adminjs'
 import 'moment/locale/nb'
-import { useSelector } from 'react-redux'
-import { Box, Button, Label, VariantType, Modal,ModalProps} from '@adminjs/design-system'
+import { useDispatch,useSelector, Provider} from 'react-redux'
+import { Box, Button, Label, Modal,ModalProps} from '@adminjs/design-system'
+import { eventStore, RootState } from './event-store.js'
 
 type ApiGetPageResponse = { prismaEvts : evtType[] };
 const api = new ApiClient();
@@ -69,6 +71,7 @@ function Selectable(props) {
     translateLabel
   } = useTranslation();
   const langFromReduxStore=useSelector((state: ReduxState)=>state.locale.language)
+  const dispatch = useDispatch();
 
   async function getAxiousRecordsList() : Promise<evtType[]> {
     const axiosResp = await api.resourceAction({
@@ -115,7 +118,6 @@ function Selectable(props) {
   }, [language]);
   
   const { openModal, closeModal } = useModal()
-  const [startEndObj,setStartEnd]= useState({start:new Date(),end: new Date()});
   type PickTimeFormProps = { 
     start?: Date,
     end? : Date, 
@@ -134,14 +136,18 @@ function Selectable(props) {
     onClose : closeModal,
     onOverlayClick : closeModal,
     children: PickTimeModalForm({
-      start: startEndObj.start,
-      end: startEndObj.end,
       handleModalSaveEvt: saveModalEvt,
     })
   }
   
   function activateModal(shModal: boolean, start: Date,end : Date){
-    setStartEnd({start: start,end: end});
+    dispatch({
+      type: "INITIALIZE_EVENT", 
+      data: { 
+        start: start.toISOString(),
+        end: end.toISOString()
+      }
+    })
     console.log("big-cal-page activateModal shModal,modalProps",shModal,modalProps);
     openModal({modalProps: modalProps})
   }
