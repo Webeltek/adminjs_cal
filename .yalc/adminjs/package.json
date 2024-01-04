@@ -1,0 +1,139 @@
+{
+  "name": "adminjs",
+  "version": "7.5.2",
+  "description": "Admin panel for apps written in node.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.js"
+    },
+    "./bundler": {
+      "import": "./lib/backend/bundler/config.js"
+    }
+  },
+  "scripts": {
+    "test": "mocha --loader=ts-node/esm ./spec/index.js",
+    "types": "tsc",
+    "clean": "rm -rf lib && mkdir lib && rm -fr types && mkdir types",
+    "build": "babel src --out-dir lib --copy-files --extensions '.ts,.js,.jsx,.tsx'",
+    "lint": "eslint './spec/**/*' './src/**/*' './cy/**/*' './*'",
+    "cover": "NODE_ENV=test nyc --reporter=lcov --reporter=text-lcov npm test",
+    "codecov": "NODE_ENV=test nyc --reporter=text-lcov npm test | codecov --pipe",
+    "bundle": "node bin/watch-dev.js",
+    "bundle:globals": "node bin/bundle-globals.js",
+    "cspell": "cspell src/**/*.ts src/**/*.js src/**/*.tsx src/**/*.jsx",
+    "check:all": "yarn types && yarn cspell && yarn lint && yarn test && ONCE=true yarn bundle && ONCE=true NODE_ENV=production yarn bundle",
+    "dev": "yarn build && yarn types && yarn bundle:globals && ONCE=true yarn bundle",
+    "release": "semantic-release"
+  },
+  "bin": {
+    "admin": "./cli.js"
+  },
+  "nyc": {
+    "exclude": [
+      "spec",
+      "example-app",
+      "src/**/*.spec.ts",
+      "src/**/*.spec.js",
+      "src/**/*.spec.tsx",
+      "src/**/*.spec.jsx",
+      "src/**/*.factory.ts",
+      "src/backend/bundler/user-components-bundler.ts",
+      "docs",
+      "coverage",
+      "types",
+      "src/frontend/assets/scripts",
+      "lib",
+      ".vscode",
+      ".github",
+      "**/*.spec.js"
+    ],
+    "all": true,
+    "extension": [
+      ".js",
+      ".jsx",
+      ".tsx",
+      ".ts"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SoftwareBrothers/adminjs.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "hapi",
+    "express",
+    "mongoose",
+    "admin",
+    "admin-panel"
+  ],
+  "browserslist": [
+    "last 5 Chrome versions"
+  ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "author": "Wojciech Krysiak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoftwareBrothers/adminjs/issues"
+  },
+  "homepage": "https://github.com/SoftwareBrothers/adminjs#readme",
+  "dependencies": {
+    "@adminjs/design-system": "file:.yalc/@adminjs/design-system",
+    "@babel/core": "^7.21.0",
+    "@babel/parser": "^7.21.0",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/preset-env": "7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
+    "@babel/register": "^7.21.0",
+    "@hello-pangea/dnd": "^16.2.0",
+    "@redux-devtools/extension": "^3.2.5",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
+    "axios": "^1.3.4",
+    "commander": "^10.0.0",
+    "flat": "^5.0.2",
+    "i18next": "^23.7.12",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.2.0",
+    "lodash": "^4.17.21",
+    "ora": "^6.2.0",
+    "prop-types": "^15.8.1",
+    "punycode": "^2.3.0",
+    "qs": "^6.11.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-feather": "^2.0.10",
+    "react-i18next": "^14.0.0",
+    "react-is": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0",
+    "redux": "^4.2.1",
+    "rollup": "3.20.5",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "slash": "^5.0.0",
+    "uuid": "^9.0.0",
+    "xss": "^1.0.14"
+  },
+  "resolutions": {
+    "@babel/core": "7.21.0",
+    "react-redux": "8.0.5",
+    "redux": "4.2.1"
+  },
+  "yalcSig": "80353f5afeba29a1097570a26fea75a3"
+}

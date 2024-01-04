@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@adminjs/design-system": {
+      "signature": "58461aaad8af4bab2b6afc2dbb59eb4e",
+      "file": true,
+      "replaced": "^4.0.0"
+    }
+  }
+}

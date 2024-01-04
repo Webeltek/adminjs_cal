@@ -2,7 +2,7 @@ import React, { Fragment, useState, useCallback, useMemo, useEffect } from 'reac
 import PropTypes, { bool } from 'prop-types'
 import { Calendar, Views, CalendarProps, DateLocalizer } from 'react-big-calendar'
 import DemoLink from './DemoLink.component.js'
-import { PickTimeModalForm } from './pick-time-form.js'
+import { PickTimeForm } from './pick-time-form.js'
 import events from './events.js'
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment'
@@ -118,13 +118,29 @@ function Selectable(props) {
   }, [language]);
   
   const { openModal, closeModal } = useModal()
+  const [showPickTimeForm, setShowPickTimeForm] = useState(false)
+  const [ modalProps, setModalProps] = useState<ModalProps>(
+    {
+      variant: 'primary',
+    label: 'Create event',
+    icon: 'Calendar',
+    title: 'Define event parameters',
+    subTitle: 'Insert title',
+    buttons: [
+        { label: 'Cancel', onClick: closeModal }, 
+        { label: 'Save', color: 'danger' , type: "submit"}],
+    onClose : closeModal,
+    onOverlayClick : closeModal,
+    }
+  )
+  
   type PickTimeFormProps = { 
     start?: Date,
     end? : Date, 
     handleModalSaveEvt: (title:string,start: Date,end: Date)=>void
   }
 
-  const modalProps: ModalProps = {
+  const modalProps1: ModalProps = {
     variant: 'primary',
     label: 'Create event',
     icon: 'Calendar',
@@ -135,24 +151,27 @@ function Selectable(props) {
         { label: 'Save', color: 'danger' , type: "submit"}],
     onClose : closeModal,
     onOverlayClick : closeModal,
-    children: PickTimeModalForm({
+    /* children: PickTimeForm({
       handleModalSaveEvt: saveModalEvt,
-    })
+    }) */
   }
   
   function activateModal(shModal: boolean, start: Date,end : Date){
-    dispatch({
+    setModalProps({...modalProps,start: start.toISOString(), end: end.toISOString()})
+    setShowPickTimeForm(shModal);
+    console.log("big-cal-page activateModal shModal,modalProps,start",shModal,modalProps,start);
+    //openModal({modalProps: {...modalProps,start: start.toISOString(),end: end.toISOString()}})
+    /* dispatch({
       type: "INITIALIZE_EVENT", 
       data: { 
         start: start.toISOString(),
         end: end.toISOString()
       }
-    })
-    console.log("big-cal-page activateModal shModal,modalProps",shModal,modalProps);
-    openModal({modalProps: modalProps})
+    }) */
   }
 
   function saveModalEvt(title:string,start: Date,end: Date){
+    closeModal()
     console.log("big-cal-page title,start,end",title,start,end);
     const startMillsNum = parseInt(start.getTime().toString());
     const endMillsNum = parseInt(end.getTime().toString());
@@ -212,7 +231,7 @@ function Selectable(props) {
           {translateLabel("BigCalHeaderMsg")}
         </strong>
       </DemoLink>
-      
+      {showPickTimeForm && <PickTimeForm {...modalProps}/>}
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}
