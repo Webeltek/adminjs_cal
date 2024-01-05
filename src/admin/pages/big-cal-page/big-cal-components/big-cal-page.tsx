@@ -116,29 +116,6 @@ function Selectable(props) {
     }); */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
-  
-  const { openModal, closeModal } = useModal()
-  const [showPickTimeForm, setShowPickTimeForm] = useState(false)
-  const [ modalProps, setModalProps] = useState<ModalProps>(
-    {
-      variant: 'primary',
-    label: 'Create event',
-    icon: 'Calendar',
-    title: 'Define event parameters',
-    subTitle: 'Insert title',
-    buttons: [
-        { label: 'Cancel', onClick: closeModal }, 
-        { label: 'Save', color: 'danger' , type: "submit"}],
-    onClose : closeModal,
-    onOverlayClick : closeModal,
-    }
-  )
-  
-  type PickTimeFormProps = { 
-    start?: Date,
-    end? : Date, 
-    handleModalSaveEvt: (title:string,start: Date,end: Date)=>void
-  }
 
   const modalProps1: ModalProps = {
     variant: 'primary',
@@ -146,37 +123,46 @@ function Selectable(props) {
     icon: 'Calendar',
     title: 'Define event parameters',
     subTitle: 'Insert title',
-    buttons: [
+    /* buttons: [
         { label: 'Cancel', onClick: closeModal }, 
         { label: 'Save', color: 'danger' , type: "submit"}],
     onClose : closeModal,
     onOverlayClick : closeModal,
-    /* children: PickTimeForm({
-      handleModalSaveEvt: saveModalEvt,
+    children: PickTimeForm({
+    handleModalSaveEvt: saveModalEvt, 
     }) */
   }
-  
-  function activateModal(shModal: boolean, start: Date,end : Date){
-    setModalProps({...modalProps,start: start.toISOString(), end: end.toISOString()})
-    setShowPickTimeForm(shModal);
-    console.log("big-cal-page activateModal shModal,modalProps,start",shModal,modalProps,start);
-    //openModal({modalProps: {...modalProps,start: start.toISOString(),end: end.toISOString()}})
-    /* dispatch({
-      type: "INITIALIZE_EVENT", 
-      data: { 
-        start: start.toISOString(),
-        end: end.toISOString()
-      }
-    }) */
+  const [ initModal, setInitModal] = useState<boolean>(false)
+  type PickTimeFormProps = { 
+    start?: Date,
+    end? : Date, 
+    handleModalSaveEvt: (title:string,start: Date,end: Date)=>void
   }
 
-  function saveModalEvt(title:string,start: Date,end: Date){
-    closeModal()
-    console.log("big-cal-page title,start,end",title,start,end);
-    const startMillsNum = parseInt(start.getTime().toString());
-    const endMillsNum = parseInt(end.getTime().toString());
+  
+  function activateModal(shModal: boolean, start: Date,end : Date){
+    console.log("big-cal-page activateModal shModal,modalProps,start",shModal,modalProps1,start);
+    //openModal({modalProps: {...modalProps,start: start.toISOString(),end: end.toISOString()}})
+    dispatch({
+      type: "SHOW_PICK_TIME_FORM", 
+      data: {
+        ...modalProps1,
+        start : start.toISOString(),
+        end: end.toISOString(),
+      }
+    });
+    setInitModal(true);
+  }
+
+  function handleModalSaveEvt(title:string,start: string,end: string){
+    dispatch({type: 'HIDE_PICK_TIME_FORM'})
+    console.log("big-cal-page handleModalSaveEvt(title,start,end)",title,start,end);
+    const startMillsNum = moment(start).toDate().getTime();
+    const endMillsNum = moment(end).toDate().getTime();
     if (title) {
-      setEvents((prev) => [...prev,{ start, end, title }]);
+      setEvents((prev) => [
+        ...prev,
+        { title, start: moment(start).toDate(), end: moment(end).toDate() }]);
       api.getPage<evtType[]>({
         pageName: 'SelectCalExample2',
         method: 'post',
@@ -231,7 +217,7 @@ function Selectable(props) {
           {translateLabel("BigCalHeaderMsg")}
         </strong>
       </DemoLink>
-      {showPickTimeForm && <PickTimeForm {...modalProps}/>}
+      { initModal && <PickTimeForm handleSave={handleModalSaveEvt} /> }
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}

@@ -14,3 +14,4 @@ export * from './sessionReducer.js';
 export * from './themeReducer.js';
 export * from './versionsReducer.js';
 export * from './eventReducer.js';
+export * from './pickTimeFormReducer.js';

@@ -20,6 +20,7 @@ import {
   themeReducer,
   versionsReducer,
   eventReducer,
+  pickTimeFormReducer,
   type DashboardInState,
   type DrawerInState,
   type FilterDrawerInState,
@@ -32,7 +33,8 @@ import {
   type RouterInState,
   type SessionInState,
   type ThemeInState,
-  type EventInState
+  type EventInState,
+  type PickTimeFormInState,
 } from './reducers/index.js'
 
 export type ReduxState = {
@@ -51,7 +53,8 @@ export type ReduxState = {
   session: SessionInState
   theme?: ThemeInState
   versions: VersionProps
-  event: EventInState
+  event: EventInState,
+  pickTimeForm: PickTimeFormInState
 }
 
 const reducer = combineReducers<ReduxState>({
@@ -70,7 +73,8 @@ const reducer = combineReducers<ReduxState>({
   session: sessionReducer,
   theme: themeReducer,
   versions: versionsReducer,
-  event: eventReducer
+  event: eventReducer,
+  pickTimeForm: pickTimeFormReducer
 })
 
 export default (initialState = {}) => createStore(

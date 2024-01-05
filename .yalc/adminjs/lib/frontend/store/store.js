@@ -1,7 +1,7 @@
 // Note: We are using legacy "createStore"
 import { composeWithDevToolsDevelopmentOnly } from '@redux-devtools/extension';
 import { combineReducers, legacy_createStore as createStore } from 'redux';
-import { assetsReducer, brandingReducer, dashboardReducer, drawerReducer, filterDrawerReducer, localesReducer, modalReducer, noticesReducer, pagesReducer, pathsReducer, resourcesReducer, routerReducer, sessionReducer, themeReducer, versionsReducer, eventReducer } from './reducers/index.js';
+import { assetsReducer, brandingReducer, dashboardReducer, drawerReducer, filterDrawerReducer, localesReducer, modalReducer, noticesReducer, pagesReducer, pathsReducer, resourcesReducer, routerReducer, sessionReducer, themeReducer, versionsReducer, eventReducer, pickTimeFormReducer } from './reducers/index.js';
 const reducer = combineReducers({
   assets: assetsReducer,
   branding: brandingReducer,
@@ -18,6 +18,7 @@ const reducer = combineReducers({
   session: sessionReducer,
   theme: themeReducer,
   versions: versionsReducer,
-  event: eventReducer
+  event: eventReducer,
+  pickTimeForm: pickTimeFormReducer
 });
 export default ((initialState = {}) => createStore(reducer, initialState, composeWithDevToolsDevelopmentOnly()));

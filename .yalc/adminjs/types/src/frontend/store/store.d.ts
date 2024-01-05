@@ -1,5 +1,5 @@
 import type { Assets, BrandingOptions, VersionProps } from '../../adminjs-options.interface.js';
-import { type DashboardInState, type DrawerInState, type FilterDrawerInState, type LolcaleInState, type ModalInState, type NoticesInState, type PagesInState, type PathsInState, type ResourcesInState, type RouterInState, type SessionInState, type ThemeInState, type EventInState } from './reducers/index.js';
+import { type DashboardInState, type DrawerInState, type FilterDrawerInState, type LolcaleInState, type ModalInState, type NoticesInState, type PagesInState, type PathsInState, type ResourcesInState, type RouterInState, type SessionInState, type ThemeInState, type EventInState, type PickTimeFormInState } from './reducers/index.js';
 export type ReduxState = {
     assets: Assets;
     branding: BrandingOptions;
@@ -17,6 +17,7 @@ export type ReduxState = {
     theme?: ThemeInState;
     versions: VersionProps;
     event: EventInState;
+    pickTimeForm: PickTimeFormInState;
 };
 declare const _default: (initialState?: {}) => import("redux").Store<import("redux").EmptyObject & ReduxState, import("redux").AnyAction>;
 export default _default;
