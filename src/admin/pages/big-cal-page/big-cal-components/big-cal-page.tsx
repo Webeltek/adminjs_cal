@@ -95,20 +95,25 @@ function Selectable(props) {
     });
   }
 
+  function convAxiosRespData(axiosRespData){
+    const convEvts=  axiosRespData.map(prEv => {
+      const obj = {
+        id: prEv.id,
+        title : prEv.title.replace(/<\/?[^>]+(>|$)/g, "\n"),
+        start :  moment(prEv.start).toDate(),
+        end:  moment(prEv.end).toDate()
+        };
+      return obj;  
+    });
+    assertsIsEvts(convEvts);
+    return convEvts;
+  }
+
   useEffect(() => {
-    api.getPage<evtType[]>({ pageName: 'SelectCalExample2' }).then((res) => {
-      console.log(" big-cal-page res.data json string",JSON.stringify(res.data));
-      const resEvts = res.data; // res.data contains string representation of dates (start and end properties)!!!
-      const convEvts = resEvts.map(prEv => {
-        const obj = {
-          id: prEv.id,
-          title : prEv.title.replace(/<\/?[^>]+(>|$)/g, "\n"),
-          start :  moment(prEv.start).toDate(),
-          end:  moment(prEv.end).toDate()
-          };
-        return obj;  
-      });
-      assertsIsEvts(resEvts)
+    api.getPage<evtType[]>({ pageName: 'SelectCalExample2' }).then((resp) => {
+      console.log(" big-cal-page res.data json string",JSON.stringify(resp.data));
+      const resEvts = resp.data; // res.data contains string representation of dates (start and end properties)!!!
+      const convEvts = convAxiosRespData(resp.data)
       setEvents(convEvts)
     });
     /* getAxiousRecordsList().then((result)=>{
@@ -161,16 +166,18 @@ function Selectable(props) {
     const startMillsNum = moment(start).toDate().getTime();
     const endMillsNum = moment(end).toDate().getTime();
     if (title) {
-      setEvents((prev) => [
-        ...prev,
-        { title: title, start: moment(start).toDate(), end: moment(end).toDate() }]);
       api.getPage<evtType[]>({
         pageName: 'SelectCalExample2',
         method: 'post',
         data : { startmills: startMillsNum, endmills: endMillsNum, title: title, insert: true }
-      }).then((savedEvt)=> {
-        console.log('big-cal-page handleModalSaveEvt AxiosResp', savedEvt);
+      }).then((resp)=> {
+        console.log('big-cal-page handleModalSaveEvt AxiosResp', resp.data);
+        const convEvts = convAxiosRespData(resp.data)
+        setEvents((prev) => [
+          ...prev,
+          { id: convEvts[0].id,title: title, start: moment(start).toDate(), end: moment(end).toDate() }]);
       })
+      
     }
   }
 
@@ -216,8 +223,8 @@ function Selectable(props) {
     subTitle: 'Event title',
     buttons: [
       { label: 'Cancel'}, 
-      { label: 'Confirm', color: 'danger' , type: "submit"}],
-    onClose: () => handleConfirmDelEvent()  
+      { label: 'Confirm', color: 'danger' , type: "submit", onClick: handleConfirmDelEvent}],
+    onClose: () => {}  
   }
 
   function handleConfirmDelEvent(){
@@ -231,19 +238,11 @@ function Selectable(props) {
       data : { startmills: startMillsNum, endmills: endMillsNum, title: title, id: id , delete: true}
     }).then((resp) =>{
       const convPrismaEvts : evtType[] = resp.data // array contains only one deleted event object
-      const convEvts = convPrismaEvts.map(prEv => {
-        const obj = {
-          id: prEv.id,
-          title : prEv.title.replace(/<\/?[^>]+(>|$)/g, "\n"),
-          start :  moment(prEv.start).toDate(),
-          end:  moment(prEv.end).toDate()
-          };
-        return obj;  
-      });
-      assertsIsEvts(convEvts)
+      const convEvts = convAxiosRespData(resp.data)
       const deletedEvent = convEvts[0];
       const modEvts= myEvents.filter((eventItem)=>{ eventItem.id !== deletedEvent.id})
       setEvents(modEvts);
+      setInitDeleteModal({show: false})
     })
   }
 
