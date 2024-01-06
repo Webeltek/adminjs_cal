@@ -101,6 +101,7 @@ function Selectable(props) {
       const resEvts = res.data; // res.data contains string representation of dates (start and end properties)!!!
       const convEvts = resEvts.map(prEv => {
         const obj = {
+          id: prEv.id,
           title : prEv.title.replace(/<\/?[^>]+(>|$)/g, "\n"),
           start :  moment(prEv.start).toDate(),
           end:  moment(prEv.end).toDate()
@@ -162,11 +163,13 @@ function Selectable(props) {
     if (title) {
       setEvents((prev) => [
         ...prev,
-        { title, start: moment(start).toDate(), end: moment(end).toDate() }]);
+        { title: title, start: moment(start).toDate(), end: moment(end).toDate() }]);
       api.getPage<evtType[]>({
         pageName: 'SelectCalExample2',
         method: 'post',
-        data : { startmills: startMillsNum, endmills: endMillsNum, title }
+        data : { startmills: startMillsNum, endmills: endMillsNum, title: title, insert: true }
+      }).then((savedEvt)=> {
+        console.log('big-cal-page handleModalSaveEvt AxiosResp', savedEvt);
       })
     }
   }
@@ -197,7 +200,7 @@ function Selectable(props) {
         api.getPage<evtType[]>({
           pageName: 'SelectCalExample2',
           method: 'post',
-          data : { startmills: startMillsNum, endmills: endMillsNum, title }
+          data : { startmills: startMillsNum, endmills: endMillsNum, title, insert: true }
         })
       }
     } 
@@ -212,18 +215,35 @@ function Selectable(props) {
     title: 'Delete event with parameters',
     subTitle: 'Event title',
     buttons: [
-      { label: 'Cancel', onClick: setInitDeleteModal({show:false})}, 
-      { label: 'Confirm', color: 'danger' , type: "submit", onClick: setInitDeleteModal({show:false})}]
+      { label: 'Cancel'}, 
+      { label: 'Confirm', color: 'danger' , type: "submit"}],
+    onClose: () => handleConfirmDelEvent()  
   }
 
   function handleConfirmDelEvent(){
+    const id = initDeleteModal.event.id;
     const title = initDeleteModal.event.title;
     const startMillsNum = parseInt(moment(initDeleteModal.event.start).toDate().getTime().toString());
     const endMillsNum = parseInt(moment(initDeleteModal.event.end).toDate().getTime().toString());
     api.getPage<evtType[]>({
       pageName: 'SelectCalExample2',
       method: 'post',
-      data : { startmills: startMillsNum, endmills: endMillsNum, title }
+      data : { startmills: startMillsNum, endmills: endMillsNum, title: title, id: id , delete: true}
+    }).then((resp) =>{
+      const convPrismaEvts : evtType[] = resp.data // array contains only one deleted event object
+      const convEvts = convPrismaEvts.map(prEv => {
+        const obj = {
+          id: prEv.id,
+          title : prEv.title.replace(/<\/?[^>]+(>|$)/g, "\n"),
+          start :  moment(prEv.start).toDate(),
+          end:  moment(prEv.end).toDate()
+          };
+        return obj;  
+      });
+      assertsIsEvts(convEvts)
+      const deletedEvent = convEvts[0];
+      const modEvts= myEvents.filter((eventItem)=>{ eventItem.id !== deletedEvent.id})
+      setEvents(modEvts);
     })
   }
 
@@ -231,7 +251,8 @@ function Selectable(props) {
     (event) => {
       //window.alert(event.title)
       deleteModalProps.title = event.title;
-      deleteModalProps.subTitle = event.start.toISOString() +'\n'+event.end.toISOString()
+      deleteModalProps.subTitle = 
+        event.id.toString()+event.start.toISOString() +'\n'+event.end.toISOString()
       setInitDeleteModal({show:true,event: event});
     }
     ,[]

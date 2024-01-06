@@ -8,16 +8,16 @@ import { method } from 'lodash';
 
 async function backendConvPrismaEvents(request: ActionRequest) : Promise<evtType[]> {
   const client = new PrismaClient();
-  if (request.method==="post" && request.payload){
+  if (request.method==="post" && request.payload.insert){
       console.log("index backendConvPrismaEvents post  request.payload",request.payload);
-      const postedEvt = await client.nf_event.create({data: request.payload});
+      const toInsertEvt = { startmills: request.payload.startmills, endmills: request.payload.endmills, title : request.payload.title}
+      const postedEvt = await client.nf_event.create({data: toInsertEvt});
       return [postedEvt];
   } else if (request.method==="post" && request.payload.delete){
     console.log("index backendConvPrismaEvents post  request.payload",request.payload);
-    const deletedEvt = await client.nf_event.deleteMany({
+    const deletedEvt = await client.nf_event.delete({
       where: {
-        startmills : request.payload.startmills,
-        endmills : request.payload.endmills  
+        id: request.payload.id  
       },
     });
     return [deletedEvt];
@@ -28,6 +28,7 @@ async function backendConvPrismaEvents(request: ActionRequest) : Promise<evtType
           const startNum = parseInt(prEv.startmills.toString());
           const endNum = parseInt(prEv.endmills.toString());
           const obj : evtType= {
+            id: prEv.id,
             title : prEv.title,
             start :  moment(startNum).toDate(),
             end:  moment(endNum).toDate()
