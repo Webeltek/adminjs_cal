@@ -8,11 +8,20 @@ import { method } from 'lodash';
 
 async function backendConvPrismaEvents(request: ActionRequest) : Promise<evtType[]> {
   const client = new PrismaClient();
-   if (request.method==="post" && request.payload){
+  if (request.method==="post" && request.payload){
       console.log("index backendConvPrismaEvents post  request.payload",request.payload);
       const postedEvt = await client.nf_event.create({data: request.payload});
       return [postedEvt];
-   } else if(request.method==="get"){
+  } else if (request.method==="post" && request.payload.delete){
+    console.log("index backendConvPrismaEvents post  request.payload",request.payload);
+    const deletedEvt = await client.nf_event.deleteMany({
+      where: {
+        startmills : request.payload.startmills,
+        endmills : request.payload.endmills  
+      },
+    });
+    return [deletedEvt];
+  } else if(request.method==="get"){
       const prismaEvents = await client.nf_event.findMany();
       const prismaEvts = prismaEvents.map(prEv => {
         if (prEv.title && prEv.startmills && prEv.endmills){
@@ -27,7 +36,7 @@ async function backendConvPrismaEvents(request: ActionRequest) : Promise<evtType
         } else return {};
       });
       return prismaEvts;
-}
+  }
 
 }
 

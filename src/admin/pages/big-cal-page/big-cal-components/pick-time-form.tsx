@@ -3,8 +3,9 @@ import { Box, DatePicker,DatePickerProps, Label,
 import React, { useState, useCallback } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useSelector,useDispatch, connect } from 'react-redux'
-import { ReduxState , PickTimeFormInState, ModalData} from 'adminjs'
+import { useTranslation, ReduxState , PickTimeFormInState, ModalData} from 'adminjs'
 import moment from 'moment'
+import { ValidationError } from './ValidationError.js'
 
 type formData = {
     eventTitle: string
@@ -12,7 +13,7 @@ type formData = {
 
 export function PickTimeForm(props){
     const { handleSave } = props;
-    const pickTimeFormState = useSelector((state: ReduxState)=> state.pickTimeForm)
+    const pickTimeFormState : PickTimeFormInState= useSelector((state: ReduxState)=> state.pickTimeForm)
     console.log("pick-time-form pickTimeFormState",pickTimeFormState)
     const dispatch = useDispatch();
     const hidePicker = () => dispatch({ type: 'HIDE_PICK_TIME_FORM'})
@@ -28,6 +29,7 @@ export function PickTimeForm(props){
     const [endDate, setEndDate] = useState<string | null>(modModalData.end)
     const { register, handleSubmit, watch, 
         formState: { errors , isSubmitting, isSubmitSuccessful} } = useForm<formData>();
+    const {tc, tm, i18n: { language },} = useTranslation();    
 
     const handleStartChange = (value) => {
         if (value) setStartDate(value)
@@ -39,6 +41,19 @@ export function PickTimeForm(props){
         else setEndDate(null)
     }
     
+    const filterStartDatetime = (time) => {
+        const currentDate = new Date();
+        const selectedDate = new Date(time);
+    
+        return selectedDate.getTime() < moment(endDate).toDate().getTime();
+    };
+
+    const filterEndDatetime = (time) => {
+        const currentDate = new Date();
+        const selectedDate = new Date(time);
+    
+        return selectedDate.getTime() > moment(startDate).toDate().getTime();
+    };
     
     const onSaveEvent: SubmitHandler<formData> = (data: formData) => {
         console.log("pick-time-modal eventTitle,startDate",data.eventTitle, startDate)
@@ -49,19 +64,23 @@ export function PickTimeForm(props){
     return (
         pickTimeFormState.show ? <Modal {...modModalData}>
                 <Box as="form" noValidate onSubmit={handleSubmit(onSaveEvent)}>
-                    <Label htmlFor="eventTitle">Inser event title</Label>
+                    <Label htmlFor="eventTitle">Insert event title</Label>
                     <Input  
                         id="eventTitle" 
                         type="text" 
                         variant="default" 
                         {...register('eventTitle',{required: "Enter event title"})}/>
-                        {errors.eventTitle && <div>{errors.eventTitle.message}</div>}
+                        <ValidationError fieldError={errors.eventTitle} />
                     <Box>
                         <DatePicker
                             onChange={handleStartChange}
                             value={startDate ?? ''}
                             disabled={false}
                             propertyType='datetime'
+                            showTimeSelect
+                            filterTime={filterStartDatetime}
+                            locale= 'pt-BR'
+                            timeFormat='p'
                         />
                     </Box>
                     <Box>
@@ -70,9 +89,17 @@ export function PickTimeForm(props){
                             value={endDate ?? ''}
                             disabled={false}
                             propertyType='datetime'
+                            showTimeSelect
+                            filterTime={filterEndDatetime}
+                            locale= 'pt-BR'
+                            timeFormat='p'
                         />
                     </Box>
-                    <Button type="submit" ml="default" label="Save1" color="danger" size="sm">Regular size</Button>
+                    <Box flex flexDirection="row" justifyContent="flex-end" mt="xl">
+                        <Button mr="md" mt="sm"
+                        type="submit" label="Save1" color="danger" size="md"> medium size
+                        </Button>
+                    </Box>
                 </Box>
             </Modal>
     : null)

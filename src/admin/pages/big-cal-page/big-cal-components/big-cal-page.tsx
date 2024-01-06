@@ -122,7 +122,7 @@ function Selectable(props) {
     label: 'Create event',
     icon: 'Calendar',
     title: 'Define event parameters',
-    subTitle: 'Insert title',
+    subTitle: 'Event title',
     /* buttons: [
         { label: 'Cancel', onClick: closeModal }, 
         { label: 'Save', color: 'danger' , type: "submit"}],
@@ -202,12 +202,42 @@ function Selectable(props) {
       }
     } 
   ,[setEvents])
+
+  const [ initDeleteModal, setInitDeleteModal] = useState<{show:boolean,event?:evtType}>({show:false})
   
+  const deleteModalProps: ModalProps = {
+    variant: 'primary',
+    label: 'Delete event',
+    icon: 'Calendar',
+    title: 'Delete event with parameters',
+    subTitle: 'Event title',
+    buttons: [
+      { label: 'Cancel', onClick: setInitDeleteModal({show:false})}, 
+      { label: 'Confirm', color: 'danger' , type: "submit", onClick: setInitDeleteModal({show:false})}]
+  }
+
+  function handleConfirmDelEvent(){
+    const title = initDeleteModal.event.title;
+    const startMillsNum = parseInt(moment(initDeleteModal.event.start).toDate().getTime().toString());
+    const endMillsNum = parseInt(moment(initDeleteModal.event.end).toDate().getTime().toString());
+    api.getPage<evtType[]>({
+      pageName: 'SelectCalExample2',
+      method: 'post',
+      data : { startmills: startMillsNum, endmills: endMillsNum, title }
+    })
+  }
 
   const handleSelectEvent = useCallback(
-    (event) => window.alert(event.title),
-    []
+    (event) => {
+      //window.alert(event.title)
+      deleteModalProps.title = event.title;
+      deleteModalProps.subTitle = event.start.toISOString() +'\n'+event.end.toISOString()
+      setInitDeleteModal({show:true,event: event});
+    }
+    ,[]
   )
+
+
   
 
   return (
@@ -218,6 +248,7 @@ function Selectable(props) {
         </strong>
       </DemoLink>
       { initModal && <PickTimeForm handleSave={handleModalSaveEvt} /> }
+      { initDeleteModal.show && <Modal {...deleteModalProps}/>}
       <div style={{ height: "95vh" }}>
         <Calendar
         {...props}
