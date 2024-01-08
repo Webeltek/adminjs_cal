@@ -1,11 +1,14 @@
 import { Box, DatePicker,DatePickerProps, Label, 
     Modal, Input, ModalProps, FormGroup, Button} from '@adminjs/design-system'
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import nb from 'date-fns/locale/nb'
 import React, { useState, useCallback } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useSelector,useDispatch, connect } from 'react-redux'
 import { useTranslation, ReduxState , PickTimeFormInState, ModalData} from 'adminjs'
 import moment from 'moment'
 import { ValidationError } from './ValidationError.js'
+registerLocale('nb', nb)
 
 type formData = {
     eventTitle: string
@@ -19,9 +22,10 @@ export function PickTimeForm(props){
     const hidePicker = () => dispatch({ type: 'HIDE_PICK_TIME_FORM'})
     const modModalData: ModalProps = {
         ...pickTimeFormState,
-        buttons: [
+        /* buttons: [
             { label: 'Cancel', onClick: hidePicker }, 
-            { label: 'Save', color: 'danger' , type: "submit"}],
+            { label: 'Save', color: 'danger' , type: "submit"}
+        ], */
         onClose : hidePicker,
         onOverlayClick : hidePicker,
         } 
@@ -42,16 +46,12 @@ export function PickTimeForm(props){
     }
     
     const filterStartDatetime = (time) => {
-        const currentDate = new Date();
         const selectedDate = new Date(time);
-    
         return selectedDate.getTime() < moment(endDate).toDate().getTime();
     };
 
     const filterEndDatetime = (time) => {
-        const currentDate = new Date();
         const selectedDate = new Date(time);
-    
         return selectedDate.getTime() > moment(startDate).toDate().getTime();
     };
     
@@ -79,8 +79,7 @@ export function PickTimeForm(props){
                             propertyType='datetime'
                             showTimeSelect
                             filterTime={filterStartDatetime}
-                            locale= 'pt-BR'
-                            timeFormat='p'
+                            locale= 'nb'
                         />
                     </Box>
                     <Box>
@@ -91,14 +90,14 @@ export function PickTimeForm(props){
                             propertyType='datetime'
                             showTimeSelect
                             filterTime={filterEndDatetime}
-                            locale= 'pt-BR'
-                            timeFormat='p'
+                            locale= 'nb'
                         />
                     </Box>
                     <Box flex flexDirection="row" justifyContent="flex-end" mt="xl">
                         <Button mr="md" mt="sm"
-                        type="submit" label="Save1" color="danger" size="md"> medium size
-                        </Button>
+                        onClick={hidePicker} label="Cancel"  size="md"></Button>
+                        <Button mr="md" mt="sm"
+                        type="submit" label="Save" color="danger" size="md"></Button>
                     </Box>
                 </Box>
             </Modal>

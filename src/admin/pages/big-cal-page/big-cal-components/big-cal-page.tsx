@@ -222,9 +222,10 @@ function Selectable(props) {
     title: 'Delete event with parameters',
     subTitle: 'Event title',
     buttons: [
-      { label: 'Cancel'}, 
+      { label: 'Cancel', onClick: ()=> setInitDeleteModal({show: false})}, 
       { label: 'Confirm', color: 'danger' , type: "submit", onClick: handleConfirmDelEvent}],
-    onClose: () => {}  
+    onOverlayClick : ()=> setInitDeleteModal({show: false}),
+    onClose: ()=> setInitDeleteModal({show: false})  
   }
 
   function handleConfirmDelEvent(){
