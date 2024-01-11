@@ -78,6 +78,7 @@ export type OverridableComponent =
   | 'PropertyDescription'
   | 'PropertyLabel'
   | 'Login'
+  | 'Register'
   | 'AuthenticationBackgroundComponent'
   | 'Footer'
 

@@ -8,6 +8,7 @@ import userComponentsBundler from './backend/bundler/user-components-bundler.js'
 import { DEFAULT_PATHS } from './constants.js';
 import { ACTIONS } from './backend/actions/index.js';
 import loginTemplate from './frontend/login-template.js';
+import registerTemplate from './frontend/register-template.js';
 import { relativeFilePathResolver } from './utils/file-resolver.js';
 import { Router } from './backend/utils/index.js';
 import { ComponentLoader } from './backend/utils/component-loader.js';
@@ -162,7 +163,9 @@ class AdminJS {
   async renderLogin(props) {
     return loginTemplate(this, props);
   }
-
+  async renderRegister(props) {
+    return registerTemplate(this, props);
+  }
   /**
    * Returns resource base on its ID
    *

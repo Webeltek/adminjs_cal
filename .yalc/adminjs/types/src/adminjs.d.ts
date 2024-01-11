@@ -3,6 +3,7 @@ import BaseResource from './backend/adapters/resource/base-resource.js';
 import BaseDatabase from './backend/adapters/database/base-database.js';
 import { RecordActionResponse, Action, BulkActionResponse } from './backend/actions/action.interface.js';
 import { LoginTemplateAttributes } from './frontend/login-template.js';
+import { RegisterTemplateAttributes } from './frontend/register-template.js';
 import { ListActionResponse } from './backend/actions/list/list-action.js';
 import { Locale } from './locale/index.js';
 import { TranslateFunctions } from './utils/translate-functions.factory.js';
@@ -98,6 +99,7 @@ declare class AdminJS {
      * @return {Promise<string>}                HTML of the rendered page
      */
     renderLogin(props: LoginTemplateAttributes): Promise<string>;
+    renderRegister(props: RegisterTemplateAttributes): Promise<string>;
     /**
      * Returns resource base on its ID
      *

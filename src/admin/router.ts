@@ -5,12 +5,79 @@ import argon2 from 'argon2';
 import { FastifyInstance } from 'fastify';
 import ConnectPgSimple from 'connect-pg-simple';
 import session from 'express-session';
-import { Router } from 'express';
-
+import { Router , Request} from 'express';
+import express from "express";
 import { AdminModel } from '../sources/mongoose/models/index.js';
 import { AuthUsers } from './constants/authUsers.js';
+import { PrismaClient } from '@prisma/client';
+import { dmmf } from '../sources/prisma/config.js';
+import formidableMiddleware from "express-formidable";
+import { FormidableOptions,AuthenticationContext, AuthenticationOptions } from '@adminjs/express';
+
+interface FormidRequest extends Request {
+  fields : any
+}
+
+export const withRegister = (
+  registerPath: string,
+  router: Router,
+  admin: AdminJS,
+  formidableOptions?: FormidableOptions
+): void => {
+  const { rootPath } = admin.options;
+
+  router.use(formidableMiddleware(formidableOptions) as any);
+
+  router.get(registerPath, async (req, res) => {
+    const baseProps = {
+      action: admin.options.loginPath,
+      errorMessage: null,
+    };
+    const register = await admin.renderRegister({
+      ...baseProps,
+    });
+
+    return res.send(register);
+  });
+
+  router.post(registerPath, async (req: FormidRequest, res, next) => {
+
+      const { email, password } = req.fields as {
+        email: string;
+        password: string;
+      };
+      // "auth.authenticate" must always be defined if "auth.provider" isn't
+      const login = await admin.renderRegister({
+        action: admin.options.loginPath,
+        errorMessage: "invalidCredentials",
+      });
+
+      return res.send(login);
+  });
+};
+
+export const buildRegisterRouter = (
+  registerPath: string,
+  admin: AdminJS,
+  predefinedRouter: express.Router,
+  auth?: AuthenticationOptions,
+  sessionOptions?: session.SessionOptions,
+  formidableOptions?: FormidableOptions
+): Router => {
+  const router = predefinedRouter;
+  withRegister(registerPath,router,admin,formidableOptions);
+  return predefinedRouter;
+}
 
 export const authenticateUser = async (email, password) => {
+  const prClient = new PrismaClient();
+  const nf_user_model = dmmf.modelMap.nf_user;
+  const foundUser = await prClient.nf_user.findFirst({
+    where: {
+      user_email : email
+    }
+  })
+
   const user = await AdminModel.findOne({ email });
   if (user && (await argon2.verify(user.password, password))) {
     const userData = AuthUsers.find((au) => email === au.email);

@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adminjs/design-system@file:.yalc/@adminjs/design-system::locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Da14ae9%26locator%3Dexample%2540workspace%253A.":
+"@adminjs/design-system@file:.yalc/@adminjs/design-system::locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Daa933c%26locator%3Dexample%2540workspace%253A.":
   version: 4.0.3
-  resolution: "@adminjs/design-system@file:.yalc/@adminjs/design-system#.yalc/@adminjs/design-system::hash=0dc0c5&locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Da14ae9%26locator%3Dexample%2540workspace%253A."
+  resolution: "@adminjs/design-system@file:.yalc/@adminjs/design-system#.yalc/@adminjs/design-system::hash=0dc0c5&locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Daa933c%26locator%3Dexample%2540workspace%253A."
   dependencies:
     "@hypnosphi/create-react-context": "npm:^0.3.1"
     "@tiptap/core": "npm:2.0.1"
@@ -4724,7 +4724,7 @@ __metadata:
 
 "adminjs@file:.yalc/adminjs::locator=example%40workspace%3A.":
   version: 7.5.2
-  resolution: "adminjs@file:.yalc/adminjs#.yalc/adminjs::hash=a14ae9&locator=example%40workspace%3A."
+  resolution: "adminjs@file:.yalc/adminjs#.yalc/adminjs::hash=aa933c&locator=example%40workspace%3A."
   dependencies:
     "@adminjs/design-system": "file:.yalc/@adminjs/design-system"
     "@babel/core": "npm:^7.21.0"
@@ -4770,7 +4770,7 @@ __metadata:
     xss: "npm:^1.0.14"
   bin:
     admin: ./cli.js
-  checksum: 8fa34daee2bcd626d2399b1c0bb9cb43b73ac066ad5300afba445938aea152fcec43bf7bd65c1172a544a91626cdbb6dae0165550c42a550b994419be93b6b98
+  checksum: 400012664bc239f70defa25f99574b316d04287b77786013258564bd8f764a8f10e5b1f56e6d6c03062b9520e1530b82f5cf2e3b6c82cd45772a52b0b4bea414
   languageName: node
   linkType: hard
 

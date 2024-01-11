@@ -14,6 +14,7 @@ import { DEFAULT_PATHS } from './constants.js'
 import { ACTIONS } from './backend/actions/index.js'
 
 import loginTemplate, { LoginTemplateAttributes } from './frontend/login-template.js'
+import registerTemplate, { RegisterTemplateAttributes } from './frontend/register-template.js'
 import { ListActionResponse } from './backend/actions/list/list-action.js'
 import { Locale } from './locale/index.js'
 import { TranslateFunctions } from './utils/translate-functions.factory.js'
@@ -190,6 +191,9 @@ class AdminJS {
     return loginTemplate(this, props)
   }
 
+  async renderRegister(props: RegisterTemplateAttributes): Promise<string> {
+    return registerTemplate(this, props)
+  }
   /**
    * Returns resource base on its ID
    *
