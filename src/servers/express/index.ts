@@ -6,7 +6,7 @@ import AdminJS from 'adminjs';
 import * as url from 'url';
 
 import { createAuthUsers, generateAdminJSConfig } from '../../admin/index.js';
-import { expressAuthenticatedRouter, buildRegisterRouter } from '../../admin/router.js';
+import { expressAuthenticatedRouter} from '../../admin/router.js';
 import { init } from '../../sources/mikroorm/config.js';
 import dataSource from '../../sources/typeorm/config.js';
 import bigIntToString from './big-int-helper.js';
@@ -20,14 +20,12 @@ const attachAdminJS = async (app: Express) => {
 
   if (process.env.NODE_ENV === 'production') await adminJS.initialize();
   else adminJS.watch();
-
   const registerPath = '/admin/register';
-  const predefinedRouter =  express.Router();
-  const registerRouter = buildRegisterRouter(registerPath,adminJS,predefinedRouter);
-  app.use(registerPath,registerRouter);
+  //const predefinedRouter =  express.Router();
+  //const registerRouter = buildRegisterRouter(registerPath,adminJS,predefinedRouter);
+  //app.use(registerPath,registerRouter);
   
   const adminRouter = expressAuthenticatedRouter(adminJS);
-
   app.use(adminJS.options.rootPath, adminRouter);
   
   app.get('/', (req, res) => res.redirect(adminJS.options.rootPath));

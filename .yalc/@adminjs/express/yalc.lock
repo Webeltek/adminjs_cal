@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "adminjs": {
+      "signature": "060053fe5adceca2ed97539c5e6e6553",
+      "file": true,
+      "replaced": "^7.4.0"
+    }
+  }
+}

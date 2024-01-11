@@ -13,61 +13,7 @@ import { PrismaClient } from '@prisma/client';
 import { dmmf } from '../sources/prisma/config.js';
 import formidableMiddleware from "express-formidable";
 import { FormidableOptions,AuthenticationContext, AuthenticationOptions } from '@adminjs/express';
-
-interface FormidRequest extends Request {
-  fields : any
-}
-
-export const withRegister = (
-  registerPath: string,
-  router: Router,
-  admin: AdminJS,
-  formidableOptions?: FormidableOptions
-): void => {
-  const { rootPath } = admin.options;
-
-  router.use(formidableMiddleware(formidableOptions) as any);
-
-  router.get(registerPath, async (req, res) => {
-    const baseProps = {
-      action: admin.options.loginPath,
-      errorMessage: null,
-    };
-    const register = await admin.renderRegister({
-      ...baseProps,
-    });
-
-    return res.send(register);
-  });
-
-  router.post(registerPath, async (req: FormidRequest, res, next) => {
-
-      const { email, password } = req.fields as {
-        email: string;
-        password: string;
-      };
-      // "auth.authenticate" must always be defined if "auth.provider" isn't
-      const login = await admin.renderRegister({
-        action: admin.options.loginPath,
-        errorMessage: "invalidCredentials",
-      });
-
-      return res.send(login);
-  });
-};
-
-export const buildRegisterRouter = (
-  registerPath: string,
-  admin: AdminJS,
-  predefinedRouter: express.Router,
-  auth?: AuthenticationOptions,
-  sessionOptions?: session.SessionOptions,
-  formidableOptions?: FormidableOptions
-): Router => {
-  const router = predefinedRouter;
-  withRegister(registerPath,router,admin,formidableOptions);
-  return predefinedRouter;
-}
+import { OldBodyParserUsedError, WrongArgumentError } from '@adminjs/express';
 
 export const authenticateUser = async (email, password) => {
   const prClient = new PrismaClient();

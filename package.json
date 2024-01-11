@@ -44,7 +44,7 @@
     "schema": "prisma/schema.prisma"
   },
   "dependencies": {
-    "@adminjs/express": "^6.0.0",
+    "@adminjs/express": "file:.yalc/@adminjs/express",
     "@adminjs/fastify": "^4.0.0",
     "@adminjs/hapi": "^7.0.0",
     "@adminjs/koa": "^4.0.0",

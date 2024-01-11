@@ -51,6 +51,15 @@
         "password": "Password"
       },
       "loginButton": "Login"
+    },
+    "Register": {
+      "welcomeHeader": "Welcome",
+      "welcomeMessage": "Register new user",
+      "properties": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "loginButton": "Register"
     }
   },
   "labels": {

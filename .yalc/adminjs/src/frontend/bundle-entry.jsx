@@ -3,7 +3,7 @@ import React, { Suspense } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-
+import { Routes, Route } from 'react-router-dom'
 import ViewHelpers from '../backend/utils/view-helpers/view-helpers.js'
 import { flat } from '../utils/flat/index.js'
 import * as AppComponents from './components/app/index.js'
@@ -43,6 +43,7 @@ const Application = (
 )
 
 const loginAppProps = window.__APP_STATE__ ?? {}
+const registerAppProps = window.__APP_STATE__ ?? {}
 const LoginApplication = (
   <Provider store={store}>
     <ThemeProvider theme={theme}>

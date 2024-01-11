@@ -3,6 +3,7 @@ import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import ViewHelpers from '../backend/utils/view-helpers/view-helpers.js';
 import { flat } from '../utils/flat/index.js';
 import * as AppComponents from './components/app/index.js';
@@ -38,6 +39,7 @@ const Application = /*#__PURE__*/React.createElement(Provider, {
   fallback: /*#__PURE__*/React.createElement(AppLoader, null)
 }, /*#__PURE__*/React.createElement(App, null))))));
 const loginAppProps = window.__APP_STATE__ ?? {};
+const registerAppProps = window.__APP_STATE__ ?? {};
 const LoginApplication = /*#__PURE__*/React.createElement(Provider, {
   store: store
 }, /*#__PURE__*/React.createElement(ThemeProvider, {

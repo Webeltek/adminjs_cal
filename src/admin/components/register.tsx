@@ -72,9 +72,9 @@ export const Register: React.FC<LoginProps> = (props) => {
             display={['none', 'none', 'block']}
             position="relative"
           >
-            <H2 fontWeight="lighter">{translateComponent('Login.welcomeHeader')}</H2>
+            <H2 fontWeight="lighter">{translateComponent('Register.welcomeHeader')}</H2>
             <Text fontWeight="lighter" mt="default">
-              {translateComponent('Login.welcomeMessage')}
+              {translateComponent('Register.welcomeMessage')}
             </Text>
             <IllustrationsWrapper p="xxl">
               <Box display="inline" mr="default">
@@ -101,25 +101,25 @@ export const Register: React.FC<LoginProps> = (props) => {
               />
             )}
             <FormGroup>
-              <Label required>{translateComponent('Login.properties.email')}</Label>
+              <Label required>{translateComponent('Register.properties.email')}</Label>
               <Input
                 name="email"
-                placeholder={translateComponent('Login.properties.email')}
+                placeholder={translateComponent('Register.properties.email')}
                 defaultValue={defaultUser.email}
               />
             </FormGroup>
             <FormGroup>
-              <Label required>{translateComponent('Login.properties.password')}</Label>
+              <Label required>{translateComponent('Register.properties.password')}</Label>
               <Input
                 type="password"
                 name="password"
-                placeholder={translateComponent('Login.properties.password')}
+                placeholder={translateComponent('Register.properties.password')}
                 autoComplete="new-password"
                 defaultValue={defaultUser.password}
               />
             </FormGroup>
             <Text mt="xl" textAlign="center">
-              <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
+              <Button variant="contained">{translateComponent('Register.loginButton')}</Button>
             </Text>
           </Box>
         </Box>
