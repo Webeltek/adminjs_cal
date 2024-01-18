@@ -41,13 +41,15 @@
     "express": ">=4.18.2",
     "express-formidable": "^1.2.0",
     "express-session": ">=1.17.3",
-    "tslib": "^2.5.0"
+    "tslib": "^2.6.2"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "dependencies": {},
-  "yalcSig": "005776c73ece14e7e64c2ba99f830cbd"
+  "dependencies": {
+    "nodemailer": "^6.9.8"
+  },
+  "yalcSig": "8b0aca94f0f4bdf934b3e01f8cc0d675"
 }

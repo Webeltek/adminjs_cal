@@ -48,10 +48,7 @@ const LoginApplication = /*#__PURE__*/React.createElement(Provider, {
   i18n: i18n
 }, /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(Suspense, {
   fallback: /*#__PURE__*/React.createElement(AppLoader, null)
-}, /*#__PURE__*/React.createElement(Routes, null, /*#__PURE__*/React.createElement(Route, {
-  path: '/admin/register',
-  element: /*#__PURE__*/React.createElement(Register, registerAppProps)
-})))))));
+}, /*#__PURE__*/React.createElement(Login, loginAppProps))))));
 const RegisterApplication = /*#__PURE__*/React.createElement(Provider, {
   store: store
 }, /*#__PURE__*/React.createElement(ThemeProvider, {
@@ -69,6 +66,7 @@ export default {
   Application,
   OriginalApplication: OriginalApp,
   LoginApplication,
+  RegisterApplication,
   ViewHelpers,
   UserComponents: {},
   ApiClient,

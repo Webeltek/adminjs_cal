@@ -19,6 +19,7 @@ import {
 import { styled } from '@adminjs/design-system/styled-components';
 import { ReduxState, useTranslation } from 'adminjs';
 import { AuthUser, AuthUsers } from '../constants/authUsers.js';
+import { useNavigate } from 'react-router-dom'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -58,6 +59,12 @@ export const Login: React.FC<LoginProps> = (props) => {
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
   const message = `Email: ${defaultUser.email}\nPassword: ${defaultUser.password}`;
+  
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = `/admin/register`; 
+    navigate(path);
+  }
 
   return (
     <React.Fragment>
@@ -120,6 +127,10 @@ export const Login: React.FC<LoginProps> = (props) => {
             </FormGroup>
             <Text mt="xl" textAlign="center">
               <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
+            </Text>
+            <Text mt="xl" textAlign="left">
+              <Button onClick={routeChange}
+              variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>
         </Box>

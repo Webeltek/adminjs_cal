@@ -50,7 +50,8 @@
         "email": "Email",
         "password": "Password"
       },
-      "loginButton": "Login"
+      "loginButton": "Login",
+      "registerButton": "Register"
     },
     "Register": {
       "welcomeHeader": "Welcome",
@@ -122,6 +123,7 @@
     "needMoreSolutions_title": "Need more advanced solutions?",
     "needMoreSolutions_subtitle": "We are here to provide you a beautiful UX/UI design and tailor made software based (not only) on AdminJS",
     "invalidCredentials": "Wrong email and/or password",
+    "emailSentTo": "Email sent to: ",
     "keyPlaceholder": "KEY",
     "valuePlaceholder": "VALUE",
     "initialKey": "Key-{{number}}",

@@ -45,15 +45,16 @@ const IllustrationsWrapper = styled(Box)<BoxProps>`
   }
 `;
 
-export type LoginProps = {
+export type RegisterProps = {
   credentials: Pick<AuthUser, 'email' | 'password'>;
   action: string;
   errorMessage?: string;
+  postMessage? : string;
   children?: any;
 };
 
-export const Register: React.FC<LoginProps> = (props) => {
-  const { action, errorMessage } = props;
+export const Register: React.FC<RegisterProps> = (props) => {
+  const { action, errorMessage, postMessage} = props;
   const { translateComponent, translateMessage } = useTranslation();
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
@@ -88,7 +89,15 @@ export const Register: React.FC<LoginProps> = (props) => {
               </Box>
             </IllustrationsWrapper>
           </Box>
-          <Box as="form" action={action} method="POST" p="x3" flexGrow={1} width={['100%', '100%', '480px']}>
+          { postMessage && (
+              <MessageBox
+                my="lg"
+                message={translateMessage(postMessage)}
+                variant="danger"
+              />
+            )}
+          { !postMessage && (
+            <Box as="form" action={action} method="POST" p="x3" flexGrow={1} width={['100%', '100%', '480px']}>
             <H5 marginBottom="xxl">
               {branding.logo ? <StyledLogo src={branding.logo} alt={branding.companyName} /> : branding.companyName}
             </H5>
@@ -122,6 +131,8 @@ export const Register: React.FC<LoginProps> = (props) => {
               <Button variant="contained">{translateComponent('Register.loginButton')}</Button>
             </Text>
           </Box>
+          )}
+          
         </Box>
         {branding.withMadeWithLove ? (
           <Box mt="xxl">

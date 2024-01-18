@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux'
 import { allowOverride } from '../../hoc/allow-override.js'
 import { useTranslation } from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
-import { LoginTemplateAttributes } from '../../login-template.js'
+import { RegisterTemplateAttributes } from '../../register-template.js'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -52,7 +52,7 @@ export type LoginProps = {
 }
 
 export const Register: React.FC = () => {
-  const props = (window as any).__APP_STATE__ as LoginTemplateAttributes
+  const props = (window as any).__APP_STATE__ as RegisterTemplateAttributes
   const { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)

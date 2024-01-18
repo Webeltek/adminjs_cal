@@ -50,10 +50,7 @@ const LoginApplication = (
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
           <Suspense fallback={<AppLoader />}>
-            <Routes>
-                {/* <Route path={'/admin/login'} element={<Login {...loginAppProps} />} /> */}
-                <Route path={'/admin/register'} element={<Register {...registerAppProps} />}/>
-            </Routes>
+            <Login {...loginAppProps} />
           </Suspense>
         </BrowserRouter>
       </I18nextProvider>
@@ -83,6 +80,7 @@ export default {
   Application,
   OriginalApplication: OriginalApp,
   LoginApplication,
+  RegisterApplication,
   ViewHelpers,
   UserComponents: {},
   ApiClient,

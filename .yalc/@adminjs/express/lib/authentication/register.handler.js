@@ -1,3 +1,5 @@
+import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
 const getRegisterPath = (registerPath, admin) => {
     const { rootPath } = admin.options;
     // since we are inside already namespaced router we have to replace login and logout routes that
@@ -9,15 +11,36 @@ const getRegisterPath = (registerPath, admin) => {
         ? normalizedRegisterPath
         : `/${normalizedRegisterPath}`;
 };
+const opt = new SMTPTransport({
+    host: process.env.MAIL_SERVER,
+    port: Number.parseInt(process.env.MAIL_PORT),
+    secure: true,
+    auth: {
+        // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASSWORD,
+    },
+});
+const transporter = nodemailer.createTransport(opt);
+async function sendEmail(from, to, subject, text, html) {
+    const info = await transporter.sendMail({
+        from: from, // sender address
+        to: to, // list of receivers
+        subject: subject, // Subject line
+        text: text, // plain text body
+        html: html, // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+}
 export const withRegister = (registerPath, router, admin, auth) => {
     const regPath = getRegisterPath(registerPath, admin);
-    console.log("inside withRegister ");
+    //console.log("inside withRegister ")
     router.get(regPath, async (req, res) => {
         const baseProps = {
             action: registerPath,
             errorMessage: null,
         };
-        console.log("inside withRegister get");
+        //console.log("inside withRegister get")
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });
@@ -26,10 +49,11 @@ export const withRegister = (registerPath, router, admin, auth) => {
         let adminUser;
         const { email, password } = req.fields;
         // "auth.authenticate" must always be defined if "auth.provider" isn't
-        adminUser = await auth.authenticate(email, password, context);
+        //adminUser = await auth.authenticate!(email, password, context);
+        sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "register test", "<b>register test</b>");
         const register = await admin.renderRegister({
             action: registerPath,
-            errorMessage: "invalidCredentials",
+            postMessage: "emailSentTo",
         });
         return res.send(register);
     });

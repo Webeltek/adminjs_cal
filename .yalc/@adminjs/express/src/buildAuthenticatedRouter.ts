@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import AdminJS, { Router as AdminRouter } from "adminjs";
 import express, { Router } from "express";
 import formidableMiddleware from "express-formidable";

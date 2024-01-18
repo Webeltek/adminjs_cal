@@ -88,6 +88,7 @@
   "homepage": "https://github.com/SoftwareBrothers/adminjs#readme",
   "dependencies": {
     "@adminjs/design-system": "file:.yalc/@adminjs/design-system",
+    "@adminjs/express": "6.1.0",
     "@babel/core": "^7.21.0",
     "@babel/parser": "^7.21.0",
     "@babel/plugin-syntax-import-assertions": "^7.20.0",
@@ -135,5 +136,5 @@
     "react-redux": "8.0.5",
     "redux": "4.2.1"
   },
-  "yalcSig": "060053fe5adceca2ed97539c5e6e6553"
+  "yalcSig": "ff2b5338e13bd468fc9c32315aa6daf3"
 }

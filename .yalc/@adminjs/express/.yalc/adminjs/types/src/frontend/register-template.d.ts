@@ -1,6 +1,7 @@
 import AdminJS from '../adminjs.js';
 export type RegisterTemplateAttributes = {
     errorMessage?: string | null;
+    postMessage?: string;
     action?: string;
     [name: string]: any;
 };
