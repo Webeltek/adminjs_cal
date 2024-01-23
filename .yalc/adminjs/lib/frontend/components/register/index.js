@@ -29,7 +29,7 @@ const IllustrationsWrapper = styled(Box)`
   }
 `;
 export const Register = () => {
-  const props = window.__APP_STATE__;
+  const props = window.__APP_STATE__REG;
   const {
     action,
     errorMessage: message

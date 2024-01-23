@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import {
@@ -55,6 +55,7 @@ export type LoginProps = {
 
 export const Login: React.FC<LoginProps> = (props) => {
   const { action, errorMessage } = props;
+  const [ route , setRoute] = useState<string>(action);
   const { translateComponent, translateMessage } = useTranslation();
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
@@ -62,7 +63,8 @@ export const Login: React.FC<LoginProps> = (props) => {
   
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
-    let path = `/admin/register`; 
+    let path = `/admin/register`;
+    setRoute(path); 
     navigate(path);
   }
 
@@ -129,7 +131,7 @@ export const Login: React.FC<LoginProps> = (props) => {
               <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
             </Text>
             <Text mt="xl" textAlign="left">
-              <Button onClick={routeChange}
+              <Button type="button" onClick={routeChange}
               variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>

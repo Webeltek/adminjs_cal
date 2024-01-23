@@ -52,7 +52,7 @@ export type LoginProps = {
 }
 
 export const Register: React.FC = () => {
-  const props = (window as any).__APP_STATE__ as RegisterTemplateAttributes
+  const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
   const { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)

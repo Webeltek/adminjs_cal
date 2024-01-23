@@ -66,7 +66,7 @@ const html = async (
       <script src="${h.assetPath('components.bundle.js', assets)}"></script>
       <script>
         try {
-          window.__APP_STATE__ = JSON.parse('${stringifiedAttributes}');
+          window.__APP_STATE__REG = JSON.parse('${stringifiedAttributes}');
         } catch (e) {
           console.log(e)
           window.__APP_STATE__ = {};
@@ -145,7 +145,7 @@ const html = async (
       <script>
         var app = document.getElementById('app');
         var root = createRoot(app);
-        const CustomLoginApplication = AdminJS.UserComponents && AdminJS.UserComponents.LoginApplication;
+        const CustomRegisterApplication = AdminJS.UserComponents && AdminJS.UserComponents.RegisterApplication;
         const RegisterApplication = AdminJS.RegisterApplication;
         root.render(RegisterApplication);
       </script>

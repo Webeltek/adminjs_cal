@@ -43,7 +43,7 @@ const Application = (
 )
 
 const loginAppProps = window.__APP_STATE__ ?? {}
-const registerAppProps = window.__APP_STATE__ ?? {}
+const registerAppProps = window.__APP_STATE__REG ?? {}
 const LoginApplication = (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
@@ -64,7 +64,7 @@ const RegisterApplication = (
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
           <Suspense fallback={<AppLoader />}>
-            <Register/>
+            <Register {...registerAppProps}/>
           </Suspense>
         </BrowserRouter>
       </I18nextProvider>
