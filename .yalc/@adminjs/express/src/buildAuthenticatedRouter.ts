@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import AdminJS, { Router as AdminRouter } from "adminjs";
 import express, { Router } from "express";
@@ -101,7 +103,8 @@ export const buildAuthenticatedRouter = (
   withLogin(router, admin, auth);
 
   const registerPath = '/admin/register';
-  withRegister(registerPath,router, admin, auth);
+  const emailSentPath = '/admin/register/email_sent';
+  withRegister(registerPath,emailSentPath,router, admin, auth);
 
   withLogout(router, admin, auth);
   buildAssets({ admin, assets, routes, router });

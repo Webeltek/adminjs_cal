@@ -32,7 +32,7 @@ async function sendEmail(from, to, subject, text, html) {
     });
     console.log("Message sent: %s", info.messageId);
 }
-export const withRegister = (registerPath, router, admin, auth) => {
+export const withRegister = (registerPath, emailSentPath, router, admin, auth) => {
     const regPath = getRegisterPath(registerPath, admin);
     //console.log("inside withRegister ")
     router.get(regPath, async (req, res) => {

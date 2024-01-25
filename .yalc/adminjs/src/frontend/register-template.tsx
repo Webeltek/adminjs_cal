@@ -44,6 +44,7 @@ const html = async (
   const reduxState = store.getState()
   const { locale } = reduxState
   const stringifiedAttributes = JSON.stringify(attributes ?? {})
+  console.log('register-template stringifiedAttributes',stringifiedAttributes);
 
   return `<!DOCTYPE html>
     <html lang=${locale.language}>
@@ -69,7 +70,7 @@ const html = async (
           window.__APP_STATE__REG = JSON.parse('${stringifiedAttributes}');
         } catch (e) {
           console.log(e)
-          window.__APP_STATE__ = {};
+          window.__APP_STATE__REG = {};
         }
       </script>
       ${styles.join('\n')}

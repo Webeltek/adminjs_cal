@@ -19,6 +19,9 @@ import {
 import { styled } from '@adminjs/design-system/styled-components';
 import { ReduxState, useTranslation } from 'adminjs';
 import { AuthUser, AuthUsers } from '../constants/authUsers.js';
+import { RegisterTemplateAttributes } from 'node_modules/adminjs/types/src/frontend/register-template.js';
+import { Routes, Route } from 'react-router-dom'
+import EmailSent from './email_sent.js';
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -45,6 +48,18 @@ const IllustrationsWrapper = styled(Box)<BoxProps>`
   }
 `;
 
+const RegisterApp: React.FC = () => {
+  return (
+    <Box height="100%" flex data-css="app">
+      <Routes>
+        <Route path="/admin/register" element={<Register/>} />
+        <Route path="/admin/register/email_sent" element={<EmailSent/>} />
+      </Routes>
+    </Box>
+
+  )
+}
+
 export type RegisterProps = {
   credentials: Pick<AuthUser, 'email' | 'password'>;
   action: string;
@@ -53,13 +68,16 @@ export type RegisterProps = {
   children?: any;
 };
 
-export const Register: React.FC<RegisterProps> = (props) => {
-  const { action, errorMessage, postMessage} = props;
+export const Register: React.FC = (props) => {
+  const props2 = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
+  const { action, errorMessage  ,postMessage} = props2
+  console.log("Overridable register action, postmessage",action ,postMessage);
+  
   const { translateComponent, translateMessage } = useTranslation();
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
   const message = `Email: ${defaultUser.email}\nPassword: ${defaultUser.password}`;
-
+  
   return (
     <React.Fragment>
       <Wrapper flex variant="grey">

@@ -18,6 +18,7 @@ export const override = (url: string, componentName: OverridableComponent): stri
 override('components/top-bar', 'Version');
 override('components/login', 'Login');
 override('components/sidebar-resource-section', 'SidebarResourceSection');
+override('components/register', 'Register')
 
 /**
  * Common components
@@ -28,7 +29,6 @@ export const DETAILED_STATS = add('components/detailed-stats', 'DetailedStats');
 export const THUMB = add('components/thumb', 'Thumb');
 export const MILLS_TO_HOUR = add('components/mills-to-hour', 'MillsToHour');
 export const STRIP_HTML_TAG = add('components/strip-html-tag','StripHtmlTag');
-export const REGISTER = add('components/register', 'Register');
 
 /**
  * Pages

@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adminjs/design-system@file:.yalc/@adminjs/design-system::locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Db8eb23%26locator%3Dexample%2540workspace%253A.":
+"@adminjs/design-system@file:.yalc/@adminjs/design-system::locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3D3097da%26locator%3Dexample%2540workspace%253A.":
   version: 4.0.3
-  resolution: "@adminjs/design-system@file:.yalc/@adminjs/design-system#.yalc/@adminjs/design-system::hash=0dc0c5&locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3Db8eb23%26locator%3Dexample%2540workspace%253A."
+  resolution: "@adminjs/design-system@file:.yalc/@adminjs/design-system#.yalc/@adminjs/design-system::hash=0dc0c5&locator=adminjs%40file%3A.yalc%2Fadminjs%23.yalc%2Fadminjs%3A%3Ahash%3D3097da%26locator%3Dexample%2540workspace%253A."
   dependencies:
     "@hypnosphi/create-react-context": "npm:^0.3.1"
     "@tiptap/core": "npm:2.0.1"
@@ -59,7 +59,7 @@ __metadata:
 
 "@adminjs/express@file:.yalc/@adminjs/express::locator=example%40workspace%3A.":
   version: 6.1.0
-  resolution: "@adminjs/express@file:.yalc/@adminjs/express#.yalc/@adminjs/express::hash=6b846b&locator=example%40workspace%3A."
+  resolution: "@adminjs/express@file:.yalc/@adminjs/express#.yalc/@adminjs/express::hash=60d5ee&locator=example%40workspace%3A."
   dependencies:
     nodemailer: "npm:^6.9.8"
   peerDependencies:
@@ -68,7 +68,7 @@ __metadata:
     express-formidable: ^1.2.0
     express-session: ">=1.17.3"
     tslib: ^2.6.2
-  checksum: 6a79aefbeaa1c508e64ef42ee079fd6751a1d6d9652001dc5df892d2445e8a37bfa867b078dc8d5bab0f769b13c8ca2f7f19e944e222bc08d96d9f24e3c86c80
+  checksum: 762fe5900ef2a7f252844fb5c608f6c7d6a458e5e6d7c19fbf68423f38fdebe7c1037b6219bca0100d643fac7531dfc26eaaaeb6242cb53f0fd1621fb33570fa
   languageName: node
   linkType: hard
 
@@ -4739,7 +4739,7 @@ __metadata:
 
 "adminjs@file:.yalc/adminjs::locator=example%40workspace%3A.":
   version: 7.5.2
-  resolution: "adminjs@file:.yalc/adminjs#.yalc/adminjs::hash=b8eb23&locator=example%40workspace%3A."
+  resolution: "adminjs@file:.yalc/adminjs#.yalc/adminjs::hash=3097da&locator=example%40workspace%3A."
   dependencies:
     "@adminjs/design-system": "file:.yalc/@adminjs/design-system"
     "@adminjs/express": "npm:6.1.0"
@@ -4786,7 +4786,7 @@ __metadata:
     xss: "npm:^1.0.14"
   bin:
     admin: ./cli.js
-  checksum: 2d56c045267807e1cc4ee0e04395c1ad3fe7100e65aa4862acc4736e2af7af250e346737c1693835fc43989fe3e10b636ef9d25b95c7ed59af9e1ed71fff2c66
+  checksum: bc87335cab2a3f407908c2b74b7196a0669e7df1e8305b01fbf9e44666f79cf9bdef2cec812250aea017c3baeca27030b9d534f23af97210a4ccaa7233454447
   languageName: node
   linkType: hard
 

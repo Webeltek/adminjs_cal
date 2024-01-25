@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import AdminJS from "adminjs";
 import { Router } from "express";
@@ -49,6 +51,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
   
   export const withRegister = (
     registerPath: string,
+    emailSentPath: string,
     router: Router,
     admin: AdminJS,
     auth: AuthenticationOptions

@@ -54,10 +54,9 @@ export type RegisterProps = {
 
 export const Register: React.FC = () => {
   const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
-  const { action, errorMessage: message ,postMessage} = props
+  const { action, postMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)
-  console.log('register props',action, message, postMessage);
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -87,45 +86,13 @@ export const Register: React.FC = () => {
             </Box>
           </IllustrationsWrapper>
         </Box>
-        <Box
-          as="form"
-          action={action}
-          method="POST"
-          p="x3"
-          flexGrow={1}
-          width={['100%', '100%', '480px']}
-        >
-          <H5 marginBottom="xxl">
-            {branding.logo ? (
-              <StyledLogo src={branding.logo} alt={branding.companyName} />
-            ) : (
-              branding.companyName
+        { message && (
+              <MessageBox
+                my="lg"
+                message={translateMessage(message)}
+                variant="danger"
+              />
             )}
-          </H5>
-          {message && (
-            <MessageBox
-              my="lg"
-              message={message.split(' ').length > 1 ? message : translateMessage(message)}
-              variant="danger"
-            />
-          )}
-          <FormGroup>
-            <Label required>{translateComponent('Login.properties.email')}</Label>
-            <Input name="email" placeholder={translateComponent('Login.properties.email')} />
-          </FormGroup>
-          <FormGroup>
-            <Label required>{translateComponent('Login.properties.password')}</Label>
-            <Input
-              type="password"
-              name="password"
-              placeholder={translateComponent('Login.properties.password')}
-              autoComplete="new-password"
-            />
-          </FormGroup>
-          <Text mt="xl" textAlign="center">
-            <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
-          </Text>
-        </Box>
       </Box>
       {branding.withMadeWithLove ? (
         <Box mt="xxl">

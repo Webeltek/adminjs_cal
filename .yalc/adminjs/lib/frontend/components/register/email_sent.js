@@ -1,4 +1,4 @@
-import { Box, Button, FormGroup, H2, H5, Illustration, Input, Label, MadeWithLove, MessageBox, Text } from '@adminjs/design-system';
+import { Box, H2, Illustration, MadeWithLove, MessageBox, Text } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -32,15 +32,13 @@ export const Register = () => {
   const props = window.__APP_STATE__REG;
   const {
     action,
-    errorMessage: message,
-    postMessage
+    postMessage: message
   } = props;
   const {
     translateComponent,
     translateMessage
   } = useTranslation();
   const branding = useSelector(state => state.branding);
-  console.log('register props', action, message, postMessage);
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -87,40 +85,11 @@ export const Register = () => {
     variant: "FlagInCog",
     width: 82,
     height: 91
-  })))), /*#__PURE__*/React.createElement(Box, {
-    as: "form",
-    action: action,
-    method: "POST",
-    p: "x3",
-    flexGrow: 1,
-    width: ['100%', '100%', '480px']
-  }, /*#__PURE__*/React.createElement(H5, {
-    marginBottom: "xxl"
-  }, branding.logo ? /*#__PURE__*/React.createElement(StyledLogo, {
-    src: branding.logo,
-    alt: branding.companyName
-  }) : branding.companyName), message && /*#__PURE__*/React.createElement(MessageBox, {
+  })))), message && /*#__PURE__*/React.createElement(MessageBox, {
     my: "lg",
-    message: message.split(' ').length > 1 ? message : translateMessage(message),
+    message: translateMessage(message),
     variant: "danger"
-  }), /*#__PURE__*/React.createElement(FormGroup, null, /*#__PURE__*/React.createElement(Label, {
-    required: true
-  }, translateComponent('Login.properties.email')), /*#__PURE__*/React.createElement(Input, {
-    name: "email",
-    placeholder: translateComponent('Login.properties.email')
-  })), /*#__PURE__*/React.createElement(FormGroup, null, /*#__PURE__*/React.createElement(Label, {
-    required: true
-  }, translateComponent('Login.properties.password')), /*#__PURE__*/React.createElement(Input, {
-    type: "password",
-    name: "password",
-    placeholder: translateComponent('Login.properties.password'),
-    autoComplete: "new-password"
-  })), /*#__PURE__*/React.createElement(Text, {
-    mt: "xl",
-    textAlign: "center"
-  }, /*#__PURE__*/React.createElement(Button, {
-    variant: "contained"
-  }, translateComponent('Login.loginButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
+  })), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
   }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
 };

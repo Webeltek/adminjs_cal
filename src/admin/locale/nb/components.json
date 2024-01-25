@@ -11,6 +11,15 @@
         "en": "Engelsk",
         "nb": "Norsk"
       }
+    },
+    "Register": {
+      "welcomeHeader": "Welcome",
+      "welcomeMessage": "Register new user",
+      "properties": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "loginButton": "Register"
     }
   }
 }

@@ -53,20 +53,13 @@ export type LoginProps = {
   children?: any;
 };
 
-export const Login: React.FC<LoginProps> = (props) => {
+export const Login: React.FC<any> = (props) => {
   const { action, errorMessage } = props;
-  const [ route , setRoute] = useState<string>(action);
   const { translateComponent, translateMessage } = useTranslation();
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
   const message = `Email: ${defaultUser.email}\nPassword: ${defaultUser.password}`;
   
-  let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = `/admin/register`;
-    setRoute(path); 
-    navigate(path);
-  }
 
   return (
     <React.Fragment>
@@ -131,7 +124,7 @@ export const Login: React.FC<LoginProps> = (props) => {
               <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
             </Text>
             <Text mt="xl" textAlign="left">
-              <Button type="button" onClick={routeChange}
+              <Button type="button" 
               variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>

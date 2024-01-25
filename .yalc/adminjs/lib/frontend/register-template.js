@@ -25,6 +25,7 @@ const html = async (admin, attributes) => {
     locale
   } = reduxState;
   const stringifiedAttributes = JSON.stringify(attributes ?? {});
+  console.log('register-template stringifiedAttributes', stringifiedAttributes);
   return `<!DOCTYPE html>
     <html lang=${locale.language}>
     <head>
@@ -49,7 +50,7 @@ const html = async (admin, attributes) => {
           window.__APP_STATE__REG = JSON.parse('${stringifiedAttributes}');
         } catch (e) {
           console.log(e)
-          window.__APP_STATE__ = {};
+          window.__APP_STATE__REG = {};
         }
       </script>
       ${styles.join('\n')}

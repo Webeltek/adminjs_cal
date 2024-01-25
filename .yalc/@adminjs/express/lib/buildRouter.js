@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prettier/prettier */
 import { Router as AdminRouter } from "adminjs";
 import { Router } from "express";
 import formidableMiddleware from "express-formidable";
@@ -39,6 +41,27 @@ export const routeHandler = ({ admin, route }) => async (req, res, next) => {
 export const buildRoute = ({ route, router, admin, }) => {
     // we have to change routes defined in AdminJS from {recordId} to :recordId
     const expressPath = convertToExpressRoute(route.path);
+    // console.log("buildRoute expressPath",expressPath); outputs -->
+    // buildRoute expressPath /frontend/assets/components.bundle.js
+    // buildRoute expressPath 
+    // buildRoute expressPath /resources/:resourceId
+    // buildRoute expressPath /api/resources/:resourceId/search/:query
+    // buildRoute expressPath /resources/:resourceId/actions/:action
+    // buildRoute expressPath /api/resources/:resourceId/actions/:action
+    // buildRoute expressPath /api/resources/:resourceId/actions/:action/:query
+    // buildRoute expressPath /api/resources/:resourceId/actions/:action
+    // buildRoute expressPath /resources/:resourceId/records/:recordId/:action
+    // buildRoute expressPath /api/resources/:resourceId/records/:recordId/:action
+    // buildRoute expressPath /api/resources/:resourceId/records/:recordId/:action
+    // buildRoute expressPath /resources/:resourceId/bulk/:action
+    // buildRoute expressPath /api/resources/:resourceId/bulk/:action
+    // buildRoute expressPath /api/resources/:resourceId/bulk/:action
+    // buildRoute expressPath /api/resources/:resourceId/search
+    // buildRoute expressPath /api/dashboard
+    // buildRoute expressPath /pages/:pageName
+    // buildRoute expressPath /api/pages/:pageName
+    // buildRoute expressPath /api/pages/:pageName
+    // buildRoute expressPath /frontend/assets/components.bundle.js
     if (route.method === "GET") {
         router.get(expressPath, routeHandler({ admin, route }));
     }
