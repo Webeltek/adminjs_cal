@@ -36953,7 +36953,7 @@ var globals = (function (exports) {
 	var router_cjs = {};
 
 	/**
-	 * @remix-run/router v1.14.1
+	 * @remix-run/router v1.14.2
 	 *
 	 * Copyright (c) Remix Software Inc.
 	 *
@@ -37848,7 +37848,7 @@ var globals = (function (exports) {
 		  branches.sort((a, b) => a.score !== b.score ? b.score - a.score // Higher score first
 		  : compareIndexes(a.routesMeta.map(meta => meta.childrenIndex), b.routesMeta.map(meta => meta.childrenIndex)));
 		}
-		const paramRe = /^:\w+$/;
+		const paramRe = /^:[\w-]+$/;
 		const dynamicSegmentValue = 3;
 		const indexRouteValue = 2;
 		const emptySegmentValue = 1;
@@ -37938,7 +37938,7 @@ var globals = (function (exports) {
 		      // Apply the splat
 		      return stringify(params[star]);
 		    }
-		    const keyMatch = segment.match(/^:(\w+)(\??)$/);
+		    const keyMatch = segment.match(/^:([\w-]+)(\??)$/);
 		    if (keyMatch) {
 		      const [, key, optional] = keyMatch;
 		      let param = params[key];
@@ -38020,7 +38020,7 @@ var globals = (function (exports) {
 		  let regexpSource = "^" + path.replace(/\/*\*?$/, "") // Ignore trailing / and /*, we'll handle it below
 		  .replace(/^\/*/, "/") // Make sure it has a leading /
 		  .replace(/[\\.*+^${}|()[\]]/g, "\\$&") // Escape special regex chars
-		  .replace(/\/:(\w+)(\?)?/g, (_, paramName, isOptional) => {
+		  .replace(/\/:([\w-]+)(\?)?/g, (_, paramName, isOptional) => {
 		    params.push({
 		      paramName,
 		      isOptional: isOptional != null
@@ -41159,7 +41159,11 @@ var globals = (function (exports) {
 		      // Check between word boundaries instead of startsWith() due to the last
 		      // paragraph of https://httpwg.org/specs/rfc9110.html#field.content-type
 		      if (contentType && /\bapplication\/json\b/.test(contentType)) {
-		        data = await result.json();
+		        if (result.body == null) {
+		          data = null;
+		        } else {
+		          data = await result.json();
+		        }
 		      } else {
 		        data = await result.text();
 		      }
@@ -41797,7 +41801,7 @@ var globals = (function (exports) {
 	}
 
 	/**
-	 * React Router v6.21.1
+	 * React Router v6.21.3
 	 *
 	 * Copyright (c) Remix Software Inc.
 	 *
@@ -43353,7 +43357,7 @@ var globals = (function (exports) {
 	var reactRouter_developmentExports = reactRouter_development.exports;
 
 	/**
-	 * React Router v6.21.1
+	 * React Router v6.21.3
 	 *
 	 * Copyright (c) Remix Software Inc.
 	 *
@@ -43377,7 +43381,7 @@ var globals = (function (exports) {
 	var reactRouterDom_development = {exports: {}};
 
 	/**
-	 * React Router DOM v6.21.1
+	 * React Router DOM v6.21.3
 	 *
 	 * Copyright (c) Remix Software Inc.
 	 *
@@ -43752,6 +43756,8 @@ var globals = (function (exports) {
 		  const startTransitionImpl = React__namespace[START_TRANSITION];
 		  const FLUSH_SYNC = "flushSync";
 		  const flushSyncImpl = ReactDOM__namespace[FLUSH_SYNC];
+		  const USE_ID = "useId";
+		  const useIdImpl = React__namespace[USE_ID];
 		  function startTransitionSafe(cb) {
 		    if (startTransitionImpl) {
 		      startTransitionImpl(cb);
@@ -44240,7 +44246,8 @@ var globals = (function (exports) {
 		    let location = reactRouter.useLocation();
 		    let routerState = React__namespace.useContext(reactRouter.UNSAFE_DataRouterStateContext);
 		    let {
-		      navigator
+		      navigator,
+		      basename
 		    } = React__namespace.useContext(reactRouter.UNSAFE_NavigationContext);
 		    let isTransitioning = routerState != null &&
 		    // Conditional usage is OK here because the usage of a data router is static
@@ -44253,6 +44260,9 @@ var globals = (function (exports) {
 		      locationPathname = locationPathname.toLowerCase();
 		      nextLocationPathname = nextLocationPathname ? nextLocationPathname.toLowerCase() : null;
 		      toPathname = toPathname.toLowerCase();
+		    }
+		    if (nextLocationPathname && basename) {
+		      nextLocationPathname = router.stripBasename(nextLocationPathname, basename) || nextLocationPathname;
 		    }
 
 		    // If the `to` has a trailing slash, look at that exact spot.  Otherwise,
@@ -44597,10 +44607,14 @@ var globals = (function (exports) {
 		    !(routeId != null) ? router.UNSAFE_invariant(false, "useFetcher can only be used on routes that contain a unique \"id\"")  : void 0;
 
 		    // Fetcher key handling
-		    let [fetcherKey, setFetcherKey] = React__namespace.useState(key || "");
+		    // OK to call conditionally to feature detect `useId`
+		    // eslint-disable-next-line react-hooks/rules-of-hooks
+		    let defaultKey = useIdImpl ? useIdImpl() : "";
+		    let [fetcherKey, setFetcherKey] = React__namespace.useState(key || defaultKey);
 		    if (key && key !== fetcherKey) {
 		      setFetcherKey(key);
 		    } else if (!fetcherKey) {
+		      // We will only fall through here when `useId` is not available
 		      setFetcherKey(getUniqueFetcherId());
 		    }
 
@@ -45134,7 +45148,7 @@ var globals = (function (exports) {
 	var reactRouterDom_developmentExports = reactRouterDom_development.exports;
 
 	/**
-	 * React Router DOM v6.21.1
+	 * React Router DOM v6.21.3
 	 *
 	 * Copyright (c) Remix Software Inc.
 	 *
@@ -46311,15 +46325,12 @@ var globals = (function (exports) {
 	}
 
 	function _isNativeReflectConstruct() {
-	  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-	  if (Reflect.construct.sham) return false;
-	  if (typeof Proxy === "function") return true;
 	  try {
-	    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-	    return true;
-	  } catch (e) {
-	    return false;
-	  }
+	    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+	  } catch (t) {}
+	  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+	    return !!t;
+	  })();
 	}
 
 	function _assertThisInitialized(self) {
@@ -48821,6 +48832,10 @@ var globals = (function (exports) {
 	  }));
 	}
 
+	/**
+	 * Custom positioning reference element.
+	 * @see https://floating-ui.com/docs/virtual-elements
+	 */
 	const min = Math.min;
 	const max = Math.max;
 	const round = Math.round;
@@ -48850,7 +48865,7 @@ var globals = (function (exports) {
 	}
 	function getWindow(node) {
 	  var _node$ownerDocument;
-	  return (node == null ? void 0 : (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+	  return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
 	}
 	function getDocumentElement(node) {
 	  var _ref;
@@ -49064,8 +49079,9 @@ var globals = (function (exports) {
 	  let timeoutId;
 	  const root = getDocumentElement(element);
 	  function cleanup() {
+	    var _io;
 	    clearTimeout(timeoutId);
-	    io && io.disconnect();
+	    (_io = io) == null || _io.disconnect();
 	    io = null;
 	  }
 	  function refresh(skip, threshold) {
@@ -49171,7 +49187,8 @@ var globals = (function (exports) {
 	        resizeObserver.unobserve(floating);
 	        cancelAnimationFrame(reobserveFrame);
 	        reobserveFrame = requestAnimationFrame(() => {
-	          resizeObserver && resizeObserver.observe(floating);
+	          var _resizeObserver;
+	          (_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
 	        });
 	      }
 	      update();
@@ -49196,12 +49213,13 @@ var globals = (function (exports) {
 	  }
 	  update();
 	  return () => {
+	    var _resizeObserver2;
 	    ancestors.forEach(ancestor => {
 	      ancestorScroll && ancestor.removeEventListener('scroll', update);
 	      ancestorResize && ancestor.removeEventListener('resize', update);
 	    });
-	    cleanupIo && cleanupIo();
-	    resizeObserver && resizeObserver.disconnect();
+	    cleanupIo == null || cleanupIo();
+	    (_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
 	    resizeObserver = null;
 	    if (animationFrame) {
 	      cancelAnimationFrame(frameId);

@@ -4,8 +4,5 @@ export type RegisterProps = {
     action: string;
     postMessage?: string;
 };
-export declare const Register: React.FC;
-declare const _default: React.ComponentType<{
-    OriginalComponent?: React.ComponentType<{}> | undefined;
-}>;
-export default _default;
+export declare const EmailSent: React.FC;
+export default EmailSent;

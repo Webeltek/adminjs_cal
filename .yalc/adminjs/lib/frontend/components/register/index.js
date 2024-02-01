@@ -5,29 +5,29 @@ import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
 const Wrapper = styled(Box)`
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100%;
-`;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+  `;
 const StyledLogo = styled.img`
-  max-width: 200px;
-  margin: ${({
+    max-width: 200px;
+    margin: ${({
   theme
 }) => theme.space.md} 0;
-`;
+  `;
 const IllustrationsWrapper = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  & svg [stroke='#3B3552'] {
-    stroke: rgba(255, 255, 255, 0.5);
-  }
-  & svg [fill='#3040D6'] {
-    fill: rgba(255, 255, 255, 1);
-  }
-`;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    & svg [stroke='#3B3552'] {
+      stroke: rgba(255, 255, 255, 0.5);
+    }
+    & svg [fill='#3040D6'] {
+      fill: rgba(255, 255, 255, 1);
+    }
+  `;
 export const Register = () => {
   const props = window.__APP_STATE__REG;
   const {

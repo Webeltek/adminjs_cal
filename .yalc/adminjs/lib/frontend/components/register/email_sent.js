@@ -2,7 +2,6 @@ import { Box, H2, Illustration, MadeWithLove, MessageBox, Text } from '@adminjs/
 import { styled } from '@adminjs/design-system/styled-components';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
 const Wrapper = styled(Box)`
   align-items: center;
@@ -28,7 +27,7 @@ const IllustrationsWrapper = styled(Box)`
     fill: rgba(255, 255, 255, 1);
   }
 `;
-export const Register = () => {
+export const EmailSent = () => {
   const props = window.__APP_STATE__REG;
   const {
     action,
@@ -93,4 +92,4 @@ export const Register = () => {
     mt: "xxl"
   }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
 };
-export default allowOverride(Register, 'Register');
+export default EmailSent;

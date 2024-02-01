@@ -16,10 +16,9 @@ import { styled } from '@adminjs/design-system/styled-components'
 
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { allowOverride } from '../../hoc/allow-override.js'
-import { useTranslation } from '../../hooks/index.js'
+import { useTranslation} from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
-import { RegisterTemplateAttributes } from '../../register-template.js'
+import { RegisterTemplateAttributes } from '../../register-template.js';
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -52,7 +51,7 @@ export type RegisterProps = {
   postMessage?: string
 }
 
-export const Register: React.FC = () => {
+export const EmailSent: React.FC = () => {
   const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
   const { action, postMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
@@ -103,4 +102,4 @@ export const Register: React.FC = () => {
   )
 }
 
-export default allowOverride(Register, 'Register')
+export default EmailSent
