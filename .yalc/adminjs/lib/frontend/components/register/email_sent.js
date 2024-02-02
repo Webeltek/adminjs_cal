@@ -89,8 +89,8 @@ export const EmailSent = () => {
     height: 91
   })))), message && /*#__PURE__*/React.createElement(MessageBox, {
     my: "lg",
-    message: translateMessage(message),
-    variant: "danger"
+    message: translateComponent(message) + email,
+    variant: "info"
   })), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
   }, /*#__PURE__*/React.createElement(MadeWithLoveMod, null)) : null);

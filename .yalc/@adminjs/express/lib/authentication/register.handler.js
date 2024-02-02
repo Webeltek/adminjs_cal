@@ -50,9 +50,10 @@ export const withRegister = (registerPath, emailSentPath, router, admin, auth) =
         const baseProps = {
             action: suffixEmailSentPath,
             errorMessage: null,
-            email: email
+            email: email,
+            postMessage: 'Register.emailSentTo',
         };
-        console.log("inside withRegister get emailSent email", email);
+        //console.log("inside withRegister get emailSent email", email);
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });

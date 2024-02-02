@@ -17,7 +17,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation} from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
-import { RegisterTemplateAttributes } from '../../register-template.js';
 import MadeWithLoveMod from './made-with-love-mod.js'
 
 const Wrapper = styled(Box)<BoxProps>`
@@ -45,14 +44,15 @@ const IllustrationsWrapper = styled(Box)<BoxProps>`
   }
 `
 
-export type RegisterProps = {
+export type EmailSentProps = {
   message?: string
   action: string
-  postMessage?: string
+  postMessage?: string,
+  email?: string
 }
 
 export const EmailSent: React.FC = () => {
-  const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
+  const props = (window as any).__APP_STATE__REG as EmailSentProps
   const { action, postMessage: message, email } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)
@@ -89,8 +89,8 @@ export const EmailSent: React.FC = () => {
         { message && (
               <MessageBox
                 my="lg"
-                message={translateMessage(message)}
-                variant="danger"
+                message={translateComponent(message)+email}
+                variant="info"
               />
             )}
       </Box>

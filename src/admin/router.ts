@@ -9,16 +9,29 @@ import { Router , Request} from 'express';
 import express from "express";
 import { AdminModel } from '../sources/mongoose/models/index.js';
 import { AuthUsers } from './constants/authUsers.js';
-import { PrismaClient } from '@prisma/client';
-import { dmmf } from '../sources/prisma/config.js';
+import { dmmf, client } from '../sources/prisma/config.js';
 import formidableMiddleware from "express-formidable";
 import { FormidableOptions,AuthenticationContext, AuthenticationOptions } from '@adminjs/express';
 import { OldBodyParserUsedError, WrongArgumentError } from '@adminjs/express';
 
+export const createUnconfUser = async () =>
+    async ({ email, password }) => {
+      const admin = await client.nf_user.findFirst({
+        where: {
+          user_email : email
+        }
+      });
+      if (!admin) {
+        await client.nf_user.create({
+          data: {
+            user_email: email, 
+            user_pass_hash: await argon2.hash(password) }});
+      }
+    }
+
 export const authenticateUser = async (email, password) => {
-  const prClient = new PrismaClient();
   const nf_user_model = dmmf.modelMap.nf_user;
-  const foundUser = await prClient.nf_user.findFirst({
+  const foundUser = await client.nf_user.findFirst({
     where: {
       user_email : email
     }

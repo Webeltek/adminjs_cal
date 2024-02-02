@@ -1,9 +1,10 @@
-import { Box, Button, FormGroup, H2, H5, Illustration, Input, Label, MadeWithLove, MessageBox, Text } from '@adminjs/design-system';
+import { Box, Button, FormGroup, H2, H5, Illustration, Input, Label, MessageBox, Text } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
+import MadeWithLoveMod from './made-with-love-mod.js';
 const Wrapper = styled(Box)`
     align-items: center;
     justify-content: center;
@@ -61,10 +62,10 @@ export const Register = () => {
     position: "relative"
   }, /*#__PURE__*/React.createElement(H2, {
     fontWeight: "lighter"
-  }, translateComponent('Login.welcomeHeader')), /*#__PURE__*/React.createElement(Text, {
+  }, translateComponent('Register.welcomeHeader')), /*#__PURE__*/React.createElement(Text, {
     fontWeight: "lighter",
     mt: "default"
-  }, translateComponent('Login.welcomeMessage')), /*#__PURE__*/React.createElement(IllustrationsWrapper, {
+  }, translateComponent('Register.registerMessage')), /*#__PURE__*/React.createElement(IllustrationsWrapper, {
     p: "xxl"
   }, /*#__PURE__*/React.createElement(Box, {
     display: "inline",
@@ -120,8 +121,8 @@ export const Register = () => {
     textAlign: "center"
   }, /*#__PURE__*/React.createElement(Button, {
     variant: "contained"
-  }, translateComponent('Login.loginButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
+  }, translateComponent('Register.registerButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
-  }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
+  }, /*#__PURE__*/React.createElement(MadeWithLoveMod, null)) : null);
 };
 export default allowOverride(Register, 'Register');

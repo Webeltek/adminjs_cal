@@ -5,5 +5,6 @@ declare module "express-session" {
     adminUser?: unknown;
     redirectTo?: string;
     email?: string;
+    postMessage?: string;
   }
 }

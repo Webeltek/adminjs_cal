@@ -57,7 +57,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
     auth: AuthenticationOptions
   ): void => {
     const suffixRegPath = getRegisterPath(registerPath,admin);
-    const suffixEmailSentPath = getRegisterPath(emailSentPath,admin)
+    const suffixEmailSentPath = getRegisterPath(emailSentPath,admin);
     
     //console.log("inside withRegister ")
     router.get(suffixRegPath, async (req, res) => {
@@ -74,13 +74,14 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
     });
 
     router.get(suffixEmailSentPath, async (req, res) => {
-      const email = req.session.email as any;
+      const email = req.session.email;
       const baseProps = {
         action: suffixEmailSentPath,
         errorMessage: null,
-        email: email
+        email: email,
+        postMessage: 'Register.emailSentTo',
       };
-      console.log("inside withRegister get emailSent email", email);
+      //console.log("inside withRegister get emailSent email", email);
       const register = await admin.renderRegister({
         ...baseProps,
       });

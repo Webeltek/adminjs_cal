@@ -45,7 +45,7 @@
       },
       "Login": {
         "welcomeHeader": "Welcome",
-        "welcomeMessage": "to AdminJS - the world's leading open-source auto-generated admin panel for your Node.js application that allows you to manage all your data in one place",
+        "welcomeMessage": "Admin panel",
         "properties": {
           "email": "Email",
           "password": "Password"
@@ -60,7 +60,8 @@
           "email": "Email",
           "password": "Password"
         },
-        "loginButton": "Register"
+        "loginButton": "Register",
+        "emailSentTo": "Email sent to: "
       }
     },
     "labels": {
