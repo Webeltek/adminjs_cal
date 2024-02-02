@@ -20,6 +20,7 @@ import {
   import { useTranslation } from '../../hooks/index.js'
   import { ReduxState } from '../../store/store.js'
   import { RegisterTemplateAttributes } from '../../register-template.js'
+  import MadeWithLoveMod from './made-with-love-mod.js'
   
   const Wrapper = styled(Box)<BoxProps>`
     align-items: center;
@@ -71,9 +72,9 @@ import {
             display={['none', 'none', 'block']}
             position="relative"
           >
-            <H2 fontWeight="lighter">{translateComponent('Login.welcomeHeader')}</H2>
+            <H2 fontWeight="lighter">{translateComponent('Register.welcomeHeader')}</H2>
             <Text fontWeight="lighter" mt="default">
-              {translateComponent('Login.welcomeMessage')}
+              {translateComponent('Register.registerMessage')}
             </Text>
             <IllustrationsWrapper p="xxl">
               <Box display="inline" mr="default">
@@ -123,13 +124,13 @@ import {
               />
             </FormGroup>
             <Text mt="xl" textAlign="center">
-              <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
+              <Button variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>
         </Box>
         {branding.withMadeWithLove ? (
           <Box mt="xxl">
-            <MadeWithLove />
+            <MadeWithLoveMod />
           </Box>
         ) : null}
       </Wrapper>

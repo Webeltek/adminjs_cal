@@ -8,7 +8,6 @@ import {
   Illustration,
   Input,
   Label,
-  MadeWithLove,
   MessageBox,
   Text,
 } from '@adminjs/design-system'
@@ -19,6 +18,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation} from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
 import { RegisterTemplateAttributes } from '../../register-template.js';
+import MadeWithLoveMod from './made-with-love-mod.js'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -53,9 +53,10 @@ export type RegisterProps = {
 
 export const EmailSent: React.FC = () => {
   const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
-  const { action, postMessage: message } = props
+  const { action, postMessage: message, email } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)
+  console.log("EmailSent message, email",message, email);
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -95,7 +96,7 @@ export const EmailSent: React.FC = () => {
       </Box>
       {branding.withMadeWithLove ? (
         <Box mt="xxl">
-          <MadeWithLove />
+          <MadeWithLoveMod />
         </Box>
       ) : null}
     </Wrapper>

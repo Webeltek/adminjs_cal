@@ -33,9 +33,10 @@ async function sendEmail(from, to, subject, text, html) {
     console.log("Message sent: %s", info.messageId);
 }
 export const withRegister = (registerPath, emailSentPath, router, admin, auth) => {
-    const regPath = getRegisterPath(registerPath, admin);
+    const suffixRegPath = getRegisterPath(registerPath, admin);
+    const suffixEmailSentPath = getRegisterPath(emailSentPath, admin);
     //console.log("inside withRegister ")
-    router.get(regPath, async (req, res) => {
+    router.get(suffixRegPath, async (req, res) => {
         const baseProps = {
             action: registerPath,
             errorMessage: null,
@@ -44,7 +45,18 @@ export const withRegister = (registerPath, emailSentPath, router, admin, auth) =
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });
-    router.post(regPath, async (req, res, next) => {
+    router.get(suffixEmailSentPath, async (req, res) => {
+        const email = req.session.email;
+        const baseProps = {
+            action: suffixEmailSentPath,
+            errorMessage: null,
+            email: email
+        };
+        console.log("inside withRegister get emailSent email", email);
+        const register = await admin.renderRegister(Object.assign({}, baseProps));
+        return res.send(register);
+    });
+    router.post(suffixRegPath, async (req, res, next) => {
         const context = { req, res };
         let adminUser;
         const { email, password } = req.fields;
@@ -53,8 +65,9 @@ export const withRegister = (registerPath, emailSentPath, router, admin, auth) =
         sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "register test", "<b>register test</b>");
         const register = await admin.renderRegister({
             action: registerPath,
-            postMessage: "emailSentTo",
+            postMessage: `Email sent to: ${email}`,
         });
-        return res.send(register);
+        req.session.email = email;
+        return res.redirect(302, emailSentPath);
     });
 };

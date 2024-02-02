@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import AdminJS from "adminjs";
 import { Router, RequestHandler } from "express";
 

@@ -60,7 +60,7 @@
         "email": "Email",
         "password": "Password"
       },
-      "loginButton": "Register"
+      "registerButton": "Register"
     }
   },
   "labels": {

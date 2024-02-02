@@ -48,7 +48,7 @@ const App = () => {
     actionName
   }).replace(resourceUrl, '').substring(1);
   const pageUrl = h.pageUrl(pageName);
-  console.log("application resourceActionUrl,pageUrl", resourceActionUrl, pageUrl);
+  console.log("application resourceActionUrl,pageUrl, resourceUrl", resourceActionUrl, pageUrl, resourceUrl);
   return /*#__PURE__*/React.createElement(Box, {
     height: "100%",
     flex: true,

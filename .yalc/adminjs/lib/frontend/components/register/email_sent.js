@@ -1,8 +1,9 @@
-import { Box, H2, Illustration, MadeWithLove, MessageBox, Text } from '@adminjs/design-system';
+import { Box, H2, Illustration, MessageBox, Text } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../hooks/index.js';
+import MadeWithLoveMod from './made-with-love-mod.js';
 const Wrapper = styled(Box)`
   align-items: center;
   justify-content: center;
@@ -31,13 +32,15 @@ export const EmailSent = () => {
   const props = window.__APP_STATE__REG;
   const {
     action,
-    postMessage: message
+    postMessage: message,
+    email
   } = props;
   const {
     translateComponent,
     translateMessage
   } = useTranslation();
   const branding = useSelector(state => state.branding);
+  console.log("EmailSent message, email", message, email);
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -90,6 +93,6 @@ export const EmailSent = () => {
     variant: "danger"
   })), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
-  }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
+  }, /*#__PURE__*/React.createElement(MadeWithLoveMod, null)) : null);
 };
 export default EmailSent;

@@ -53,7 +53,7 @@ const App: React.FC = () => {
   const bulkActionUrl = h.bulkActionUrl({ resourceId, actionName })
     .replace(resourceUrl, '').substring(1)
   const pageUrl = h.pageUrl(pageName)
-  console.log("application resourceActionUrl,pageUrl",resourceActionUrl,pageUrl);
+  console.log("application resourceActionUrl,pageUrl, resourceUrl",resourceActionUrl,pageUrl,resourceUrl);
 
   return (
     <Box height="100%" flex data-css="app">
