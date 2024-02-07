@@ -124,7 +124,7 @@ export const Login: React.FC<any> = (props) => {
               <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
             </Text>
             <Text mt="xl" textAlign="left">
-              <Button type="button" 
+              <Button type="submit" formAction="/admin/register"
               variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>

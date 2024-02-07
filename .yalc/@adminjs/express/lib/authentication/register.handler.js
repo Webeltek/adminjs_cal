@@ -31,6 +31,7 @@ async function sendEmail(from, to, subject, text, html) {
         html: html, // html body
     });
     console.log("Message sent: %s", info.messageId);
+    return true;
 }
 export const withRegister = (registerPath, emailSentPath, confirmPath, router, admin, auth) => {
     const suffixRegPath = getRegisterPath(registerPath, admin);
@@ -56,7 +57,7 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
         //adminUser = await auth.authenticate!(email, password, context);
         if (unconfUser) {
             let { conf_token } = unconfUser;
-            sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "", `<p>Dear ${email},</p>
+            let mailState = sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "", `<p>Dear ${email},</p>
             <p>Welcome to <b>domain address</b>!</p>
             <p>To confirm your account please</p> 
             <p><a href="${fullUrlPath + conf_token}">click here</a>.</p>
@@ -66,18 +67,20 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
             <p>Sincerely,</p>
             <p>The Team</p>
             <p><small>Note: replies to this email address are not monitored.</small></p>`);
-            req.session.email = email;
-            req.session.unconfUser = unconfUser;
-            req.session.save((err) => {
-                if (err) {
-                    return next(err);
-                }
-                if (req.session.redirectTo) {
-                    return res.redirect(302, req.session.redirectTo);
-                }
-                else {
-                    return res.redirect(302, emailSentPath);
-                }
+            mailState.then(() => {
+                req.session.email = email;
+                req.session.unconfUser = unconfUser;
+                req.session.save((err) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    if (req.session.redirectTo) {
+                        return res.redirect(302, req.session.redirectTo);
+                    }
+                    else {
+                        return res.redirect(302, emailSentPath);
+                    }
+                });
             });
         }
         else {

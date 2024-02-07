@@ -45,9 +45,10 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
       subject: subject, // Subject line
       text: text, // plain text body
       html: html, // html body
-    });
+    },);
   
     console.log("Message sent: %s", info.messageId);
+    return true;
   }
   
   export const withRegister = (
@@ -90,7 +91,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
         //adminUser = await auth.authenticate!(email, password, context);
         if (unconfUser){
           let { conf_token } = unconfUser as any;
-          sendEmail(
+          let mailState = sendEmail(
             process.env.FMAIL_SENDER,
             email,
             process.env.MAIL_SUBJECT_PREFIX,
@@ -106,19 +107,22 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
             <p>The Team</p>
             <p><small>Note: replies to this email address are not monitored.</small></p>`
           )
-  
-          req.session.email = email;
-          req.session.unconfUser = unconfUser as object;
-          req.session.save((err) => {
-            if (err) {
-              return next(err);
-            }
-            if (req.session.redirectTo) {
-              return res.redirect(302, req.session.redirectTo);
-            } else {
-              return res.redirect(302, emailSentPath);
-            }
-          });
+          
+          mailState.then(()=>{
+                req.session.email = email;
+                req.session.unconfUser = unconfUser as object;
+                req.session.save((err) => {
+                  if (err) {
+                    return next(err);
+                  }
+                  if (req.session.redirectTo) {
+                    return res.redirect(302, req.session.redirectTo);
+                  } else {
+                    return res.redirect(302, emailSentPath);
+                  }
+                });
+          })
+          
     
         } else {
           const baseProps = {
