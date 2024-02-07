@@ -50,7 +50,7 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
         const context = { req, res };
         const { email, password } = req.fields;
         let unconfUser = await auth.createUnconfUser(email, password, context);
-        console.log("unconfUser", unconfUser);
+        console.log("router.post unconfUser", unconfUser);
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         //adminUser = await auth.authenticate!(email, password, context);
         if (unconfUser) {
@@ -67,7 +67,17 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
             <p><small>Note: replies to this email address are not monitored.</small></p>`);
             req.session.email = email;
             req.session.unconfUser = unconfUser;
-            return res.redirect(302, emailSentPath);
+            req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                if (req.session.redirectTo) {
+                    return res.redirect(302, req.session.redirectTo);
+                }
+                else {
+                    return res.redirect(302, emailSentPath);
+                }
+            });
         }
         else {
             const baseProps = {
@@ -87,7 +97,7 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
             email: email,
             postMessage: 'Register.emailSentTo',
         };
-        //console.log("inside withRegister get emailSent email", email);
+        console.log("get emailSentPath unconfUser", req.session.unconfUser);
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });

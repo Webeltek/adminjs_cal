@@ -83,7 +83,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
           password: string;
         };
         let unconfUser = await auth.createUnconfUser!(email,password,context);
-        console.log("unconfUser",unconfUser);
+        console.log("router.post unconfUser",unconfUser);
         
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         //adminUser = await auth.authenticate!(email, password, context);
@@ -107,9 +107,18 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
           )
   
           req.session.email = email;
-          req.session.unconfUser = unconfUser;
+          req.session.unconfUser = unconfUser as object;
+          req.session.save((err) => {
+            if (err) {
+              return next(err);
+            }
+            if (req.session.redirectTo) {
+              return res.redirect(302, req.session.redirectTo);
+            } else {
+              return res.redirect(302, emailSentPath);
+            }
+          });
     
-          return res.redirect(302, emailSentPath);
         } else {
           const baseProps = {
             action: registerPath,
@@ -133,7 +142,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
         email: email,
         postMessage: 'Register.emailSentTo',
       };
-      //console.log("inside withRegister get emailSent email", email);
+      console.log("get emailSentPath unconfUser", req.session.unconfUser);
       const register = await admin.renderRegister({
         ...baseProps,
       });

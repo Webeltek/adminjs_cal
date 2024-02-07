@@ -31,24 +31,23 @@ export const createUnconfUser = async ( email, password, cont : AuthenticationCo
       return unconfUser;
 }
 
-export const confUser = async (confToken : string, unconfUser) => {
-  jwt.verify(confToken, process.env.SESSION_SECRET ?? 'sessionsecret', function(err,decoded){
-    if (decoded){
-      const { confirm : uid } = JSON.parse(decoded as string);
-      let confUser =  {
-        uid : uid,
-        user_email: unconfUser.email, 
-        user_pass_hash: unconfUser.user_pass_hash,
-        user_confirmed: true,
-      };
-      client.nf_user.create({ data: confUser});
-      return confUser;
-    }
-    if (err){
-      console.log("Email confirm token error");
-      return null;
-    }
-  })
+export const confUser = async (reqConfToken : string, unconfUser) => {
+  
+  let decoded = jwt.verify(reqConfToken, process.env.SESSION_SECRET ?? 'sessionsecret');
+  console.log("decoded", decoded);
+  const { uid } = unconfUser;
+  const { confirm : decodedUid } = decoded as any;
+  if ( uid === decodedUid){
+    let confUser =  {
+      uid : uid,
+      user_email: unconfUser.email, 
+      user_pass_hash: unconfUser.user_pass_hash,
+      user_confirmed: true,
+    };
+    client.nf_user.create({ data: confUser});
+    return confUser;
+  }
+  
 }
 
 export const authenticatePrismaUser = async (email,password) =>{

@@ -26,6 +26,7 @@ const attachAdminJS = async (app: Express) => {
   //app.use(registerPath,registerRouter);
   
   const adminRouter = expressAuthenticatedRouter(adminJS);
+  app.set('trust proxy', 1) // trust first proxy
   app.use(adminJS.options.rootPath, adminRouter);
   
   app.get('/', (req, res) => res.redirect(adminJS.options.rootPath));
