@@ -32,9 +32,10 @@ async function sendEmail(from, to, subject, text, html) {
     });
     console.log("Message sent: %s", info.messageId);
 }
-export const withRegister = (registerPath, emailSentPath, router, admin, auth) => {
+export const withRegister = (registerPath, emailSentPath, confirmPath, router, admin, auth) => {
     const suffixRegPath = getRegisterPath(registerPath, admin);
     const suffixEmailSentPath = getRegisterPath(emailSentPath, admin);
+    const suffixConfirmPath = getRegisterPath(confirmPath, admin);
     //console.log("inside withRegister ")
     router.get(suffixRegPath, async (req, res) => {
         const baseProps = {
@@ -45,10 +46,43 @@ export const withRegister = (registerPath, emailSentPath, router, admin, auth) =
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });
+    router.post(suffixRegPath, async (req, res, next) => {
+        const context = { req, res };
+        const { email, password } = req.fields;
+        let unconfUser = await auth.createUnconfUser(email, password, context);
+        console.log("unconfUser", unconfUser);
+        // "auth.authenticate" must always be defined if "auth.provider" isn't
+        //adminUser = await auth.authenticate!(email, password, context);
+        if (unconfUser) {
+            let { conf_token } = unconfUser;
+            sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "", `<p>Dear ${email},</p>
+            <p>Welcome to <b>domain address</b>!</p>
+            <p>To confirm your account please</p> 
+            <p><a href="${'/admin/register/confirm/' + conf_token}">click here</a>.</p>
+            <p>Alternatively, you can paste the following link in your browser's address bar:</p>
+            <p><a href="{{ url_for('auth_bp.confirm',_external=True, token=token) }}">
+                {{ url_for('auth_bp.confirm',_external=True, token=token) }}</a></p>
+            <p>Sincerely,</p>
+            <p>The Team</p>
+            <p><small>Note: replies to this email address are not monitored.</small></p>`);
+            req.session.email = email;
+            req.session.unconfUser = unconfUser;
+            return res.redirect(302, emailSentPath);
+        }
+        else {
+            const baseProps = {
+                action: registerPath,
+                errorMessage: "Error in confirm initialisation",
+            };
+            //console.log("inside withRegister get")
+            const register = await admin.renderRegister(Object.assign({}, baseProps));
+            return res.send(register);
+        }
+    });
     router.get(suffixEmailSentPath, async (req, res) => {
         const email = req.session.email;
         const baseProps = {
-            action: suffixEmailSentPath,
+            action: emailSentPath,
             errorMessage: null,
             email: email,
             postMessage: 'Register.emailSentTo',
@@ -57,18 +91,32 @@ export const withRegister = (registerPath, emailSentPath, router, admin, auth) =
         const register = await admin.renderRegister(Object.assign({}, baseProps));
         return res.send(register);
     });
-    router.post(suffixRegPath, async (req, res, next) => {
+    router.get(suffixConfirmPath, async (req, res, next) => {
         const context = { req, res };
-        let adminUser;
-        const { email, password } = req.fields;
-        // "auth.authenticate" must always be defined if "auth.provider" isn't
-        //adminUser = await auth.authenticate!(email, password, context);
-        sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "register test", "<b>register test</b>");
-        const register = await admin.renderRegister({
-            action: registerPath,
-            postMessage: `Email sent to: ${email}`,
-        });
-        req.session.email = email;
-        return res.redirect(302, emailSentPath);
+        const unconfUser = req.session.unconfUser;
+        const { conf_token } = unconfUser;
+        const reqConfToken = req.params.conf_token;
+        let confUser = await auth.confUser(reqConfToken, unconfUser);
+        if (confUser) {
+            req.session.adminUser = confUser;
+            req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                if (req.session.redirectTo) {
+                    return res.redirect(302, req.session.redirectTo);
+                }
+                else {
+                    return res.redirect(302, admin.options.rootPath);
+                }
+            });
+        }
+        else {
+            const register = await admin.renderRegister({
+                action: registerPath,
+                errorMessage: "Wrong confirmation link",
+            });
+            return res.send(register);
+        }
     });
 };

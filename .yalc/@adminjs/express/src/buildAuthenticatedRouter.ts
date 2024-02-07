@@ -58,7 +58,7 @@ const INVALID_AUTH_CONFIG_ERROR =
  */
 export const buildAuthenticatedRouter = (
   admin: AdminJS,
-  auth: AuthenticationOptions,
+  auth: AuthenticationOptions ,
   predefinedRouter?: express.Router | null,
   sessionOptions?: session.SessionOptions,
   formidableOptions?: FormidableOptions
@@ -104,7 +104,8 @@ export const buildAuthenticatedRouter = (
 
   const registerPath = '/admin/register';
   const emailSentPath = '/admin/register/email_sent';
-  withRegister(registerPath,emailSentPath,router, admin, auth);
+  const confirmPath = '/admin/register/confirm/:conf_token';
+  withRegister(registerPath,emailSentPath,confirmPath,router, admin, auth);
 
   withLogout(router, admin, auth);
   buildAssets({ admin, assets, routes, router });

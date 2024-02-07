@@ -74,7 +74,8 @@ export const buildAuthenticatedRouter = (admin, auth, predefinedRouter, sessionO
     withLogin(router, admin, auth);
     const registerPath = '/admin/register';
     const emailSentPath = '/admin/register/email_sent';
-    withRegister(registerPath, emailSentPath, router, admin, auth);
+    const confirmPath = '/admin/register/confirm/:conf_token';
+    withRegister(registerPath, emailSentPath, confirmPath, router, admin, auth);
     withLogout(router, admin, auth);
     buildAssets({ admin, assets, routes, router });
     withProtectedRoutesHandler(router, admin);

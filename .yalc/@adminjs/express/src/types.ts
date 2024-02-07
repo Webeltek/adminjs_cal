@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BaseAuthProvider } from "adminjs";
 import { Request, Response } from "express";
 
@@ -38,6 +39,12 @@ export type AuthenticationMaxRetriesOptions = {
 export type AuthenticationOptions = {
   cookiePassword: string;
   cookieName?: string;
+  createUnconfUser?: (
+    email: string,
+    password: string,
+    context?: AuthenticationContext) => unknown | null;
+  confUser?:  (confToken : string, unconfUser) => unknown | null;
+  authenticatePrismaUser?: (email: string, password: string) => unknown | null;  
   authenticate?: (
     email: string,
     password: string,

@@ -34,6 +34,9 @@ export type AuthenticationMaxRetriesOptions = {
 export type AuthenticationOptions = {
     cookiePassword: string;
     cookieName?: string;
+    createUnconfUser?: (email: string, password: string, context?: AuthenticationContext) => unknown | null;
+    confUser?: (confToken: string, unconfUser: any) => unknown | null;
+    authenticatePrismaUser?: (email: string, password: string) => unknown | null;
     authenticate?: (email: string, password: string, context?: AuthenticationContext) => unknown | null;
     /**
      * @description Maximum number of authorization attempts (if number - per minute)
