@@ -83,7 +83,8 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
           password: string;
         };
         let unconfUser = await auth.createUnconfUser!(email,password,context);
-        console.log("router.post unconfUser",unconfUser);
+        let fullUrlPath = `${req.protocol}://${req.get('host')}${req.originalUrl}/confirm/`
+        //console.log("post unconfUser",unconfUser);
         
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         //adminUser = await auth.authenticate!(email, password, context);
@@ -97,7 +98,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
             `<p>Dear ${ email },</p>
             <p>Welcome to <b>domain address</b>!</p>
             <p>To confirm your account please</p> 
-            <p><a href="${'/admin/register/confirm/'+conf_token}">click here</a>.</p>
+            <p><a href="${fullUrlPath+conf_token}">click here</a>.</p>
             <p>Alternatively, you can paste the following link in your browser's address bar:</p>
             <p><a href="{{ url_for('auth_bp.confirm',_external=True, token=token) }}">
                 {{ url_for('auth_bp.confirm',_external=True, token=token) }}</a></p>
@@ -142,7 +143,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
         email: email,
         postMessage: 'Register.emailSentTo',
       };
-      console.log("get emailSentPath unconfUser", req.session.unconfUser);
+      console.log("register.handler emailSentPath unconfUser", req.session.unconfUser);
       const register = await admin.renderRegister({
         ...baseProps,
       });
@@ -156,7 +157,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
       const { conf_token } = unconfUser;
       const reqConfToken =  req.params.conf_token;
       let confUser = await auth.confUser!(reqConfToken,unconfUser);
-      
+      console.log("register.handler confirmPath confUser",confUser);
       if (confUser) {
         req.session.adminUser = confUser;
         req.session.save((err) => {

@@ -39,13 +39,12 @@ export const confUser = async (reqConfToken : string, unconfUser) => {
   const { confirm : decodedUid } = decoded as any;
   if ( uid === decodedUid){
     let confUser =  {
-      uid : uid,
       user_email: unconfUser.email, 
       user_pass_hash: unconfUser.user_pass_hash,
       user_confirmed: true,
     };
-    client.nf_user.create({ data: confUser});
-    return confUser;
+    let nfConfUser = await client.nf_user.create({ data: confUser});
+    return nfConfUser;
   }
   
 }
