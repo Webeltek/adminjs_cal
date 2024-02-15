@@ -57,13 +57,13 @@ export const withLogin = (router, admin, auth) => {
             action: admin.options.loginPath,
             errorMessage: null,
         };
-        const login = await admin.renderLogin(Object.assign(Object.assign({}, baseProps), providerProps));
+        const login = await admin.renderRegister(Object.assign(Object.assign({}, baseProps), providerProps));
         return res.send(login);
     });
     router.post(loginPath, async (req, res, next) => {
         var _a;
         if (!new Retry(req.ip).canLogin(auth.maxRetries)) {
-            const login = await admin.renderLogin(Object.assign({ action: admin.options.loginPath, errorMessage: "tooManyRequests" }, providerProps));
+            const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "tooManyRequests" }, providerProps));
             return res.send(login);
         }
         const context = { req, res };
@@ -96,7 +96,7 @@ export const withLogin = (router, admin, auth) => {
             });
         }
         else {
-            const login = await admin.renderLogin(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
+            const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
             return res.send(login);
         }
     });

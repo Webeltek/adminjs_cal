@@ -2,6 +2,7 @@ export const withProtectedRoutesHandler = (router, admin) => {
     const { loginPath } = admin.options;
     const authorizedRoutesMiddleware = (request, response, next) => {
         if (!request.session || !request.session.adminUser) {
+            //console.log("protected-routes request.session,request.session.adminUser: ",request.session,request.session.adminUser);
             return response.redirect(loginPath);
         }
         return next();

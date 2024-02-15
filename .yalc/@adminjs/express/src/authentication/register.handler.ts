@@ -64,6 +64,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
     const suffixConfirmPath = getRegisterPath(confirmPath,admin);
     
     //console.log("inside withRegister ")
+
     router.get(suffixRegPath, async (req, res) => {
       const baseProps = {
         action: registerPath,
@@ -121,6 +122,8 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
                     return res.redirect(302, emailSentPath);
                   }
                 });
+          }).catch(()=>{
+            return res.redirect(302, registerPath);
           })
           
     

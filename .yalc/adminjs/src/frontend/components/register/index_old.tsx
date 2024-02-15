@@ -23,13 +23,15 @@ import { RegisterTemplateAttributes } from '../../register-template.js'
 import { Routes, Route } from 'react-router-dom'
 import { Register } from './register.js'
 import { EmailSent } from './email_sent.js'
+import { Login } from '../login/index.js'
 
 
 const RegisterApp: React.FC = () => {
-  console.log("inside RegisterApp")
+  //console.log("inside RegisterApp")
   return (
     <Box height="100%" flex data-css="app">
       <Routes>
+        <Route path="/admin/login" element={<Login/>} />
         <Route path="/admin/register" element={<Register/>} />
         <Route path="/admin/register/email_sent" element={<EmailSent/>} />
       </Routes>

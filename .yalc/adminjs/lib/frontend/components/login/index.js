@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
+import { useNavigate } from 'react-router';
 const Wrapper = styled(Box)`
   align-items: center;
   justify-content: center;
@@ -29,7 +30,7 @@ const IllustrationsWrapper = styled(Box)`
   }
 `;
 export const Login = () => {
-  const props = window.__APP_STATE__;
+  const props = window.__APP_STATE__REG;
   const {
     action,
     errorMessage: message
@@ -39,6 +40,11 @@ export const Login = () => {
     translateMessage
   } = useTranslation();
   const branding = useSelector(state => state.branding);
+  const navigate = useNavigate();
+  function handleRegisterClick(e) {
+    e.preventDefault();
+    navigate('/admin/register');
+  }
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -118,7 +124,14 @@ export const Login = () => {
     textAlign: "center"
   }, /*#__PURE__*/React.createElement(Button, {
     variant: "contained"
-  }, translateComponent('Login.loginButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
+  }, translateComponent('Login.loginButton'))), /*#__PURE__*/React.createElement(Text, {
+    mt: "xl",
+    textAlign: "left"
+  }, /*#__PURE__*/React.createElement(Button, {
+    type: "button",
+    onClick: handleRegisterClick,
+    variant: "contained"
+  }, translateComponent('Register.registerButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
   }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
 };

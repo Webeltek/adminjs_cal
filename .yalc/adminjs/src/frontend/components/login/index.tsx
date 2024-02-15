@@ -14,12 +14,13 @@ import {
 } from '@adminjs/design-system'
 import { styled } from '@adminjs/design-system/styled-components'
 
-import React from 'react'
+import React , { FormEvent } from 'react'
 import { useSelector } from 'react-redux'
 import { allowOverride } from '../../hoc/allow-override.js'
 import { useTranslation } from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
 import { LoginTemplateAttributes } from '../../login-template.js'
+import { useNavigate } from 'react-router'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -52,10 +53,16 @@ export type LoginProps = {
 }
 
 export const Login: React.FC = () => {
-  const props = (window as any).__APP_STATE__ as LoginTemplateAttributes
+  const props = (window as any).__APP_STATE__REG as LoginTemplateAttributes
   const { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)
+  const navigate = useNavigate();
+
+  function handleRegisterClick(e: FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    navigate('/admin/register')
+  }
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -123,6 +130,10 @@ export const Login: React.FC = () => {
           <Text mt="xl" textAlign="center">
             <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
           </Text>
+          <Text mt="xl" textAlign="left">
+              <Button type="button"  onClick={handleRegisterClick} 
+              variant="contained">{translateComponent('Register.registerButton')}</Button>
+            </Text>
         </Box>
       </Box>
       {branding.withMadeWithLove ? (

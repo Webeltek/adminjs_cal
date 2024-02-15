@@ -13,6 +13,8 @@ export const withProtectedRoutesHandler = (
     next
   ) => {
     if (!request.session || !request.session.adminUser) {
+      //console.log("protected-routes request.session,request.session.adminUser: ",request.session,request.session.adminUser);
+      
       return response.redirect(loginPath);
     }
     return next();

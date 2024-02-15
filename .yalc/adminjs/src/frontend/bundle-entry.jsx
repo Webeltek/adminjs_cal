@@ -44,7 +44,7 @@ const Application = (
 
 const loginAppProps = window.__APP_STATE__ ?? {}
 const registerAppProps = window.__APP_STATE__REG ?? {}
-const LoginApplication = (
+/* const LoginApplication = (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18n}>
@@ -56,7 +56,7 @@ const LoginApplication = (
       </I18nextProvider>
     </ThemeProvider>
   </Provider>
-)
+) */
 
 const RegisterApplication = (
   <Provider store={store}>
@@ -79,7 +79,7 @@ export default {
   withNotice,
   Application,
   OriginalApplication: OriginalApp,
-  LoginApplication,
+  //LoginApplication,
   RegisterApplication,
   ViewHelpers,
   UserComponents: {},

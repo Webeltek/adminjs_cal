@@ -40,15 +40,20 @@ const Application = /*#__PURE__*/React.createElement(Provider, {
 }, /*#__PURE__*/React.createElement(App, null))))));
 const loginAppProps = window.__APP_STATE__ ?? {};
 const registerAppProps = window.__APP_STATE__REG ?? {};
-const LoginApplication = /*#__PURE__*/React.createElement(Provider, {
-  store: store
-}, /*#__PURE__*/React.createElement(ThemeProvider, {
-  theme: theme
-}, /*#__PURE__*/React.createElement(I18nextProvider, {
-  i18n: i18n
-}, /*#__PURE__*/React.createElement(BrowserRouter, null, /*#__PURE__*/React.createElement(Suspense, {
-  fallback: /*#__PURE__*/React.createElement(AppLoader, null)
-}, /*#__PURE__*/React.createElement(Login, loginAppProps))))));
+/* const LoginApplication = (
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <Suspense fallback={<AppLoader />}>
+            <Login {...loginAppProps} />
+          </Suspense>
+        </BrowserRouter>
+      </I18nextProvider>
+    </ThemeProvider>
+  </Provider>
+) */
+
 const RegisterApplication = /*#__PURE__*/React.createElement(Provider, {
   store: store
 }, /*#__PURE__*/React.createElement(ThemeProvider, {
@@ -65,7 +70,7 @@ export default {
   withNotice,
   Application,
   OriginalApplication: OriginalApp,
-  LoginApplication,
+  //LoginApplication,
   RegisterApplication,
   ViewHelpers,
   UserComponents: {},

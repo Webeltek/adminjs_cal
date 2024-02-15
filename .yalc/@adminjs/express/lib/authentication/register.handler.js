@@ -81,6 +81,8 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
                         return res.redirect(302, emailSentPath);
                     }
                 });
+            }).catch(() => {
+                return res.redirect(302, registerPath);
             });
         }
         else {

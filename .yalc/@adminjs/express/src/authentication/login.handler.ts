@@ -80,7 +80,7 @@ export const withLogin = (
       action: admin.options.loginPath,
       errorMessage: null,
     };
-    const login = await admin.renderLogin({
+    const login = await admin.renderRegister({
       ...baseProps,
       ...providerProps,
     });
@@ -90,7 +90,7 @@ export const withLogin = (
 
   router.post(loginPath, async (req : any, res, next) => {
     if (!new Retry(req.ip).canLogin(auth.maxRetries)) {
-      const login = await admin.renderLogin({
+      const login = await admin.renderRegister({
         action: admin.options.loginPath,
         errorMessage: "tooManyRequests",
         ...providerProps,
@@ -134,7 +134,7 @@ export const withLogin = (
         }
       });
     } else {
-      const login = await admin.renderLogin({
+      const login = await admin.renderRegister({
         action: admin.options.loginPath,
         errorMessage: "invalidCredentials",
         ...providerProps,

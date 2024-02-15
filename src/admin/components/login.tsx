@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , FormEvent} from 'react';
 
 import { useSelector } from 'react-redux';
 import {
@@ -19,7 +19,8 @@ import {
 import { styled } from '@adminjs/design-system/styled-components';
 import { ReduxState, useTranslation } from 'adminjs';
 import { AuthUser, AuthUsers } from '../constants/authUsers.js';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
+import axios from 'axios';
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -59,7 +60,12 @@ export const Login: React.FC<any> = (props) => {
   const [defaultUser] = AuthUsers;
   const branding = useSelector((state: ReduxState) => state.branding);
   const message = `Email: ${defaultUser.email}\nPassword: ${defaultUser.password}`;
+  const navigate = useNavigate()
   
+  console.log("Login overridable")
+  function handleRegisterClick(e: FormEvent<HTMLFormElement>){
+    e.preventDefault();
+  }
 
   return (
     <React.Fragment>
@@ -124,7 +130,7 @@ export const Login: React.FC<any> = (props) => {
               <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
             </Text>
             <Text mt="xl" textAlign="left">
-              <Button type="submit" formAction="/admin/register"
+              <Button type="button" onClick={handleRegisterClick}
               variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>
           </Box>
