@@ -21,6 +21,7 @@ import {
   import { ReduxState } from '../../store/store.js'
   import { RegisterTemplateAttributes } from '../../register-template.js'
   import MadeWithLoveMod from './made-with-love-mod.js'
+  import { useLocation } from 'react-router'
   
   const Wrapper = styled(Box)<BoxProps>`
     align-items: center;
@@ -55,10 +56,13 @@ import {
   
   export const Register: React.FC = () => {
     const props = (window as any).__APP_STATE__REG as RegisterTemplateAttributes
-    const { action, errorMessage: message ,postMessage} = props
+    let { action, errorMessage: message ,postMessage} = props
     const { translateComponent, translateMessage } = useTranslation()
-    const branding = useSelector((state: ReduxState) => state.branding)
+    const branding = useSelector((state: ReduxState) => state.branding);
     console.log('register props',action, message, postMessage);
+    const location = useLocation();
+    const { state } = location;
+    if (state) { action = state;}
   
     return (
       <Wrapper flex variant="grey" className="login__Wrapper">
@@ -122,6 +126,10 @@ import {
                 placeholder={translateComponent('Login.properties.password')}
                 autoComplete="new-password"
               />
+            </FormGroup>
+            <FormGroup>
+              <Label >{translateComponent('Register.properties.organization')}</Label>
+              <Input name="organization" placeholder={translateComponent('Register.properties.organization')} />
             </FormGroup>
             <Text mt="xl" textAlign="center">
               <Button variant="contained">{translateComponent('Register.registerButton')}</Button>

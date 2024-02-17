@@ -55,7 +55,7 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
         //console.log("post unconfUser",unconfUser);
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         //adminUser = await auth.authenticate!(email, password, context);
-        if (unconfUser) {
+        if (unconfUser && typeof unconfUser === 'object') {
             let { conf_token } = unconfUser;
             let mailState = sendEmail(process.env.FMAIL_SENDER, email, process.env.MAIL_SUBJECT_PREFIX, "", `<p>Dear ${email},</p>
             <p>Welcome to <b>domain address</b>!</p>
@@ -86,10 +86,16 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, router, a
             });
         }
         else {
-            const baseProps = {
+            let baseProps = {
                 action: registerPath,
                 errorMessage: "Error in confirm initialisation",
             };
+            if (unconfUser === 'user_exists') {
+                baseProps = {
+                    action: registerPath,
+                    errorMessage: "User already exists",
+                };
+            }
             //console.log("inside withRegister get")
             const register = await admin.renderRegister(Object.assign({}, baseProps));
             return res.send(register);

@@ -90,7 +90,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
         
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         //adminUser = await auth.authenticate!(email, password, context);
-        if (unconfUser){
+        if (unconfUser && typeof unconfUser==='object'){
           let { conf_token } = unconfUser as any;
           let mailState = sendEmail(
             process.env.FMAIL_SENDER,
@@ -128,10 +128,16 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
           
     
         } else {
-          const baseProps = {
+          let baseProps = {
             action: registerPath,
             errorMessage: "Error in confirm initialisation",
           };
+          if ( unconfUser === 'user_exists'){
+            baseProps = {
+              action: registerPath,
+              errorMessage: "User already exists",
+            }; 
+          }
           //console.log("inside withRegister get")
           const register = await admin.renderRegister({
             ...baseProps,

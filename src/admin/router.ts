@@ -18,17 +18,27 @@ import jwt from 'jsonwebtoken';
 import { SessionData } from '@adminjs/express';
 
 export const createUnconfUser = async ( email, password, cont : AuthenticationContext) => {
-      let uid = uuidv4();
-      let conf_token= jwt.sign({ confirm: uid }, process.env.SESSION_SECRET ?? 'sessionsecret', {
+      const foundUser = await client.nf_user.findUnique({
+        where: {
+          user_email : email
+        }
+      });
+      if (foundUser){
+        return "user_exists";
+      } else {
+        let uid = uuidv4();
+        let conf_token= jwt.sign({ confirm: uid }, process.env.SESSION_SECRET ?? 'sessionsecret', {
         expiresIn: '1h',});
-      let unconfUser =  {
-        uid : uid,
-        user_email: email, 
-        user_pass_hash: await argon2.hash(password),
-        user_confirmed: false,
-        conf_token : conf_token
-      };  
-      return unconfUser;
+        let unconfUser =  {
+          uid : uid,
+          user_email: email, 
+          user_pass_hash: await argon2.hash(password),
+          user_confirmed: false,
+          conf_token : conf_token
+        };  
+        return unconfUser;
+      }
+
 }
 
 export const confUser = async (reqConfToken : string, unconfUser) => {
@@ -39,7 +49,7 @@ export const confUser = async (reqConfToken : string, unconfUser) => {
   const { confirm : decodedUid } = decoded as any;
   if ( uid === decodedUid){
     let confUser =  {
-      user_email: unconfUser.email, 
+      user_email: unconfUser.user_email, 
       user_pass_hash: unconfUser.user_pass_hash,
       user_confirmed: true,
     };
@@ -56,6 +66,9 @@ export const authenticatePrismaUser = async (email,password) =>{
       user_email : email
     }
   });
+  let isPassVerified = await argon2.verify(foundUser.user_pass_hash, password);
+  console.log('typeof isPassVerified',isPassVerified);
+  
   if (foundUser && (await argon2.verify(foundUser.user_pass_hash, password))) {
     const userData = foundUser;
     return { ...userData };

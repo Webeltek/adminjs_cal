@@ -13,13 +13,13 @@
       }
     },
     "Register": {
-      "welcomeHeader": "Welcome",
-      "welcomeMessage": "Register new user",
+      "welcomeHeader": "Velkommen",
+      "welcomeMessage": "Registrer ny bruker",
       "properties": {
-        "email": "Email",
-        "password": "Password"
+        "email": "Epost",
+        "password": "Passord"
       },
-      "loginButton": "Register"
+      "registerButton": "Registrer"
     }
   }
 }

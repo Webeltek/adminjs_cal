@@ -118,7 +118,7 @@ export const withLogin = (
         password: string;
       };
       // "auth.authenticate" must always be defined if "auth.provider" isn't
-      adminUser = await auth.authenticate!(email, password, context);
+      adminUser = await auth.authenticatePrismaUser!(email, password);
     }
 
     if (adminUser) {

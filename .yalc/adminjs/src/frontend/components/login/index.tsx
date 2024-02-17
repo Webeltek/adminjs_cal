@@ -61,7 +61,8 @@ export const Login: React.FC = () => {
 
   function handleRegisterClick(e: FormEvent<HTMLFormElement>){
     e.preventDefault();
-    navigate('/admin/register')
+    let navigateOptions = {state : '/admin/register'};
+    navigate('/admin/register',navigateOptions )
   }
 
   return (
@@ -130,7 +131,7 @@ export const Login: React.FC = () => {
           <Text mt="xl" textAlign="center">
             <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
           </Text>
-          <Text mt="xl" textAlign="left">
+          <Text mt="xl" textAlign="center">
               <Button type="button"  onClick={handleRegisterClick} 
               variant="contained">{translateComponent('Register.registerButton')}</Button>
             </Text>

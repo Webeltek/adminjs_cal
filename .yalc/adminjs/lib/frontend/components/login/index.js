@@ -43,7 +43,10 @@ export const Login = () => {
   const navigate = useNavigate();
   function handleRegisterClick(e) {
     e.preventDefault();
-    navigate('/admin/register');
+    let navigateOptions = {
+      state: '/admin/register'
+    };
+    navigate('/admin/register', navigateOptions);
   }
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
@@ -126,7 +129,7 @@ export const Login = () => {
     variant: "contained"
   }, translateComponent('Login.loginButton'))), /*#__PURE__*/React.createElement(Text, {
     mt: "xl",
-    textAlign: "left"
+    textAlign: "center"
   }, /*#__PURE__*/React.createElement(Button, {
     type: "button",
     onClick: handleRegisterClick,

@@ -58,9 +58,10 @@
         "welcomeMessage": "Register new user",
         "properties": {
           "email": "Email",
-          "password": "Password"
+          "password": "Password",
+          "organization": "Organization"
         },
-        "loginButton": "Register",
+        "registerButton": "Register",
         "emailSentTo": "Email sent to: "
       }
     },

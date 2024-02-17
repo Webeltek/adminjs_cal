@@ -44,23 +44,24 @@
       }
     },
     "Login": {
-      "welcomeHeader": "Welcome",
+      "welcomeHeader": "Velkommen",
       "welcomeMessage": "Admin panel",
       "properties": {
-        "email": "Email",
-        "password": "Password"
+        "email": "Epost",
+        "password": "Passord"
       },
       "loginButton": "Login",
-      "registerButton": "Register"
+      "registerButton": "Registrer"
     },
     "Register": {
-      "welcomeHeader": "Welcome",
-      "welcomeMessage": "Register new user",
+      "welcomeHeader": "Velkommen",
+      "welcomeMessage": "Registrer ny bruker",
       "properties": {
-        "email": "Email",
-        "password": "Password"
+        "email": "Epost",
+        "password": "Passord",
+        "organization": "Organisasjon"
       },
-      "registerButton": "Register",
+      "registerButton": "Registrer",
       "emailSentTo": "Epost er sendt til: "
     }
   },

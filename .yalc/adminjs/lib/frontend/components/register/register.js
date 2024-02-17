@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
 import MadeWithLoveMod from './made-with-love-mod.js';
+import { useLocation } from 'react-router';
 const Wrapper = styled(Box)`
     align-items: center;
     justify-content: center;
@@ -31,7 +32,7 @@ const IllustrationsWrapper = styled(Box)`
   `;
 export const Register = () => {
   const props = window.__APP_STATE__REG;
-  const {
+  let {
     action,
     errorMessage: message,
     postMessage
@@ -42,6 +43,13 @@ export const Register = () => {
   } = useTranslation();
   const branding = useSelector(state => state.branding);
   console.log('register props', action, message, postMessage);
+  const location = useLocation();
+  const {
+    state
+  } = location;
+  if (state) {
+    action = state;
+  }
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -116,6 +124,9 @@ export const Register = () => {
     name: "password",
     placeholder: translateComponent('Login.properties.password'),
     autoComplete: "new-password"
+  })), /*#__PURE__*/React.createElement(FormGroup, null, /*#__PURE__*/React.createElement(Label, null, translateComponent('Register.properties.organization')), /*#__PURE__*/React.createElement(Input, {
+    name: "organization",
+    placeholder: translateComponent('Register.properties.organization')
   })), /*#__PURE__*/React.createElement(Text, {
     mt: "xl",
     textAlign: "center"

@@ -79,7 +79,7 @@ export const withLogin = (router, admin, auth) => {
         else {
             const { email, password } = req.fields;
             // "auth.authenticate" must always be defined if "auth.provider" isn't
-            adminUser = await auth.authenticate(email, password, context);
+            adminUser = await auth.authenticatePrismaUser(email, password);
         }
         if (adminUser) {
             req.session.adminUser = adminUser;
