@@ -27,7 +27,7 @@ const LoggedIn: React.FC<LoggedInProps> = (props) => {
   return (
     <Box flexShrink={0} data-css="logged-in">
       <CurrentUserNav
-        name={session.email}
+        name={session.user_email}
         title={session.title}
         avatarUrl={session.avatarUrl}
         dropActions={dropActions}

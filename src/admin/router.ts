@@ -66,8 +66,8 @@ export const authenticatePrismaUser = async (email,password) =>{
       user_email : email
     }
   });
-  let isPassVerified = await argon2.verify(foundUser.user_pass_hash, password);
-  console.log('typeof isPassVerified',isPassVerified);
+  //let isPassVerified = await argon2.verify(foundUser.user_pass_hash, password);
+  //console.log('typeof isPassVerified',isPassVerified);
   
   if (foundUser && (await argon2.verify(foundUser.user_pass_hash, password))) {
     const userData = foundUser;

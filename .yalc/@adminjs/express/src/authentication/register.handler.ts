@@ -173,6 +173,7 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
       console.log("register.handler confirmPath confUser",confUser);
       if (confUser) {
         req.session.adminUser = confUser;
+        req.session.email = confUser['user_email'];
         req.session.save((err) => {
           if (err) {
             return next(err);

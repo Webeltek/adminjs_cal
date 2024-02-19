@@ -2771,11 +2771,11 @@ var globals = (function (exports) {
 	}
 
 	var reactExports = react$1.exports;
-	var React$2 = /*@__PURE__*/getDefaultExportFromCjs(reactExports);
+	var React$3 = /*@__PURE__*/getDefaultExportFromCjs(reactExports);
 
-	var React$3 = /*#__PURE__*/_mergeNamespaces({
+	var React$4 = /*#__PURE__*/_mergeNamespaces({
 		__proto__: null,
-		default: React$2
+		default: React$3
 	}, [reactExports]);
 
 	var redux = {};
@@ -34563,52 +34563,44 @@ var globals = (function (exports) {
 
 	var Context = {};
 
-	var hasRequiredContext;
+	Context.__esModule = true;
+	Context.default = Context.ReactReduxContext = void 0;
 
-	function requireContext () {
-		if (hasRequiredContext) return Context;
-		hasRequiredContext = 1;
+	var React$2 = _interopRequireWildcard$1(reactExports);
 
-		Context.__esModule = true;
-		Context.default = Context.ReactReduxContext = void 0;
+	function _getRequireWildcardCache$1(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache$1 = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-		var React = _interopRequireWildcard(reactExports);
+	function _interopRequireWildcard$1(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache$1(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-		function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+	const ContextKey = Symbol.for(`react-redux-context`);
+	const gT = typeof globalThis !== "undefined" ? globalThis :
+	/* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
+	{};
 
-		function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+	function getContext() {
+	  var _gT$ContextKey;
 
-		const ContextKey = Symbol.for(`react-redux-context`);
-		const gT = typeof globalThis !== "undefined" ? globalThis :
-		/* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
-		{};
+	  if (!React$2.createContext) return {};
+	  const contextMap = (_gT$ContextKey = gT[ContextKey]) != null ? _gT$ContextKey : gT[ContextKey] = new Map();
+	  let realContext = contextMap.get(React$2.createContext);
 
-		function getContext() {
-		  var _gT$ContextKey;
+	  if (!realContext) {
+	    realContext = React$2.createContext(null);
 
-		  if (!React.createContext) return {};
-		  const contextMap = (_gT$ContextKey = gT[ContextKey]) != null ? _gT$ContextKey : gT[ContextKey] = new Map();
-		  let realContext = contextMap.get(React.createContext);
+	    {
+	      realContext.displayName = 'ReactRedux';
+	    }
 
-		  if (!realContext) {
-		    realContext = React.createContext(null);
+	    contextMap.set(React$2.createContext, realContext);
+	  }
 
-		    {
-		      realContext.displayName = 'ReactRedux';
-		    }
-
-		    contextMap.set(React.createContext, realContext);
-		  }
-
-		  return realContext;
-		}
-
-		const ReactReduxContext = /*#__PURE__*/getContext();
-		Context.ReactReduxContext = ReactReduxContext;
-		var _default = ReactReduxContext;
-		Context.default = _default;
-		return Context;
+	  return realContext;
 	}
+
+	const ReactReduxContext = /*#__PURE__*/getContext();
+	Context.ReactReduxContext = ReactReduxContext;
+	var _default$2 = ReactReduxContext;
+	Context.default = _default$2;
 
 	useReduxContext$1.__esModule = true;
 	useReduxContext$1.createReduxContextHook = createReduxContextHook;
@@ -34616,7 +34608,7 @@ var globals = (function (exports) {
 
 	var _react$1 = reactExports;
 
-	var _Context$2 = requireContext();
+	var _Context$2 = Context;
 
 	/**
 	 * Hook factory, which creates a `useReduxContext` hook bound to a given context. This is a low-level
@@ -34676,7 +34668,7 @@ var globals = (function (exports) {
 
 	var _useReduxContext = useReduxContext$1;
 
-	var _Context$1 = requireContext();
+	var _Context$1 = Context;
 
 	var _useSyncExternalStore$1 = useSyncExternalStore$1;
 
@@ -36194,7 +36186,7 @@ var globals = (function (exports) {
 
 	var _warning = _interopRequireDefault(requireWarning());
 
-	var _Context = requireContext();
+	var _Context = Context;
 
 	var _useSyncExternalStore = useSyncExternalStore$1;
 
@@ -36610,7 +36602,7 @@ var globals = (function (exports) {
 
 		var React = _interopRequireWildcard(reactExports);
 
-		var _Context = requireContext();
+		var _Context = Context;
 
 		var _Subscription = requireSubscription();
 
@@ -36681,7 +36673,7 @@ var globals = (function (exports) {
 		useStore.createStoreHook = createStoreHook;
 		useStore.useStore = void 0;
 
-		var _Context = requireContext();
+		var _Context = Context;
 
 		var _useReduxContext = useReduxContext$1;
 
@@ -36735,7 +36727,7 @@ var globals = (function (exports) {
 		useDispatch.createDispatchHook = createDispatchHook;
 		useDispatch.useDispatch = void 0;
 
-		var _Context = requireContext();
+		var _Context = Context;
 
 		var _useStore = requireUseStore();
 
@@ -36874,7 +36866,7 @@ var globals = (function (exports) {
 
 		var _connect = _interopRequireDefault(connect$1);
 
-		var _Context = requireContext();
+		var _Context = Context;
 
 		var _useDispatch = requireUseDispatch();
 
@@ -48187,7 +48179,7 @@ var globals = (function (exports) {
 	  return create();
 	};
 
-	var useInsertionEffect = React$3['useInsertion' + 'Effect'] ? React$3['useInsertion' + 'Effect'] : false;
+	var useInsertionEffect = React$4['useInsertion' + 'Effect'] ? React$4['useInsertion' + 'Effect'] : false;
 	var useInsertionEffectAlwaysWithSyncFallback = useInsertionEffect || syncFallback;
 	var useInsertionEffectWithLayoutFallback = useInsertionEffect || reactExports.useLayoutEffect;
 
@@ -64621,7 +64613,7 @@ var globals = (function (exports) {
 
 	/* eslint-disable import/first, import/no-extraneous-dependencies */
 	window.global = {};
-	window.React = React$2;
+	window.React = React$3;
 	window.ReactDOM = ReactDOM;
 	window.createRoot = createRoot;
 	window.Redux = Redux;
@@ -64634,7 +64626,7 @@ var globals = (function (exports) {
 	window.ReactSelectCreatable = CreatableSelect$1;
 	window.FeatherIcons = FeatherIcons;
 
-	exports.React = React$2;
+	exports.React = React$3;
 	exports.ReactDOM = ReactDOM;
 	exports.ReactRedux = ReactRedux;
 	exports.Redux = Redux;

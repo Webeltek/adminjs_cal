@@ -6,7 +6,7 @@ import AdminJS, { defaultOptions } from '../../../adminjs.js';
 import resourceStub, { expectedResult } from '../../../../spec/backend/helpers/resource-stub.js';
 const someID = 'someID';
 const currentAdmin = {
-  email: 'some@email.com',
+  user_email: 'some@email.com',
   name: 'someName',
   otherValue: 'someOther-value'
 };

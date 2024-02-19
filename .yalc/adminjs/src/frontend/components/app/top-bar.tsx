@@ -32,6 +32,8 @@ const TopBar: React.FC<Props> = (props) => {
   const session = useSelector((state: ReduxState) => state.session)
   const paths = useSelector((state: ReduxState) => state.paths)
   const versions = useSelector((state: ReduxState) => state.versions)
+  console.log("top-bar session, session.email ",session, session?.user_email);
+  
 
   return (
     <NavBar data-css="topbar">
@@ -46,7 +48,7 @@ const TopBar: React.FC<Props> = (props) => {
       </Box>
       <Version versions={versions} />
       <LanguageSelect />
-      {session && session.email ? <LoggedIn session={session} paths={paths} /> : ''}
+      {session && session.user_email ? <LoggedIn session={session} paths={paths} /> : ''}
     </NavBar>
   )
 }
