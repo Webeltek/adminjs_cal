@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { SessionData } from '@adminjs/express';
 
-export const createUnconfUser = async ( email, password, cont : AuthenticationContext) => {
+export const createUnconfUser = async ( email, password,ou, cont : AuthenticationContext) => {
       const foundUser = await client.nf_user.findUnique({
         where: {
           user_email : email
@@ -33,6 +33,7 @@ export const createUnconfUser = async ( email, password, cont : AuthenticationCo
           uid : uid,
           user_email: email, 
           user_pass_hash: await argon2.hash(password),
+          ou : ou,
           user_confirmed: false,
           conf_token : conf_token
         };  
@@ -42,7 +43,6 @@ export const createUnconfUser = async ( email, password, cont : AuthenticationCo
 }
 
 export const confUser = async (reqConfToken : string, unconfUser) => {
-  
   let decoded = jwt.verify(reqConfToken, process.env.SESSION_SECRET ?? 'sessionsecret');
   console.log("decoded", decoded);
   const { uid } = unconfUser;
@@ -52,11 +52,44 @@ export const confUser = async (reqConfToken : string, unconfUser) => {
       user_email: unconfUser.user_email, 
       user_pass_hash: unconfUser.user_pass_hash,
       user_confirmed: true,
+      ou : unconfUser.ou
     };
     let nfConfUser = await client.nf_user.create({ data: confUser});
     return nfConfUser;
   }
-  
+}
+
+export const authenticateGmailUser = async (email : string | undefined,google_sub: string | undefined)=>{
+  const foundUser = await client.nf_user.findFirst({
+    where: {
+      user_email : email
+    }
+  });
+  if (foundUser ) {
+    const userData = {
+    id  : foundUser.id,               
+    user_email : foundUser.user_email,         
+    vipps_sub : foundUser.vipps_sub,         
+    google_sub : foundUser.google_sub,      
+    access_token : foundUser.access_token,      
+    last_seen : foundUser.last_seen,         
+    is_admin : foundUser.is_admin,          
+    ou : foundUser.ou,               
+    address : foundUser.address
+    }
+    return { ...userData };
+  } else {
+    let gmailUser =  {
+      user_email: email, 
+      google_sub: google_sub,
+      user_confirmed: true,
+      user_is_logged_in: true
+    };
+    let googleUser = await client.nf_user.create({ data: gmailUser});
+    return {...googleUser}
+  }
+  return null;
+
 }
 
 export const authenticatePrismaUser = async (email,password) =>{
@@ -70,7 +103,20 @@ export const authenticatePrismaUser = async (email,password) =>{
   //console.log('typeof isPassVerified',isPassVerified);
   
   if (foundUser && (await argon2.verify(foundUser.user_pass_hash, password))) {
-    const userData = foundUser;
+    const userData = {
+    id  : foundUser.id,               
+    user_email : foundUser.user_email,         
+    vipps_sub : foundUser.vipps_sub,         
+    google_sub : foundUser.google_sub,        
+    user_is_logged_in : foundUser.user_is_logged_in, 
+    user_confirmed : foundUser.user_confirmed,    
+    user_conf_by_admin : foundUser.user_conf_by_admin,
+    access_token : foundUser.access_token,      
+    last_seen : foundUser.last_seen,         
+    is_admin : foundUser.is_admin,          
+    ou : foundUser.ou,               
+    address : foundUser.address
+    }
     return { ...userData };
   }
   return null;
@@ -103,6 +149,7 @@ export const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | nu
     {
       createUnconfUser: createUnconfUser,
       confUser : confUser,
+      authenticateGmailUser: authenticateGmailUser,
       authenticatePrismaUser : authenticatePrismaUser,
       authenticate: authenticateUser,
       cookieName: 'adminjs',

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import AdminJS, { CurrentAdmin } from "adminjs";
 import { Router } from "express";
 import { AuthenticationOptions } from "../types.js";

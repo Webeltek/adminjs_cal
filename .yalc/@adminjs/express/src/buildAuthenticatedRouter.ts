@@ -102,10 +102,11 @@ export const buildAuthenticatedRouter = (
 
   withLogin(router, admin, auth);
 
+  const gmailCallbackPath = '/admin/register/gmail_cb'
   const registerPath = '/admin/register';
   const emailSentPath = '/admin/register/email_sent';
   const confirmPath = '/admin/register/confirm/:conf_token';
-  withRegister(registerPath,emailSentPath,confirmPath,router, admin, auth);
+  withRegister(registerPath,emailSentPath,confirmPath, gmailCallbackPath,router, admin, auth);
 
   withLogout(router, admin, auth);
   buildAssets({ admin, assets, routes, router });

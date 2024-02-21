@@ -21,6 +21,9 @@ import { useTranslation } from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
 import { LoginTemplateAttributes } from '../../login-template.js'
 import { useNavigate } from 'react-router'
+import { GoogleLogin } from '@react-oauth/google';
+import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
+import { config } from 'process'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -64,6 +67,23 @@ export const Login: React.FC = () => {
     let navigateOptions = {state : '/admin/register'};
     navigate('/admin/register',navigateOptions )
   }
+
+  const handleSuccess = async (credentialResponse) => {
+    // Handle the successful login here
+    const { credential } = credentialResponse;
+    console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/register/gmail_cb',undefined,{ params : {credential : credential}});
+
+  };
+
+
+  const handleError = () => {
+
+    // Handle login errors here
+
+    console.log('Google login failed');
+
+  };
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -132,9 +152,16 @@ export const Login: React.FC = () => {
             <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
           </Text>
           <Text mt="xl" textAlign="center">
-              <Button type="button"  onClick={handleRegisterClick} 
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={handleError}
+              useOneTap
+            />
+          </Text>
+          <Text mt="xl" textAlign="center">
+            <Button type="button"  onClick={handleRegisterClick} 
               variant="contained">{translateComponent('Register.registerButton')}</Button>
-            </Text>
+          </Text>
         </Box>
       </Box>
       {branding.withMadeWithLove ? (

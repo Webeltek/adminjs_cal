@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
 import { useNavigate } from 'react-router';
+import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 const Wrapper = styled(Box)`
   align-items: center;
   justify-content: center;
@@ -48,6 +50,23 @@ export const Login = () => {
     };
     navigate('/admin/register', navigateOptions);
   }
+  const handleSuccess = async credentialResponse => {
+    // Handle the successful login here
+    const {
+      credential
+    } = credentialResponse;
+    console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/register/gmail_cb', undefined, {
+      params: {
+        credential: credential
+      }
+    });
+  };
+  const handleError = () => {
+    // Handle login errors here
+
+    console.log('Google login failed');
+  };
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -128,6 +147,13 @@ export const Login = () => {
   }, /*#__PURE__*/React.createElement(Button, {
     variant: "contained"
   }, translateComponent('Login.loginButton'))), /*#__PURE__*/React.createElement(Text, {
+    mt: "xl",
+    textAlign: "center"
+  }, /*#__PURE__*/React.createElement(GoogleLogin, {
+    onSuccess: handleSuccess,
+    onError: handleError,
+    useOneTap: true
+  })), /*#__PURE__*/React.createElement(Text, {
     mt: "xl",
     textAlign: "center"
   }, /*#__PURE__*/React.createElement(Button, {

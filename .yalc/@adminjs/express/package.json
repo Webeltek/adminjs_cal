@@ -49,7 +49,8 @@
     }
   },
   "dependencies": {
+    "google-auth-library": "^9.6.3",
     "nodemailer": "^6.9.8"
   },
-  "yalcSig": "a02576549c4eda7df3ef358d3ac3657e"
+  "yalcSig": "a72b63877eb72aed0293dd9d6b18d012"
 }

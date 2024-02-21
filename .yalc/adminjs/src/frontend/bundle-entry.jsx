@@ -18,6 +18,7 @@ import * as Hooks from './hooks/index.js'
 import createStore from './store/store.js'
 import initTranslations from './utils/adminjs.i18n.js'
 import ApiClient from './utils/api-client.js'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -59,7 +60,8 @@ const registerAppProps = window.__APP_STATE__REG ?? {}
 ) */
 
 const RegisterApplication = (
-  <Provider store={store}>
+  <GoogleOAuthProvider clientId={"79524392295-cksiecamepjhv0jdqcpfiqlmd46vogmh.apps.googleusercontent.com"}>
+    <Provider store={store}>
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
@@ -70,6 +72,8 @@ const RegisterApplication = (
       </I18nextProvider>
     </ThemeProvider>
   </Provider>
+  </GoogleOAuthProvider>
+  
 )
 
 // eslint-disable-next-line no-undef

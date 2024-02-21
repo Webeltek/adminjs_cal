@@ -33,9 +33,9 @@ model nf_user {
   user_pass_hash     String?      @db.VarChar
   vipps_sub          String?      @db.VarChar
   google_sub         String?      @db.VarChar
-  user_is_logged_in  Boolean?
-  user_confirmed     Boolean?
-  user_conf_by_admin Boolean?
+  user_is_logged_in  Boolean?     @default(false)
+  user_confirmed     Boolean?     @default(false)
+  user_conf_by_admin Boolean?     @default(false)
   access_token       String?      @db.VarChar
   last_seen          String?      @db.VarChar
   is_admin           Boolean?

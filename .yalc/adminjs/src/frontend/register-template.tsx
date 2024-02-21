@@ -60,6 +60,7 @@ const html = async (
       ${faviconTag}
 
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+      <script src="https://accounts.google.com/gsi/client" async></script>
 
       <script src="${h.assetPath('global.bundle.js', assets)}"></script>
       <script src="${h.assetPath('design-system.bundle.js', assets)}"></script>

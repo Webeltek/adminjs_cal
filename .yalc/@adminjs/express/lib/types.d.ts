@@ -34,8 +34,9 @@ export type AuthenticationMaxRetriesOptions = {
 export type AuthenticationOptions = {
     cookiePassword: string;
     cookieName?: string;
-    createUnconfUser?: (email: string, password: string, context?: AuthenticationContext) => unknown | null;
+    createUnconfUser?: (email: string, password: string, ou: string, context?: AuthenticationContext) => unknown | null;
     confUser?: (confToken: string, unconfUser: any) => unknown | null;
+    authenticateGmailUser?: (email: string | undefined, google_sub: string | undefined) => unknown | null;
     authenticatePrismaUser?: (email: string, password: string) => unknown | null;
     authenticate?: (email: string, password: string, context?: AuthenticationContext) => unknown | null;
     /**
