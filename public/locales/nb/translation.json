@@ -66,13 +66,14 @@
     }
   },
   "labels": {
-    "navigation": "Navigation",
+    "navigation": "Navigasjon",
     "pages": "Sider",
-    "selectedRecords": "Selected ({{selected}})",
+    "selectedRecords": "Valgt ({{selected}})",
     "filters": "Filters",
     "adminVersion": "Admin: {{version}}",
     "appVersion": "App: {{version}}",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "choose_theme" : "Velg Tema"
   },
   "properties": {
     "length": "Length",

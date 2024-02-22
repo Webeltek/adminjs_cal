@@ -44,7 +44,7 @@ const html = async (
   const reduxState = store.getState()
   const { locale } = reduxState
   const stringifiedAttributes = JSON.stringify(attributes ?? {})
-  console.log('register-template stringifiedAttributes',stringifiedAttributes);
+  //console.log('register-template stringifiedAttributes',stringifiedAttributes);
 
   return `<!DOCTYPE html>
     <html lang=${locale.language}>

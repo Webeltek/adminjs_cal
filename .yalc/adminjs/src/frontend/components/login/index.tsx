@@ -59,7 +59,7 @@ export const Login: React.FC = () => {
   const props = (window as any).__APP_STATE__REG as LoginTemplateAttributes
   const { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
-  const branding = useSelector((state: ReduxState) => state.branding)
+  const  branding = useSelector((state: ReduxState) => state.branding);
   const navigate = useNavigate();
 
   function handleRegisterClick(e: FormEvent<HTMLFormElement>){
@@ -71,9 +71,14 @@ export const Login: React.FC = () => {
   const handleSuccess = async (credentialResponse) => {
     // Handle the successful login here
     const { credential } = credentialResponse;
-    console.log('Google login successful', credentialResponse);
-    const resp = await axios.post('/admin/register/gmail_cb',undefined,{ params : {credential : credential}});
-
+    //console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/login/gmail_cb',undefined,{ params : {credential : credential}});
+    if (resp.data){
+      console.log("login/index/ resp.data",resp.data);
+      if (resp.data.redirectTo === '/admin'){
+        window.location.href = '/admin';
+      }
+    }
   };
 
 
@@ -155,7 +160,6 @@ export const Login: React.FC = () => {
             <GoogleLogin
               onSuccess={handleSuccess}
               onError={handleError}
-              useOneTap
             />
           </Text>
           <Text mt="xl" textAlign="center">

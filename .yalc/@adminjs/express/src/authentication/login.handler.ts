@@ -2,21 +2,20 @@
 /* eslint-disable prettier/prettier */
 import AdminJS from "adminjs";
 import { Router } from "express";
-
 import type {
   AuthenticationContext,
   AuthenticationMaxRetriesOptions,
   AuthenticationOptions,
 } from "../types.js";
+import { OAuth2Client } from "google-auth-library";
 
-const getLoginPath = (admin: AdminJS): string => {
-  const { loginPath, rootPath } = admin.options;
+const getLoginPath = (loginPath: string,admin: AdminJS): string => {
+  const {  rootPath } = admin.options;
   // since we are inside already namespaced router we have to replace login and logout routes that
   // they don't have rootUrl inside. So changing /admin/login to just /login.
   // but there is a case where user gives / as a root url and /login becomes `login`. We have to
   // fix it by adding / in front of the route
   const normalizedLoginPath = loginPath.replace(rootPath, "");
-
   return normalizedLoginPath.startsWith("/")
     ? normalizedLoginPath
     : `/${normalizedLoginPath}`;
@@ -67,15 +66,18 @@ class Retry {
 export const withLogin = (
   router: Router,
   admin: AdminJS,
+  loginPath: string,
+  gmailCallbackPath: string,
   auth: AuthenticationOptions
 ): void => {
   const { rootPath } = admin.options;
-  const loginPath = getLoginPath(admin);
+  const suffixLoginPath = getLoginPath(loginPath,admin);
+  const suffixGmailCallbackPath = getLoginPath(gmailCallbackPath,admin);
 
   const { provider } = auth;
   const providerProps = provider?.getUiProps?.() ?? {};
 
-  router.get(loginPath, async (req, res) => {
+  router.get(suffixLoginPath, async (req, res) => {
     const baseProps = {
       action: admin.options.loginPath,
       errorMessage: null,
@@ -88,7 +90,7 @@ export const withLogin = (
     return res.send(login);
   });
 
-  router.post(loginPath, async (req : any, res, next) => {
+  router.post(suffixLoginPath, async (req : any, res, next) => {
     if (!new Retry(req.ip).canLogin(auth.maxRetries)) {
       const login = await admin.renderRegister({
         action: admin.options.loginPath,
@@ -123,7 +125,7 @@ export const withLogin = (
 
     if (adminUser) {
       req.session.adminUser = adminUser;
-      console.log("login.handler adminUser['user_email']",adminUser['user_email']);
+      //console.log("login.handler adminUser['user_email']",adminUser['user_email']);
       
       req.session.email = adminUser['user_email'];
       req.session.save((err) => {
@@ -146,4 +148,54 @@ export const withLogin = (
       return res.send(login);
     }
   });
+
+  router.post(suffixGmailCallbackPath, async (req: any, res, next) => {
+    //const context: AuthenticationContext = { req, res };
+    const { credential } = req.query;
+    const { rootPath } = admin.options;
+    const verifyArr = await verify(credential)
+    .catch((err) => console.log("register.handler verify error",err));
+    const [email,google_sub] = verifyArr ? verifyArr : [];
+    const adminUser = await auth.authenticateGmailUser!(email,google_sub);
+      if (adminUser) {
+        req.session.adminUser = adminUser;
+        //console.log("login.handler adminUser['user_email']",adminUser['user_email']);
+        
+        req.session.email = adminUser['user_email'];
+        req.session.save((err) => {
+          if (err) {
+            return next(err);
+          }
+          if (req.session.redirectTo) {
+            return res.redirect(302, req.session.redirectTo);
+          } else {
+            console.log("register.handler gmail adminUser rootPath",adminUser,rootPath)
+            return res.send({ "redirectTo": "/admin"});
+          }
+        });
+      } else {
+        const login = await admin.renderRegister({
+          action: admin.options.loginPath,
+          errorMessage: "invalidCredentials",
+        });
+  
+        return res.send(login);
+      }
+
+  });
+
+  async function verify(token) {
+    const client = new OAuth2Client();
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userSub = payload!['sub'];
+    const email =  payload!['email'];
+    console.log("register.handler verify payload",payload);
+    return [email,userSub];
+  }
 };

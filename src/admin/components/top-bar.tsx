@@ -1,13 +1,39 @@
-import { Box, Button, Icon, Text } from '@adminjs/design-system';
-import { ReduxState } from 'adminjs';
+import { Box, Button, Icon, Text, DropDown,
+  DropDownItem,
+  DropDownMenu,
+  DropDownTrigger } from '@adminjs/design-system';
+import { ReduxState , initializeTheme , useTranslation, getTheme } from 'adminjs';
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch} from 'react-redux';
+import { dark, light, noSidebar } from '@adminjs/themes'
 
 const TopBar = () => {
   const versions = useSelector((state: ReduxState) => state.versions);
+  const currAdmin = useSelector((state: ReduxState) => state.session);
+  const theme = useSelector((state: ReduxState) => state.theme);
+  const dispatch = useDispatch();
   const GITHUB_URL = (window as any).AdminJS.env.GITHUB_URL;
   const SLACK_URL = (window as any).AdminJS.env.SLACK_URL;
   const DOCUMENTATION_URL = (window as any).AdminJS.env.DOCUMENTATION_URL;
+  const { translateLabel } = useTranslation();
+  const themeConfigArr = [ dark, light, noSidebar];
+
+  function changeTheme(themeConf){
+    const THEME_INITIALIZE = 'THEME_INITIALIZE'
+    const initThemeResponseAction = {
+      type: 'THEME_INITIALIZE',
+      data: themeConf
+    };
+    console.log("top-bar initThemeAction",initThemeResponseAction);
+    dispatch(initThemeResponseAction);
+    currAdmin.theme = themeConf;
+    dispatch({ 
+      type: 'SESSION_INITIALIZE',
+      data: currAdmin
+  })
+    console.log("top-bar currAdmin",currAdmin);
+    console.log("top-bar theme",theme);
+  }
 
   return (
     <Box flex flexGrow={1} justifyContent="end" alignItems="center">
@@ -26,6 +52,28 @@ const TopBar = () => {
         <Icon icon="BookOpen" />
         Documentation
       </Button>
+      <Box flex alignItems="center">
+      <DropDown>
+        <DropDownTrigger>
+          <Button color="text">
+            <Icon icon="Moon" />
+            {translateLabel(`choose_theme`)}
+          </Button>
+        </DropDownTrigger>
+        <DropDownMenu>
+          {themeConfigArr.map((themeConfig) => (
+            <DropDownItem
+              key={themeConfig.id}
+              onClick={() => {
+                changeTheme(themeConfig)
+              }}
+            >
+              {themeConfig.name}
+            </DropDownItem>
+          ))}
+        </DropDownMenu>
+      </DropDown>
+    </Box>
     </Box>
   );
 };

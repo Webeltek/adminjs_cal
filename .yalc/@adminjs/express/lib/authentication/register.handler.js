@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
-import { OAuth2Client } from "google-auth-library";
 const getRegisterPath = (registerPath, admin) => {
     const { rootPath } = admin.options;
     // since we are inside already namespaced router we have to replace login and logout routes that
@@ -34,11 +33,10 @@ async function sendEmail(from, to, subject, text, html) {
     console.log("Message sent: %s", info.messageId);
     return true;
 }
-export const withRegister = (registerPath, emailSentPath, confirmPath, gmailCallbackPath, router, admin, auth) => {
+export const withRegister = (registerPath, emailSentPath, confirmPath, router, admin, auth) => {
     const suffixRegPath = getRegisterPath(registerPath, admin);
     const suffixEmailSentPath = getRegisterPath(emailSentPath, admin);
     const suffixConfirmPath = getRegisterPath(confirmPath, admin);
-    const suffixGmailCallbackPath = getRegisterPath(gmailCallbackPath, admin);
     //console.log("inside withRegister ")
     router.get(suffixRegPath, async (req, res) => {
         const baseProps = {
@@ -145,51 +143,4 @@ export const withRegister = (registerPath, emailSentPath, confirmPath, gmailCall
             return res.send(register);
         }
     });
-    router.post(suffixGmailCallbackPath, async (req, res, next) => {
-        const context = { req, res };
-        const { credential } = req.query;
-        const { rootPath } = admin.options;
-        verify(credential)
-            .then(async ([email, google_sub]) => {
-            let adminUser = await auth.authenticateGmailUser(email, google_sub);
-            if (adminUser) {
-                req.session.adminUser = adminUser;
-                console.log("login.handler adminUser['user_email']", adminUser['user_email']);
-                req.session.email = adminUser['user_email'];
-                req.session.save((err) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    if (req.session.redirectTo) {
-                        return res.redirect(302, req.session.redirectTo);
-                    }
-                    else {
-                        return res.redirect(302, rootPath);
-                    }
-                });
-            }
-            else {
-                const login = await admin.renderRegister({
-                    action: admin.options.loginPath,
-                    errorMessage: "invalidCredentials",
-                });
-                return res.send(login);
-            }
-        })
-            .catch((err) => console.log("register.handler verify error", err));
-    });
-    async function verify(token) {
-        const client = new OAuth2Client();
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-            // Or, if multiple clients access the backend:
-            //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-        });
-        const payload = ticket.getPayload();
-        const userSub = payload['sub'];
-        const email = payload['email'];
-        console.log("register.handler verify payload", payload);
-        return [email, userSub];
-    }
 };

@@ -55,12 +55,18 @@ export const Login = () => {
     const {
       credential
     } = credentialResponse;
-    console.log('Google login successful', credentialResponse);
-    const resp = await axios.post('/admin/register/gmail_cb', undefined, {
+    //console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/login/gmail_cb', undefined, {
       params: {
         credential: credential
       }
     });
+    if (resp.data) {
+      console.log("login/index/ resp.data", resp.data);
+      if (resp.data.redirectTo === '/admin') {
+        window.location.href = '/admin';
+      }
+    }
   };
   const handleError = () => {
     // Handle login errors here
@@ -151,8 +157,7 @@ export const Login = () => {
     textAlign: "center"
   }, /*#__PURE__*/React.createElement(GoogleLogin, {
     onSuccess: handleSuccess,
-    onError: handleError,
-    useOneTap: true
+    onError: handleError
   })), /*#__PURE__*/React.createElement(Text, {
     mt: "xl",
     textAlign: "center"

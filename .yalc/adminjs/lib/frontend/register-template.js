@@ -25,7 +25,8 @@ const html = async (admin, attributes) => {
     locale
   } = reduxState;
   const stringifiedAttributes = JSON.stringify(attributes ?? {});
-  console.log('register-template stringifiedAttributes', stringifiedAttributes);
+  //console.log('register-template stringifiedAttributes',stringifiedAttributes);
+
   return `<!DOCTYPE html>
     <html lang=${locale.language}>
     <head>

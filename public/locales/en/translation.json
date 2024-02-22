@@ -72,7 +72,8 @@
       "filters": "Filters",
       "adminVersion": "Admin: {{version}}",
       "appVersion": "App: {{version}}",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "choose_theme" : "Choose Theme"
     },
     "properties": {
       "length": "Length",
