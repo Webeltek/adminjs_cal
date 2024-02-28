@@ -5,9 +5,10 @@ import { Box, Button, Icon, Text, DropDown,
 import { ReduxState , initializeTheme , useTranslation, getTheme } from 'adminjs';
 import React, { FC } from 'react';
 import { useSelector , useDispatch} from 'react-redux';
-import { dark, light, noSidebar } from '@adminjs/themes'
+import { dark, light, noSidebar } from '@adminjs/themes';
+import { useNavigate } from 'react-router'
 
-const TopBar = () => {
+const TopBar : FC = () => {
   const versions = useSelector((state: ReduxState) => state.versions);
   const currAdmin = useSelector((state: ReduxState) => state.session);
   const theme = useSelector((state: ReduxState) => state.theme);
@@ -16,6 +17,7 @@ const TopBar = () => {
   const SLACK_URL = (window as any).AdminJS.env.SLACK_URL;
   const DOCUMENTATION_URL = (window as any).AdminJS.env.DOCUMENTATION_URL;
   const { translateLabel } = useTranslation();
+  const navigate = useNavigate();
   const themeConfigArr = [ dark, light, noSidebar];
 
   function changeTheme(themeConf){
@@ -32,7 +34,7 @@ const TopBar = () => {
       data: currAdmin
   })
     console.log("top-bar currAdmin",currAdmin);
-    console.log("top-bar theme",theme);
+    navigate('/admin')
   }
 
   return (

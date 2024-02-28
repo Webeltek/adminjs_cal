@@ -9,6 +9,9 @@ import LanguageSelect from './language-select/language-select.js'
 import LoggedIn from './logged-in.js'
 import Version from './version.js'
 
+
+
+
 const NavBar = styled(Box)<BoxProps>`
   height: ${({ theme }) => theme.sizes.navbarHeight};
   border-bottom: ${({ theme }) => theme.borders.default};
@@ -32,8 +35,8 @@ const TopBar: React.FC<Props> = (props) => {
   const session = useSelector((state: ReduxState) => state.session)
   const paths = useSelector((state: ReduxState) => state.paths)
   const versions = useSelector((state: ReduxState) => state.versions)
-  console.log("top-bar session, session.email ",session, session?.user_email);
   
+  console.log("top-bar session, session.email ",session, session?.user_email);
 
   return (
     <NavBar data-css="topbar">

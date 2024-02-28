@@ -89,6 +89,7 @@
   "dependencies": {
     "@adminjs/design-system": "file:.yalc/@adminjs/design-system",
     "@adminjs/express": "6.1.0",
+    "@adminjs/themes": "^1.0.1",
     "@babel/core": "^7.21.0",
     "@babel/parser": "^7.21.0",
     "@babel/plugin-syntax-import-assertions": "^7.20.0",
@@ -149,5 +150,5 @@
     "react-redux": "8.0.5",
     "redux": "4.2.1"
   },
-  "yalcSig": "b43270ef1dcdb461b19b10ed0a45546f"
+  "yalcSig": "88dc3baf0a2f52d82796c7d53d8f19b7"
 }
