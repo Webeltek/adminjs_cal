@@ -92,7 +92,7 @@ export const authenticateGmailUser = async (email : string | undefined,google_su
 
 }
 
-export const authenticatePrismaUser = async (email,password) =>{
+export const authenticatePrismaUser = async (email,password,theme) =>{
   const nf_user_model = dmmf.modelMap.nf_user;
   const foundUser = await client.nf_user.findFirst({
     where: {
@@ -115,7 +115,8 @@ export const authenticatePrismaUser = async (email,password) =>{
     last_seen : foundUser.last_seen,         
     is_admin : foundUser.is_admin,          
     ou : foundUser.ou,               
-    address : foundUser.address
+    address : foundUser.address,
+    theme: theme
     }
     return { ...userData };
   }

@@ -79,9 +79,11 @@ export const withLogin = (router, admin, loginPath, gmailCallbackPath, auth) => 
             }, context);
         }
         else {
-            const { email, password } = req.fields;
-            // "auth.authenticate" must always be defined if "auth.provider" isn't
-            adminUser = await auth.authenticatePrismaUser(email, password);
+            const { email, password, theme } = req.fields;
+            if (!theme) {
+                // "auth.authenticate" must always be defined if "auth.provider" isn't
+                adminUser = await auth.authenticatePrismaUser(email, password, theme);
+            }
         }
         if (adminUser) {
             req.session.adminUser = adminUser;
@@ -100,8 +102,25 @@ export const withLogin = (router, admin, loginPath, gmailCallbackPath, auth) => 
             });
         }
         else {
-            const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
-            return res.send(login);
+            const { theme } = req.fields;
+            if (theme && req.session.adminUser) {
+                req.session.adminUser.theme = theme;
+                req.session.save((err) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    if (req.session.redirectTo) {
+                        return res.redirect(302, req.session.redirectTo);
+                    }
+                    else {
+                        return res.send({ "redirectTo": "/admin" });
+                    }
+                });
+            }
+            else {
+                const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
+                return res.send(login);
+            }
         }
     });
     router.post(suffixGmailCallbackPath, async (req, res, next) => {

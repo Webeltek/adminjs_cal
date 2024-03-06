@@ -37,7 +37,7 @@ export type AuthenticationOptions = {
     createUnconfUser?: (email: string, password: string, ou: string, context?: AuthenticationContext) => unknown | null;
     confUser?: (confToken: string, unconfUser: any) => unknown | null;
     authenticateGmailUser?: (email: string | undefined, google_sub: string | undefined) => unknown | null;
-    authenticatePrismaUser?: (email: string, password: string) => unknown | null;
+    authenticatePrismaUser?: (email: string, password: string, theme?: string) => unknown | null;
     authenticate?: (email: string, password: string, context?: AuthenticationContext) => unknown | null;
     /**
      * @description Maximum number of authorization attempts (if number - per minute)

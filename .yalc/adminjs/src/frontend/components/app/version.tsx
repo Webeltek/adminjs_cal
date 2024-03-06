@@ -9,11 +9,13 @@ import { VersionProps } from '../../../adminjs-options.interface.js'
 import { useTranslation } from '../../hooks/index.js'
 import allowOverride from '../../hoc/allow-override.js'
 
-import { useNavigate } from 'react-router'
+import { useNavigate , useLocation} from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ReduxState } from '../../store/store.js'
 import { dark, light, noSidebar } from '@adminjs/themes';
 import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
+import { appendForceRefresh } from '../actions/utils/append-force-refresh.js'
+import { combineStyles } from '@adminjs/design-system'
 
 export type Props = {
   versions: VersionProps;
@@ -35,8 +37,10 @@ const Version: React.FC<Props> = (props) => {
   const { translateLabel } = useTranslation()
   const dispatch = useDispatch();
   const session = useSelector((state: ReduxState) => state.session);
+  const selectedTheme = useSelector((state: ReduxState) => state.theme);
+  const branding = useSelector((state: ReduxState) => state.branding);
   const themeConfigArr = [ dark, light, noSidebar];
-  const navigate = useNavigate();
+  const location = useLocation();
 
   async function changeTheme(themeConf){
     const THEME_INITIALIZE = 'THEME_INITIALIZE'
@@ -44,19 +48,30 @@ const Version: React.FC<Props> = (props) => {
       type: 'THEME_INITIALIZE',
       data: themeConf
     };
-    console.log("top-bar initThemeAction",initThemeResponseAction);
+    //console.log("version initThemeAction",initThemeResponseAction);
     dispatch(initThemeResponseAction);
-    if (session) session.theme = themeConf;
+    if (session) session.theme = themeConf.id;
     dispatch({ 
       type: 'SESSION_INITIALIZE',
       data: session
-  })
-    console.log("top-bar currAdmin",session);
-    const resp = await axios.post('/admin/login',{ email: 'vel.velikov@1337.no', password: 'password'});
-    if(resp){
-      console.log(resp);
-      
-    }
+    })
+    console.log("version currAdmin/session.theme",session?.theme);
+    axios.post('/admin/login',
+      { 
+        theme : themeConf.id
+      })
+      .then((resp) => {
+        if (resp.data){
+          //console.log("version resp.data",resp.data);
+          if (resp.data.redirectTo === '/admin'){
+            window.location.href = location.pathname;
+          }
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    
+    
   }
 
   return (

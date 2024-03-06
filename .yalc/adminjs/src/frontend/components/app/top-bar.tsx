@@ -36,7 +36,7 @@ const TopBar: React.FC<Props> = (props) => {
   const paths = useSelector((state: ReduxState) => state.paths)
   const versions = useSelector((state: ReduxState) => state.versions)
   
-  console.log("top-bar session, session.email ",session, session?.user_email);
+  //console.log("top-bar session, session.email ",session, session?.user_email);
 
   return (
     <NavBar data-css="topbar">

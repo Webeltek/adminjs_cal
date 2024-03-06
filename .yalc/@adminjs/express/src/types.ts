@@ -46,7 +46,7 @@ export type AuthenticationOptions = {
     context?: AuthenticationContext) => unknown | null;
   confUser?:  (confToken : string, unconfUser) => unknown | null;
   authenticateGmailUser?: (email: string | undefined, google_sub : string | undefined)=> unknown | null;
-  authenticatePrismaUser?: (email: string, password: string) => unknown | null;  
+  authenticatePrismaUser?: (email: string, password: string, theme? : string) => unknown | null;  
   authenticate?: (
     email: string,
     password: string,

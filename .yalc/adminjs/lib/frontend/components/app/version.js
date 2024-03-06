@@ -3,7 +3,7 @@ import { cssClass, Text, Box, DropDown, Button, DropDownItem, DropDownMenu, Drop
 import { styled } from '@adminjs/design-system/styled-components';
 import { useTranslation } from '../../hooks/index.js';
 import allowOverride from '../../hoc/allow-override.js';
-import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { dark, light, noSidebar } from '@adminjs/themes';
 import axios from 'axios';
@@ -27,29 +27,36 @@ const Version = props => {
   } = useTranslation();
   const dispatch = useDispatch();
   const session = useSelector(state => state.session);
+  const selectedTheme = useSelector(state => state.theme);
+  const branding = useSelector(state => state.branding);
   const themeConfigArr = [dark, light, noSidebar];
-  const navigate = useNavigate();
+  const location = useLocation();
   async function changeTheme(themeConf) {
     const THEME_INITIALIZE = 'THEME_INITIALIZE';
     const initThemeResponseAction = {
       type: 'THEME_INITIALIZE',
       data: themeConf
     };
-    console.log("top-bar initThemeAction", initThemeResponseAction);
+    //console.log("version initThemeAction",initThemeResponseAction);
     dispatch(initThemeResponseAction);
-    if (session) session.theme = themeConf;
+    if (session) session.theme = themeConf.id;
     dispatch({
       type: 'SESSION_INITIALIZE',
       data: session
     });
-    console.log("top-bar currAdmin", session);
-    const resp = await axios.post('/admin/login', {
-      email: 'vel.velikov@1337.no',
-      password: 'password'
+    console.log("version currAdmin/session.theme", session?.theme);
+    axios.post('/admin/login', {
+      theme: themeConf.id
+    }).then(resp => {
+      if (resp.data) {
+        //console.log("version resp.data",resp.data);
+        if (resp.data.redirectTo === '/admin') {
+          window.location.href = location.pathname;
+        }
+      }
+    }, error => {
+      console.log(error);
     });
-    if (resp) {
-      console.log(resp);
-    }
   }
   return /*#__PURE__*/React.createElement(Box, {
     flex: true,

@@ -115,12 +115,17 @@ export const withLogin = (
         context
       );
     } else {
-      const { email, password } = req.fields as {
+      const { email, password , theme} = req.fields as {
         email: string;
         password: string;
+        theme?: string;
+
       };
-      // "auth.authenticate" must always be defined if "auth.provider" isn't
-      adminUser = await auth.authenticatePrismaUser!(email, password);
+      if(!theme){
+        // "auth.authenticate" must always be defined if "auth.provider" isn't
+        adminUser = await auth.authenticatePrismaUser!(email, password, theme);
+      }
+      
     }
 
     if (adminUser) {
@@ -139,13 +144,31 @@ export const withLogin = (
         }
       });
     } else {
-      const login = await admin.renderRegister({
-        action: admin.options.loginPath,
-        errorMessage: "invalidCredentials",
-        ...providerProps,
-      });
+      const {theme} = req.fields as {
+        theme?: string;
 
-      return res.send(login);
+      };
+      if (theme && req.session.adminUser){
+        req.session.adminUser.theme = theme;
+        req.session.save((err) => {
+          if (err) {
+            return next(err);
+          }
+          if (req.session.redirectTo) {
+            return res.redirect(302, req.session.redirectTo);
+          } else {
+            return res.send({ "redirectTo": "/admin"});
+          }
+        });
+      } else {
+        const login = await admin.renderRegister({
+          action: admin.options.loginPath,
+          errorMessage: "invalidCredentials",
+          ...providerProps,
+        });
+  
+        return res.send(login);
+      }
     }
   });
 
