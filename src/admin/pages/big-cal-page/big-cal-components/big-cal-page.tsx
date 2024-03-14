@@ -197,19 +197,18 @@ function Selectable(props) {
       }
     } */
     ({ start, end }) => {
-      const title = null // window.prompt('New Event name')
+      //const title = null // disable immeadietly save event to backend with null value 
       activateModal(true, start,end) // 
-      const startMillsNum = parseInt(start.getTime().toString());
-      const endMillsNum = parseInt(end.getTime().toString());
-      //console.log("big-cal-page typeof startMillsNum",typeof startMillsNum);
-      if (title) {
+      //const startMillsNum = parseInt(start.getTime().toString());
+      //const endMillsNum = parseInt(end.getTime().toString());
+      /* if (title) {
         setEvents((prev) => [...prev,{ start, end, title }]);
         api.getPage<evtType[]>({
           pageName: 'SelectCalExample2',
           method: 'post',
           data : { startmills: startMillsNum, endmills: endMillsNum, title, insert: true }
         })
-      }
+      } */
     } 
   ,[setEvents])
 

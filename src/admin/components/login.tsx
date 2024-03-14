@@ -54,6 +54,7 @@ export type LoginProps = {
   children?: any;
 };
 
+// overriden Login component is disabled inside adminjs bundle-entry.jsx
 export const Login: React.FC<any> = (props) => {
   const { action, errorMessage } = props;
   const { translateComponent, translateMessage } = useTranslation();

@@ -29,35 +29,61 @@ export function PickTimeForm(props){
         onClose : hidePicker,
         onOverlayClick : hidePicker,
         } 
-    const [startDate, setStartDate] = useState<string | null>(modModalData.start)
-    const [endDate, setEndDate] = useState<string | null>(modModalData.end)
     const { register, handleSubmit, watch, 
         formState: { errors , isSubmitting, isSubmitSuccessful} } = useForm<formData>();
     const {tc, tm, i18n: { language },} = useTranslation();    
-
+    
     const handleStartChange = (value) => {
-        if (value) setStartDate(value)
-        else setStartDate(null)
+        if (value) {
+            dispatch({
+                type: "SHOW_PICK_TIME_FORM", 
+                data: {
+                  start : value,
+                }
+              });
+        }
+        else {
+            dispatch({
+                type: "SHOW_PICK_TIME_FORM", 
+                data: {
+                  start : null,
+                }
+              });
+        }
     }
     
     const handleEndChange = (value) => {
-        if (value) setEndDate(value)
-        else setEndDate(null)
+        if (value) {
+            dispatch({
+                type: "SHOW_PICK_TIME_FORM", 
+                data: {
+                  end : value,
+                }
+              });
+        }
+        else {
+            dispatch({
+                type: "SHOW_PICK_TIME_FORM", 
+                data: {
+                  end : null,
+                }
+              });
+        }
     }
     
     const filterStartDatetime = (time) => {
         const selectedDate = new Date(time);
-        return selectedDate.getTime() < moment(endDate).toDate().getTime();
+        return selectedDate.getTime() < moment(modModalData.end).toDate().getTime();
     };
 
     const filterEndDatetime = (time) => {
         const selectedDate = new Date(time);
-        return selectedDate.getTime() > moment(startDate).toDate().getTime();
+        return selectedDate.getTime() > moment(modModalData.start).toDate().getTime();
     };
     
     const onSaveEvent: SubmitHandler<formData> = (data: formData) => {
-        console.log("pick-time-modal eventTitle,startDate",data.eventTitle, startDate)
-            handleSave(data.eventTitle,startDate,endDate)
+        console.log("pick-time-modal eventTitle,startDate",data.eventTitle, modModalData.start)
+            handleSave(data.eventTitle,modModalData.start,modModalData.end)
             hidePicker()
     }
 
@@ -74,7 +100,7 @@ export function PickTimeForm(props){
                     <Box>
                         <DatePicker
                             onChange={handleStartChange}
-                            value={startDate ?? ''}
+                            value={modModalData.start ?? ''}
                             disabled={false}
                             propertyType='datetime'
                             showTimeSelect
@@ -85,7 +111,7 @@ export function PickTimeForm(props){
                     <Box>
                         <DatePicker
                             onChange={handleEndChange}
-                            value={endDate ?? ''}
+                            value={modModalData.end ?? ''}
                             disabled={false}
                             propertyType='datetime'
                             showTimeSelect
