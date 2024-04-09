@@ -240,9 +240,9 @@ function Selectable(props) {
       const convPrismaEvts : evtType[] = resp.data // array contains only one deleted event object
       const convEvts = convAxiosRespData(resp.data)
       const deletedEvent = convEvts[0];
-      const modEvts= myEvents.filter((eventItem)=>{ eventItem.id !== deletedEvent.id})
+      const modEvts= myEvents.filter((eventItem)=> eventItem.id !== deletedEvent.id);
+      setInitDeleteModal({show: false});
       setEvents(modEvts);
-      setInitDeleteModal({show: false})
     })
   }
 

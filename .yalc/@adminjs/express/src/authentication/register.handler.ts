@@ -12,6 +12,7 @@ import type {
   AuthenticationMaxRetriesOptions,
   AuthenticationOptions,
 } from "../types.js";
+import { error } from "console";
 
 const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
     const { rootPath } = admin.options;
@@ -29,12 +30,14 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
   const opt = new SMTPTransport({
   host : process.env.MAIL_SERVER,
   port: Number.parseInt(process.env.MAIL_PORT as string),
-  secure: true,
+  secure: false,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
     user: process.env.MAIL_USERNAME,
     pass: process.env.MAIL_PASSWORD,
   },
+  /* logger: true,
+  debug : true */
   })
   const transporter = nodemailer.createTransport(opt);
 
@@ -45,9 +48,19 @@ const getRegisterPath = (registerPath: string,admin: AdminJS): string => {
       subject: subject, // Subject line
       text: text, // plain text body
       html: html, // html body
-    },);
+    },
+    /* (error,info)=>{
+      if(error){
+        console.log('transporter.sendMail error:',error);
+        
+      }
+      if(info){
+        console.log('register.handler sendMail info:',info);
+      }
+    } */
+    );
   
-    console.log("Message sent: %s", info.messageId);
+    //console.log("Message sent: %s", info.messageId);
     return true;
   }
   
@@ -87,7 +100,7 @@ export const withRegister = (
           ou: string
         };
         let unconfUser = await auth.createUnconfUser!(email,password,ou,context);
-        let fullUrlPath = `${req.protocol}://${req.get('host')}${req.originalUrl}/confirm/`
+        let fullUrlPath = `${req.protocol}://${process.env.EXT_HOSTNAME}${req.originalUrl}/confirm/`
         //console.log("post unconfUser",unconfUser);
         
         // "auth.authenticate" must always be defined if "auth.provider" isn't
@@ -100,12 +113,12 @@ export const withRegister = (
             process.env.MAIL_SUBJECT_PREFIX,
             "",
             `<p>Dear ${ email },</p>
-            <p>Welcome to <b>domain address</b>!</p>
+            <p>Welcome to <b>${process.env.EXT_HOSTNAME}</b>!</p>
             <p>To confirm your account please</p> 
             <p><a href="${fullUrlPath+conf_token}">click here</a>.</p>
             <p>Alternatively, you can paste the following link in your browser's address bar:</p>
-            <p><a href="{{ url_for('auth_bp.confirm',_external=True, token=token) }}">
-                {{ url_for('auth_bp.confirm',_external=True, token=token) }}</a></p>
+            <p><a href="${fullUrlPath+conf_token}">
+                ${fullUrlPath+conf_token}</a></p>
             <p>Sincerely,</p>
             <p>The Team</p>
             <p><small>Note: replies to this email address are not monitored.</small></p>`

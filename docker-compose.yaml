@@ -1,6 +1,49 @@
-version: '3.7'
 
 services:
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email webeltek@1337.no --agree-tos --no-eff-email --force-renewal -d 138.109-247-35.customer.lyse.net
+    networks:
+      - app_network 
+  webserver:
+    image: nginx:latest
+    container_name: webserver
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    depends_on:
+      - adminjs
+    networks:
+      - app_network
+  adminjs:
+    image : webeltek2017/repo24:test
+    container_name: adminjs-example-app-master
+    environment:
+      POSTGRES_DATABASE_URL_FILE: /run/secrets/postgres_database_url
+    secrets:
+      - postgres_database_url
+    ports: 
+      - "3001:3000"
+    depends_on:
+      postgres_db:
+        condition: service_healthy  
+    command: ["yarn","start:dev"]    
+    networks:
+      - app_network 
+
   mongo_db:
     container_name: adminjs-example-mongo
     image: mongo
@@ -8,33 +51,76 @@ services:
       - "27017:27017"
     volumes:
       - mongo_db_example_app:/data/db
+    networks:
+      - app_network   
 
   postgres_db:
-    container_name: adminjs-example-postgres
-    image: postgres
-    environment:
-      - POSTGRES_DB=adminjs
-      - POSTGRES_USER=adminjs
-      - POSTGRES_PASSWORD=adminjs
-    ports:
-      - "5435:5432"
-    volumes:
-      - postgres_db_example_app:/var/lib/postgresql/data
+      container_name: adminjs-example-postgres
+      image: postgres
+      environment:
+        POSTGRES_DB_FILE: /run/secrets/postgres_db
+        POSTGRES_USER_FILE: /run/secrets/postgres_user
+        POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      secrets:
+        - postgres_db
+        - postgres_user
+        - postgres_password  
+      ports:
+        - "5435:5432"
+      volumes:
+        - postgres_db_example_app:/var/lib/postgresql/data
+      healthcheck:
+          test: ["CMD-SHELL", "pg_isready -h postgres_db"]
+          interval    : 1s
+          timeout: 5s
+          retries: 10
+      networks:
+      - app_network          
 
-  mysql_db:
-    container_name: adminjs-example-mysql
-    image: mysql
-    environment:
-      MYSQL_USER: adminjs
-      MYSQL_PASSWORD: adminjs
-      MYSQL_ROOT_PASSWORD: adminjs
-      MYSQL_DATABASE: adminjs
-    ports:
-      - "3308:3306"
-    volumes:
-      - mysql_db_example_app:/var/lib/mysql
+  # mysql_db:
+  #   container_name: adminjs-example-mysql
+  #   image: mysql
+  #   environment:
+  #     MYSQL_USER: adminjs
+  #     MYSQL_PASSWORD: adminjs
+  #     MYSQL_ROOT_PASSWORD: adminjs
+  #     MYSQL_DATABASE: adminjs
+  #   ports:
+  #     - "3308:3306"
+  #   volumes:
+  #     - mysql_db_example_app:/var/lib/mysql
+  #   networks:
+  #     - app_network   
 
 volumes:
   mongo_db_example_app:
   postgres_db_example_app:
-  mysql_db_example_app:
+  #mysql_db_example_app:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/st5/adminjs-example-app-master/web-root_nginx
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/st5/adminjs-example-app-master/dhparam
+      o: bind    
+
+networks:
+  app_network:
+    driver: bridge      
+
+secrets:
+  postgres_db:
+    file: postgres_db.txt
+  postgres_user:
+    file: postgres_user.txt
+  postgres_password:
+    file: postgres_password.txt
+  postgres_database_url:
+    file: postgres_database_url.txt
