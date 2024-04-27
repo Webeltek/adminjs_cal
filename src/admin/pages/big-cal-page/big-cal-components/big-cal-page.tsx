@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback, useMemo, useEffect } from 'react'
+import React, { useRef, Fragment, useState, useCallback, useMemo, useEffect } from 'react'
 import PropTypes, { bool } from 'prop-types'
 import { Calendar, Views, CalendarProps, DateLocalizer } from 'react-big-calendar'
 import DemoLink from './DemoLink.component.js'
@@ -12,6 +12,9 @@ import 'moment/locale/nb'
 import { useDispatch,useSelector, Provider} from 'react-redux'
 import { Box, Button, Label, Modal,ModalProps} from '@adminjs/design-system'
 import { eventStore, RootState } from './event-store.js'
+import { Canvas, useFrame , ThreeElements} from '@react-three/fiber'
+import * as THREE from 'three'
+
 
 type ApiGetPageResponse = { prismaEvts : evtType[] };
 const api = new ApiClient();
@@ -257,11 +260,34 @@ function Selectable(props) {
     ,[]
   )
 
-
-  
+  function ThreeBox(props: ThreeElements['mesh']) {
+    const ref = useRef<THREE.Mesh>(null!)
+    const [hovered, hover] = useState(false)
+    const [clicked, click] = useState(false)
+    useFrame((state, delta) => (ref.current.rotation.x += delta))
+    return (
+      <mesh
+        {...props}
+        ref={ref}
+        scale={clicked ? 1.5 : 1}
+        onClick={(event) => click(!clicked)}
+        onPointerOver={(event) => hover(true)}
+        onPointerOut={(event) => hover(false)}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+      </mesh>
+    )
+  }
 
   return (
     <Fragment>
+      <Canvas>
+        <ambientLight intensity={Math.PI / 2} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+        <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+        <ThreeBox position={[-1.2, 0, 0]} />
+        <ThreeBox position={[1.2, 0, 0]} />
+      </Canvas>
       <DemoLink fileName="selectable">
         <strong>
           {translateLabel("BigCalHeaderMsg")}

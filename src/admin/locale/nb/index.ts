@@ -31,22 +31,29 @@ const noLocale: LocaleTranslations = {
   labels: {
     nf_user: "Bruker",
     nf_event: "Event",
-    nf_room: "Rom",
+    nf_room: "Bord",
     nf_payment: "Betaling"
   },
   resources: {
+    properties : {
+      user_email: "Email",
+      telephone: "Telephone"
+    },
     nf_event: {
       properties : {
         title : "Titel",
+        bookname: "Booking",
+        roomname: "Bord",
         startmills: "Start",
         endmills: "Stop",
-        ou : "Org."
+        ou : "Org.",
+        nf_user: "Bruker"
       }
     },
     nf_room: {
       properties: {
-        title: "Titel",
-        row: "Rad"
+        title: "Type",
+        row: "Nummer"
       }
     },
     Complicated,

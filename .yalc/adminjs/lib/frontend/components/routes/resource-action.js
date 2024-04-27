@@ -41,6 +41,7 @@ const ResourceAction = props => {
       resource: resource
     }));
   }
+  console.log("resource-action location");
   return /*#__PURE__*/React.createElement(Wrapper, {
     width: action.containerWidth,
     showFilter: action.showFilter

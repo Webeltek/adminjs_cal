@@ -30,6 +30,7 @@ model nf_room {
 model nf_user {
   id                 Int          @id @default(autoincrement())
   user_email         String?      @unique @db.VarChar
+  telephone          String?      @db.VarChar 
   user_pass_hash     String?      @db.VarChar
   vipps_sub          String?      @db.VarChar
   google_sub         String?      @db.VarChar

@@ -6,6 +6,7 @@ import AdminJS from "adminjs";
 import { Router } from "express";
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
+import { parse } from 'qs'
 
 import type {
   AuthenticationContext,
@@ -80,9 +81,12 @@ export const withRegister = (
     //console.log("inside withRegister ")
 
     router.get(suffixRegPath, async (req, res) => {
+      
+      let query = req.query;
+      let error = query ? query.error : null;
       const baseProps = {
         action: registerPath,
-        errorMessage: null,
+        errorMessage: error,
       };
       //console.log("inside withRegister get")
       const register = await admin.renderRegister({
@@ -182,31 +186,38 @@ export const withRegister = (
     router.get(suffixConfirmPath, async (req: any, res, next) => {
       const context: AuthenticationContext = { req, res };
       const unconfUser = req.session.unconfUser;
-      const { conf_token } = unconfUser;
+      //const { conf_token } = unconfUser;
       const reqConfToken =  req.params.conf_token;
-      let confUser = await auth.confUser!(reqConfToken,unconfUser);
-      console.log("register.handler confirmPath confUser",confUser);
-      if (confUser) {
-        req.session.adminUser = confUser;
-        req.session.email = confUser['user_email'];
-        req.session.save((err) => {
-          if (err) {
-            return next(err);
-          }
-          if (req.session.redirectTo) {
-            return res.redirect(302, req.session.redirectTo);
-          } else {
-            return res.redirect(302, admin.options.rootPath);
-          }
-        });
+      if (!req.session.adminUser){
+        let confUser = await auth.confUser!(reqConfToken,unconfUser);
+        console.log("register.handler confirmPath confUser",confUser);
+        if (confUser && typeof confUser=== 'object') {
+          req.session.adminUser = confUser;
+          req.session.save((err) => {
+            if (err) {
+              return next(err);
+            }
+            if (req.session.redirectTo) {
+              return res.redirect(302, req.session.redirectTo);
+            } else {
+              return res.redirect(302, admin.options.rootPath);
+            }
+          });
+        } else if (confUser==="userAlreadyConfirmed"){
+          let location ='/admin/register?error=userAlreadyConfirmed';
+          return res.redirect(302,location);
+
+        } else if (confUser === 'Token verify error') {
+          let location = '/admin/register?error=tokenVerifyError'; 
+          return res.redirect(302,location);
+        } else if (confUser === 'Token expired') {
+          let location ='/admin/register?error=tokenExpiredError';
+          return res.redirect(302,location);
+        }
       } else {
-        const register = await admin.renderRegister({
-          action: registerPath,
-          errorMessage: "Wrong confirmation link",
-        });
-  
-        return res.send(register);
+        return res.redirect(302, admin.options.rootPath);
       }
+      
 
   });
 

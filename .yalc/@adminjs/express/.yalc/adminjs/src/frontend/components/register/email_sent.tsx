@@ -8,7 +8,6 @@ import {
   Illustration,
   Input,
   Label,
-  MadeWithLove,
   MessageBox,
   Text,
 } from '@adminjs/design-system'
@@ -16,10 +15,9 @@ import { styled } from '@adminjs/design-system/styled-components'
 
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { allowOverride } from '../../hoc/allow-override.js'
-import { useTranslation } from '../../hooks/index.js'
+import { useTranslation} from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
-import { LoginTemplateAttributes } from '../../login-template.js'
+import MadeWithLoveMod from './made-with-love-mod.js'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -46,16 +44,19 @@ const IllustrationsWrapper = styled(Box)<BoxProps>`
   }
 `
 
-export type LoginProps = {
+export type EmailSentProps = {
   message?: string
   action: string
+  postMessage?: string,
+  email?: string
 }
 
-export const Login: React.FC = () => {
-  const props = (window as any).__APP_STATE__ as LoginTemplateAttributes
-  const { action, errorMessage: message } = props
+export const EmailSent: React.FC = () => {
+  const props = (window as any).__APP_STATE__REG as EmailSentProps
+  const { action, postMessage: message, email } = props
   const { translateComponent, translateMessage } = useTranslation()
   const branding = useSelector((state: ReduxState) => state.branding)
+  console.log("EmailSent message, email",message, email);
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -85,53 +86,21 @@ export const Login: React.FC = () => {
             </Box>
           </IllustrationsWrapper>
         </Box>
-        <Box
-          as="form"
-          action={action}
-          method="POST"
-          p="x3"
-          flexGrow={1}
-          width={['100%', '100%', '480px']}
-        >
-          <H5 marginBottom="xxl">
-            {branding.logo ? (
-              <StyledLogo src={branding.logo} alt={branding.companyName} />
-            ) : (
-              branding.companyName
+        { message && (
+              <MessageBox
+                my="lg"
+                message={translateComponent(message)+email}
+                variant="info"
+              />
             )}
-          </H5>
-          {message && (
-            <MessageBox
-              my="lg"
-              message={message.split(' ').length > 1 ? message : translateMessage(message)}
-              variant="danger"
-            />
-          )}
-          <FormGroup>
-            <Label required>{translateComponent('Login.properties.email')}</Label>
-            <Input name="email" placeholder={translateComponent('Login.properties.email')} />
-          </FormGroup>
-          <FormGroup>
-            <Label required>{translateComponent('Login.properties.password')}</Label>
-            <Input
-              type="password"
-              name="password"
-              placeholder={translateComponent('Login.properties.password')}
-              autoComplete="new-password"
-            />
-          </FormGroup>
-          <Text mt="xl" textAlign="center">
-            <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
-          </Text>
-        </Box>
       </Box>
       {branding.withMadeWithLove ? (
         <Box mt="xxl">
-          <MadeWithLove />
+          <MadeWithLoveMod />
         </Box>
       ) : null}
     </Wrapper>
   )
 }
 
-export default allowOverride(Login, 'Login')
+export default EmailSent

@@ -11,7 +11,7 @@ import BaseProperty from '../../adapters/property/base-property.js'
 
 const someID = 'someID'
 const currentAdmin = {
-  email: 'some@email.com',
+  user_email: 'some@email.com',
   name: 'someName',
   otherValue: 'someOther-value',
 }

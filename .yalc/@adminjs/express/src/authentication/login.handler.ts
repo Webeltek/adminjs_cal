@@ -130,9 +130,8 @@ export const withLogin = (
 
     if (adminUser) {
       req.session.adminUser = adminUser;
-      //console.log("login.handler adminUser['user_email']",adminUser['user_email']);
+      console.log("login.handler adminUser['user_email']",adminUser['user_email']);
       
-      req.session.email = adminUser['user_email'];
       req.session.save((err) => {
         if (err) {
           return next(err);
@@ -157,7 +156,7 @@ export const withLogin = (
           if (req.session.redirectTo) {
             return res.redirect(302, req.session.redirectTo);
           } else {
-            return res.send({ "redirectTo": "/admin"});
+            return res.redirect(302, "/admin");
           }
         });
       } else {
@@ -184,7 +183,6 @@ export const withLogin = (
         req.session.adminUser = adminUser;
         //console.log("login.handler adminUser['user_email']",adminUser['user_email']);
         
-        req.session.email = adminUser['user_email'];
         req.session.save((err) => {
           if (err) {
             return next(err);
@@ -192,7 +190,7 @@ export const withLogin = (
           if (req.session.redirectTo) {
             return res.redirect(302, req.session.redirectTo);
           } else {
-            console.log("register.handler gmail adminUser rootPath",adminUser,rootPath)
+            console.log("register.handler adminUser rootPath",adminUser,rootPath)
             return res.send({ "redirectTo": "/admin"});
           }
         });

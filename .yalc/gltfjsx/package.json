@@ -1,0 +1,78 @@
+{
+  "name": "gltfjsx",
+  "version": "6.2.16",
+  "description": "GLTF to JSX converter",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "node src/test"
+  },
+  "type": "module",
+  "keywords": [
+    "gltf",
+    "jsx",
+    "react",
+    "fiber",
+    "three",
+    "threejs",
+    "webp"
+  ],
+  "author": "Paul Henschel",
+  "maintainers": [
+    "Max Rusan"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmndrs/gltfjsx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pmndrs/gltfjsx/issues"
+  },
+  "homepage": "https://github.com/pmndrs/gltfjsx#readme",
+  "bin": {
+    "gltfjsx": "./cli.js"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "3.10.0",
+    "@gltf-transform/extensions": "3.10.0",
+    "@gltf-transform/functions": "3.10.0",
+    "@node-loader/babel": "^2.0.1",
+    "draco3dgltf": "^1.5.6",
+    "is-var-name": "^2.0.0",
+    "keyframe-resample": "^0.0.15",
+    "meow": "^12.1.1",
+    "meshoptimizer": "^0.20.0",
+    "prettier": "3.1.1",
+    "read-pkg-up": "^10.1.0",
+    "three": "0.159.0",
+    "three-stdlib": "^2.28.7"
+  },
+  "optionalDependencies": {
+    "jsdom": "^23.0.1",
+    "jsdom-global": "^3.0.2",
+    "sharp": "0.32.6"
+  },
+  "prettier": {
+    "semi": false,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "jsxBracketSameLine": true,
+    "tabWidth": 2,
+    "printWidth": 120
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/react-three-fiber"
+  },
+  "yalcSig": "98d09f6929e1a543f98fa2f7a8fd8952"
+}

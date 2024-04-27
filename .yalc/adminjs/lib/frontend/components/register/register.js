@@ -50,6 +50,7 @@ export const Register = () => {
   if (state) {
     action = state;
   }
+  console.log("register message", message);
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",

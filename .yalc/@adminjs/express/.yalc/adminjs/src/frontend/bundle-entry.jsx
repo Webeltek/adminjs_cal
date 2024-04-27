@@ -11,13 +11,14 @@ import * as ActionComponents from './components/actions/index.js'
 import App, { OriginalApp } from './components/application.js'
 import { AppLoader } from './components/index.js'
 import Login from './components/login/index.js'
-import Register from './components/register/index.js'
+import Register from './components/register/index_old.js'
 import BasePropertyComponent, { CleanPropertyComponent } from './components/property-type/index.js'
 import withNotice from './hoc/with-notice.js'
 import * as Hooks from './hooks/index.js'
 import createStore from './store/store.js'
 import initTranslations from './utils/adminjs.i18n.js'
 import ApiClient from './utils/api-client.js'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -43,8 +44,8 @@ const Application = (
 )
 
 const loginAppProps = window.__APP_STATE__ ?? {}
-const registerAppProps = window.__APP_STATE__ ?? {}
-const LoginApplication = (
+const registerAppProps = window.__APP_STATE__REG ?? {}
+/* const LoginApplication = (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18n}>
@@ -56,20 +57,23 @@ const LoginApplication = (
       </I18nextProvider>
     </ThemeProvider>
   </Provider>
-)
+) */
 
 const RegisterApplication = (
-  <Provider store={store}>
+  <GoogleOAuthProvider clientId={"79524392295-cksiecamepjhv0jdqcpfiqlmd46vogmh.apps.googleusercontent.com"}>
+    <Provider store={store}>
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
           <Suspense fallback={<AppLoader />}>
-            <Register/>
+            <Register {...registerAppProps}/>
           </Suspense>
         </BrowserRouter>
       </I18nextProvider>
     </ThemeProvider>
   </Provider>
+  </GoogleOAuthProvider>
+  
 )
 
 // eslint-disable-next-line no-undef
@@ -79,7 +83,7 @@ export default {
   withNotice,
   Application,
   OriginalApplication: OriginalApp,
-  LoginApplication,
+  //LoginApplication,
   RegisterApplication,
   ViewHelpers,
   UserComponents: {},

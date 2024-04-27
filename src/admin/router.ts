@@ -14,7 +14,7 @@ import formidableMiddleware from "express-formidable";
 import { FormidableOptions,AuthenticationContext, AuthenticationOptions } from '@adminjs/express';
 import { OldBodyParserUsedError, WrongArgumentError } from '@adminjs/express';
 import { v4 as uuidv4 } from 'uuid';
-import jwt from 'jsonwebtoken';
+import jwt , { TokenExpiredError} from 'jsonwebtoken';
 import { SessionData } from '@adminjs/express';
 
 export const createUnconfUser = async ( email, password,ou, cont : AuthenticationContext) => {
@@ -43,20 +43,40 @@ export const createUnconfUser = async ( email, password,ou, cont : Authenticatio
 }
 
 export const confUser = async (reqConfToken : string, unconfUser) => {
-  let decoded = jwt.verify(reqConfToken, process.env.SESSION_SECRET ?? 'sessionsecret');
-  console.log("decoded", decoded);
-  const { uid } = unconfUser;
-  const { confirm : decodedUid } = decoded as any;
-  if ( uid === decodedUid){
-    let confUser =  {
-      user_email: unconfUser.user_email, 
-      user_pass_hash: unconfUser.user_pass_hash,
-      user_confirmed: true,
-      ou : unconfUser.ou
-    };
-    let nfConfUser = await client.nf_user.create({ data: confUser});
-    return nfConfUser;
+  try {
+    let decoded = jwt.verify(reqConfToken, process.env.SESSION_SECRET ?? 'sessionsecret');
+    console.log("decoded", decoded);
+    if ( unconfUser){
+      const { uid } = unconfUser;
+      const { confirm : decodedUid } = decoded as any;
+      if ( uid === decodedUid){
+        let confUser =  {
+          user_email: unconfUser.user_email, 
+          user_pass_hash: unconfUser.user_pass_hash,
+          user_confirmed: true,
+          ou : unconfUser.ou
+        };
+        let userAlreadyConfirmed = await client.nf_user.findUnique({ where : { user_email : unconfUser.user_email}});
+        if (!userAlreadyConfirmed) {
+          let nfConfUser = await client.nf_user.create({ data: confUser});
+          return nfConfUser;
+        } else {
+          return "userAlreadyConfirmed";
+        }
+      }
+    }
+    return "unconfUser undefined"  
+
+  } catch ( err){
+    console.log("router confUser err",err);
+    if ( err.name && err.name === 'TokenExpiredError'){
+      return "Token expired"
+    } else {
+      return 'Token verify error';
+    }
   }
+  
+  
 }
 
 export const authenticateGmailUser = async (email : string | undefined,google_sub: string | undefined)=>{

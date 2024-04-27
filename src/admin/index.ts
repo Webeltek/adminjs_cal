@@ -66,7 +66,7 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
     scripts: process.env.NODE_ENV === 'production' ? ['/gtm.js'] : [],
   },
   branding: {
-    companyName: 'AdminJS demo page',
+    companyName: 'Webeltek',
     favicon: '/favicon.ico',
     theme: {
       colors: { primary100: '#4078EB' },

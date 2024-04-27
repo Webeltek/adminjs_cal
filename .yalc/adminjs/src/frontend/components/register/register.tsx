@@ -14,14 +14,16 @@ import {
   } from '@adminjs/design-system'
   import { styled } from '@adminjs/design-system/styled-components'
   
-  import React from 'react'
+  import React , {useMemo } from 'react'
   import { useSelector } from 'react-redux'
   import { allowOverride } from '../../hoc/allow-override.js'
   import { useTranslation } from '../../hooks/index.js'
   import { ReduxState } from '../../store/store.js'
   import { RegisterTemplateAttributes } from '../../register-template.js'
   import MadeWithLoveMod from './made-with-love-mod.js'
-  import { useLocation } from 'react-router'
+  import { useLocation  } from 'react-router'
+  import { useSearchParams } from 'react-router-dom'
+  import { parse } from 'qs'
   
   const Wrapper = styled(Box)<BoxProps>`
     align-items: center;
@@ -63,6 +65,10 @@ import {
     const location = useLocation();
     const { state } = location;
     if (state) { action = state;}
+
+    console.log("register message",message);
+    
+
   
     return (
       <Wrapper flex variant="grey" className="login__Wrapper">

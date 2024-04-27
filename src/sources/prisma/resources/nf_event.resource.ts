@@ -14,6 +14,10 @@ export const CreateNfEventResource: ResourceFunction<{
   },
   features: [useEnvironmentVariableToDisableActions()],
   options: {
+    listProperties: ['title','id','nf_user','bookname','roomname','startmills','endmills'],
+    filterProperties: ['title','id','nf_user','bookname','roomname','startmills','endmills'],
+    editProperties: ['title','bookname','roomname','startmills','endmills'],
+    showProperties: ['title','id','nf_user','bookname','roomname','startmills','endmills','ou'],
     navigation: menu.prisma,
     properties: {
       title : {
@@ -30,6 +34,8 @@ export const CreateNfEventResource: ResourceFunction<{
         type : "string",
         components : {
           list : MILLS_TO_HOUR,
+          edit : MILLS_TO_HOUR,
+          show : MILLS_TO_HOUR,
         },
         props : {
           typeMills : "start"
@@ -40,6 +46,8 @@ export const CreateNfEventResource: ResourceFunction<{
         type : "string",
         components : {
           list : MILLS_TO_HOUR,
+          edit : MILLS_TO_HOUR,
+          show : MILLS_TO_HOUR,
         },
         props : {
           typeMills : "end"

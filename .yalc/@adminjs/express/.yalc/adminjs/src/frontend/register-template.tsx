@@ -12,7 +12,7 @@ import { getAssets, getBranding, getFaviconFromBranding, getLocales } from '../b
 import { defaultLocale } from '../locale/index.js'
 
 export type RegisterTemplateAttributes = {
-  errorMessage?: string | null;
+  errorMessage?: any;
   postMessage?: string;
   action?: string;
   [name: string]: any;
@@ -44,6 +44,7 @@ const html = async (
   const reduxState = store.getState()
   const { locale } = reduxState
   const stringifiedAttributes = JSON.stringify(attributes ?? {})
+  console.log('register-template stringifiedAttributes',stringifiedAttributes);
 
   return `<!DOCTYPE html>
     <html lang=${locale.language}>
@@ -59,6 +60,7 @@ const html = async (
       ${faviconTag}
 
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+      <script src="https://accounts.google.com/gsi/client" async></script>
 
       <script src="${h.assetPath('global.bundle.js', assets)}"></script>
       <script src="${h.assetPath('design-system.bundle.js', assets)}"></script>
@@ -66,10 +68,10 @@ const html = async (
       <script src="${h.assetPath('components.bundle.js', assets)}"></script>
       <script>
         try {
-          window.__APP_STATE__ = JSON.parse('${stringifiedAttributes}');
+          window.__APP_STATE__REG = JSON.parse('${stringifiedAttributes}');
         } catch (e) {
           console.log(e)
-          window.__APP_STATE__ = {};
+          window.__APP_STATE__REG = {};
         }
       </script>
       ${styles.join('\n')}
@@ -145,7 +147,7 @@ const html = async (
       <script>
         var app = document.getElementById('app');
         var root = createRoot(app);
-        const CustomLoginApplication = AdminJS.UserComponents && AdminJS.UserComponents.LoginApplication;
+        const CustomRegisterApplication = AdminJS.UserComponents && AdminJS.UserComponents.RegisterApplication;
         const RegisterApplication = AdminJS.RegisterApplication;
         root.render(RegisterApplication);
       </script>

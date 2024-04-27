@@ -33,12 +33,25 @@ const enLocale: LocaleTranslations = {
     nf_payment: "Payment"
   },
   resources: {
+    nf_user : {
+      properties : {
+        user_email: "Email",
+        telephone: "Telephone",
+        user_is_logged_in:  "User Is Logged In",
+        user_confirmed : "User Confirmed",
+      },
+    },
     nf_event: {
       properties : {
         startmills: "Start",
         endmills: "End",
-        ou : "Org."
+        ou : "Org.",
+        nf_user: "User"
       }
+    },
+    nf_room : {
+      title : "Type",
+      row : "Number"
     },
     Complicated,
     Person,

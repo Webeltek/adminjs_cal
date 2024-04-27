@@ -22,7 +22,7 @@ const LoggedIn = props => {
     flexShrink: 0,
     "data-css": "logged-in"
   }, /*#__PURE__*/React.createElement(CurrentUserNav, {
-    name: session.email,
+    name: session.user_email,
     title: session.title,
     avatarUrl: session.avatarUrl,
     dropActions: dropActions

@@ -12,6 +12,7 @@ import { ActionHeaderProps } from './action-header-props.js'
 import { actionsToButtonGroup } from './actions-to-button-group.js'
 import { StyledBackButton } from './styled-back-button.js'
 import { useFilterDrawer } from '../../../hooks/use-filter-drawer.js'
+import { withNoSSR } from '../../../hoc/with-no-ssr.js'
 
 /**
  * Header of an action. It renders Action name with buttons for all the actions.
@@ -134,7 +135,7 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
   )
 }
 
-const OverridableActionHeader = allowOverride(ActionHeader, 'ActionHeader')
+const OverridableActionHeader = allowOverride(withNoSSR(ActionHeader), 'ActionHeader')
 
 export {
   OverridableActionHeader as default,

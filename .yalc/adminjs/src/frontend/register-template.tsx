@@ -12,7 +12,7 @@ import { getAssets, getBranding, getFaviconFromBranding, getLocales } from '../b
 import { defaultLocale } from '../locale/index.js'
 
 export type RegisterTemplateAttributes = {
-  errorMessage?: string | null;
+  errorMessage?: any;
   postMessage?: string;
   action?: string;
   [name: string]: any;
@@ -44,7 +44,7 @@ const html = async (
   const reduxState = store.getState()
   const { locale } = reduxState
   const stringifiedAttributes = JSON.stringify(attributes ?? {})
-  //console.log('register-template stringifiedAttributes',stringifiedAttributes);
+  console.log('register-template stringifiedAttributes',stringifiedAttributes);
 
   return `<!DOCTYPE html>
     <html lang=${locale.language}>

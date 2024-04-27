@@ -22,7 +22,7 @@ type Params<ParamsT = Record<string, unknown>, FiltersT = Record<string, unknown
 export declare function useQueryParams<ParamsT = Record<string, unknown>, FiltersT = Record<string, unknown>>(): {
     showFilters: boolean;
     parsedQuery: Params<ParamsT, FiltersT>;
-    listParams: Partial<Params<ParamsT, FiltersT>>;
+    listParams: any;
     filters: FiltersT;
     sortBy: string;
     direction: "asc" | "desc";

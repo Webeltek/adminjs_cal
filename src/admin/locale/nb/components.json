@@ -12,14 +12,27 @@
         "nb": "Norsk"
       }
     },
-    "Register": {
+    "Login": {
       "welcomeHeader": "Velkommen",
-      "welcomeMessage": "Registrer ny bruker",
+      "welcomeMessage": "Admin panel",
       "properties": {
         "email": "Epost",
         "password": "Passord"
       },
+      "loginButton": "Login",
       "registerButton": "Registrer"
+    },
+    "Register": {
+      "welcomeHeader": "Velkommen",
+      "registerMessage": "Registrer ny bruker",
+      "properties": {
+        "email": "Epost",
+        "password": "Passord",
+        "organization": "Organisasjon"
+      },
+      "registerButton": "Registrer",
+      "emailSentTo": "Epost er sendt til: "
     }
   }
+  
 }

@@ -1,2 +1,5 @@
 {
+    "vscode-graphql.rejectUnauthorized": false,
+    "eslint.format.enable": true,
+    "eslint.enable": false
 }

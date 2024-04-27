@@ -11,6 +11,28 @@
         "en": "English",
         "nb": "Norwegian"
       }
+    },
+    "Login": {
+      "welcomeHeader": "Welcome",
+      "welcomeMessage": "Admin panel",
+      "properties": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "loginButton": "Login",
+      "registerButton": "Register"
+    },
+    "Register": {
+      "welcomeHeader": "Welcome",
+      "registerMessage": "Register new user",
+      "properties": {
+        "email": "Email",
+        "password": "Password",
+        "organization": "Organization"
+      },
+      "registerButton": "Register",
+      "emailSentTo": "Email sent to: "
     }
+    
   }
 }

@@ -31,6 +31,9 @@ const TopBar = props => {
   const session = useSelector(state => state.session);
   const paths = useSelector(state => state.paths);
   const versions = useSelector(state => state.versions);
+
+  //console.log("top-bar session, session.email ",session, session?.user_email);
+
   return /*#__PURE__*/React.createElement(NavBar, {
     "data-css": "topbar"
   }, /*#__PURE__*/React.createElement(Box, {
@@ -46,7 +49,7 @@ const TopBar = props => {
     size: 24
   })), /*#__PURE__*/React.createElement(Version, {
     versions: versions
-  }), /*#__PURE__*/React.createElement(LanguageSelect, null), session && session.email ? /*#__PURE__*/React.createElement(LoggedIn, {
+  }), /*#__PURE__*/React.createElement(LanguageSelect, null), session && session.user_email ? /*#__PURE__*/React.createElement(LoggedIn, {
     session: session,
     paths: paths
   }) : '');

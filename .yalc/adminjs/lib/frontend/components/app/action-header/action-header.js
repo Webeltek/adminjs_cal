@@ -10,6 +10,7 @@ import Breadcrumbs from '../breadcrumbs.js';
 import { actionsToButtonGroup } from './actions-to-button-group.js';
 import { StyledBackButton } from './styled-back-button.js';
 import { useFilterDrawer } from '../../../hooks/use-filter-drawer.js';
+import { withNoSSR } from '../../../hoc/with-no-ssr.js';
 
 /**
  * Header of an action. It renders Action name with buttons for all the actions.
@@ -138,5 +139,5 @@ const ActionHeader = props => {
     buttons: actionButtons
   }))));
 };
-const OverridableActionHeader = allowOverride(ActionHeader, 'ActionHeader');
+const OverridableActionHeader = allowOverride(withNoSSR(ActionHeader), 'ActionHeader');
 export { OverridableActionHeader as default, OverridableActionHeader as ActionHeader, ActionHeader as OriginalActionHeader };

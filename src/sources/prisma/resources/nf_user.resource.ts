@@ -14,9 +14,9 @@ export const CreateNfUserResource: ResourceFunction<{
   features: [useEnvironmentVariableToDisableActions()],
   options: {
     navigation: menu.prisma,
-    listProperties : ['id','user_email','user_is_logged_in','user_confirmed','ou'],
-    filterProperties: ['id','user_email','user_is_logged_in','user_confirmed','ou'],
-    editProperties: ['user_email','user_is_logged_in','user_confirmed','ou'],
-    showProperties: ['id','user_email','user_is_logged_in','user_confirmed','ou']
+    listProperties : ['id','user_email','telephone','user_is_logged_in','user_confirmed','ou'],
+    filterProperties: ['id','user_email','telephone','user_is_logged_in','user_confirmed','ou'],
+    editProperties: ['user_email','telephone','user_is_logged_in','user_confirmed','ou'],
+    showProperties: ['id','user_email','telephone','user_is_logged_in','user_confirmed','ou']
   },
 });

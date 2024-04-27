@@ -14,12 +14,17 @@ import {
 } from '@adminjs/design-system'
 import { styled } from '@adminjs/design-system/styled-components'
 
-import React from 'react'
+import React , { FormEvent } from 'react'
 import { useSelector } from 'react-redux'
 import { allowOverride } from '../../hoc/allow-override.js'
 import { useTranslation } from '../../hooks/index.js'
 import { ReduxState } from '../../store/store.js'
-import { RegisterTemplateAttributes } from '../../register-template.js'
+import { LoginTemplateAttributes } from '../../login-template.js'
+import { useNavigate } from 'react-router'
+import { GoogleLogin } from '@react-oauth/google';
+import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
+import { config } from 'process'
+import { useSearchParams } from 'react-router-dom'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -51,11 +56,43 @@ export type LoginProps = {
   action: string
 }
 
-export const Register: React.FC = () => {
-  const props = (window as any).__APP_STATE__ as RegisterTemplateAttributes
-  const { action, errorMessage: message } = props
+export const Login: React.FC = () => {
+  const props = (window as any).__APP_STATE__REG as LoginTemplateAttributes
+  let { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
-  const branding = useSelector((state: ReduxState) => state.branding)
+  const  branding = useSelector((state: ReduxState) => state.branding);
+  const navigate = useNavigate();
+
+  function handleRegisterClick(e: FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    let navigateOptions = {state : '/admin/register'};
+    navigate('/admin/register',navigateOptions )
+  }
+
+  const handleSuccess = async (credentialResponse) => {
+    // Handle the successful login here
+    const { credential } = credentialResponse;
+    //console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/login/gmail_cb',undefined,{ params : {credential : credential}});
+    if (resp.data){
+      console.log("login/index/ resp.data props",resp.data, props);
+      if (resp.data.redirectTo === '/admin'){
+        window.location.href = '/admin';
+      }
+    }
+  };
+
+  const [searchParams] = useSearchParams();
+    let error = searchParams.get('error');
+    if (error) { message = error};
+
+  const handleError = () => {
+
+    // Handle login errors here
+
+    console.log('Google login failed');
+
+  };
 
   return (
     <Wrapper flex variant="grey" className="login__Wrapper">
@@ -123,6 +160,16 @@ export const Register: React.FC = () => {
           <Text mt="xl" textAlign="center">
             <Button variant="contained">{translateComponent('Login.loginButton')}</Button>
           </Text>
+          <Text mt="xl" textAlign="center">
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={handleError}
+            />
+          </Text>
+          <Text mt="xl" textAlign="center">
+            <Button type="button"  onClick={handleRegisterClick} 
+              variant="contained">{translateComponent('Register.registerButton')}</Button>
+          </Text>
         </Box>
       </Box>
       {branding.withMadeWithLove ? (
@@ -134,4 +181,4 @@ export const Register: React.FC = () => {
   )
 }
 
-export default allowOverride(Register, 'Register')
+export default allowOverride(Login, 'Login')

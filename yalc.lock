@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "packages": {
+    "adminjs": {
+      "signature": "4a849001763c84a0a9cd3fada1f6bd1a",
+      "file": true,
+      "replaced": "^7.5.2"
+    },
+    "@adminjs/express": {
+      "signature": "9394762e30bdf7420bc375c5d667d66c",
+      "file": true,
+      "replaced": "^6.0.0"
+    },
+    "gltfjsx": {
+      "signature": "98d09f6929e1a543f98fa2f7a8fd8952",
+      "file": true,
+      "replaced": "^6.2.16"
+    }
+  }
+}

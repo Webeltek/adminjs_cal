@@ -127,3 +127,13 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# docker secrets/ nginx sertificate
+        dependencies/
+        dhparam/
+        mongo_database_url.txt
+        postgres_database_url.txt
+        postgres_db.txt
+        postgres_password.txt
+        postgres_user.txt
+        

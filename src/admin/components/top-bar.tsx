@@ -55,27 +55,27 @@ const TopBar : FC = () => {
         Documentation
       </Button>
       <Box flex alignItems="center">
-      <DropDown>
-        <DropDownTrigger>
-          <Button color="text">
-            <Icon icon="Moon" />
-            {translateLabel(`choose_theme`)}
-          </Button>
-        </DropDownTrigger>
-        <DropDownMenu>
-          {themeConfigArr.map((themeConfig) => (
-            <DropDownItem
-              key={themeConfig.id}
-              onClick={() => {
-                changeTheme(themeConfig)
-              }}
-            >
-              {themeConfig.name}
-            </DropDownItem>
-          ))}
-        </DropDownMenu>
-      </DropDown>
-    </Box>
+        <DropDown>
+          <DropDownTrigger>
+            <Button color="text">
+              <Icon icon="Moon" />
+              {translateLabel(`choose_theme`)}
+            </Button>
+          </DropDownTrigger>
+          <DropDownMenu>
+            {themeConfigArr.map((themeConfig) => (
+              <DropDownItem
+                key={themeConfig.id}
+                onClick={() => {
+                  changeTheme(themeConfig)
+                }}
+              >
+                {themeConfig.name}
+              </DropDownItem>
+            ))}
+          </DropDownMenu>
+        </DropDown>
+      </Box>
     </Box>
   );
 };

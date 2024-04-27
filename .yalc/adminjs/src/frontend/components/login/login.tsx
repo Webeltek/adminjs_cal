@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router'
 import { GoogleLogin } from '@react-oauth/google';
 import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { config } from 'process'
+import { useSearchParams } from 'react-router-dom'
 
 const Wrapper = styled(Box)<BoxProps>`
   align-items: center;
@@ -57,7 +58,7 @@ export type LoginProps = {
 
 export const Login: React.FC = () => {
   const props = (window as any).__APP_STATE__REG as LoginTemplateAttributes
-  const { action, errorMessage: message } = props
+  let { action, errorMessage: message } = props
   const { translateComponent, translateMessage } = useTranslation()
   const  branding = useSelector((state: ReduxState) => state.branding);
   const navigate = useNavigate();
@@ -74,13 +75,16 @@ export const Login: React.FC = () => {
     //console.log('Google login successful', credentialResponse);
     const resp = await axios.post('/admin/login/gmail_cb',undefined,{ params : {credential : credential}});
     if (resp.data){
-      console.log("login/index/ resp.data",resp.data);
+      console.log("login/index/ resp.data props",resp.data, props);
       if (resp.data.redirectTo === '/admin'){
         window.location.href = '/admin';
       }
     }
   };
 
+  const [searchParams] = useSearchParams();
+    let error = searchParams.get('error');
+    if (error) { message = error};
 
   const handleError = () => {
 

@@ -4,6 +4,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
+import { useNavigate } from 'react-router';
+import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 const Wrapper = styled(Box)`
   align-items: center;
   justify-content: center;
@@ -29,7 +32,7 @@ const IllustrationsWrapper = styled(Box)`
   }
 `;
 export const Login = () => {
-  const props = window.__APP_STATE__;
+  const props = window.__APP_STATE__REG;
   const {
     action,
     errorMessage: message
@@ -39,6 +42,37 @@ export const Login = () => {
     translateMessage
   } = useTranslation();
   const branding = useSelector(state => state.branding);
+  const navigate = useNavigate();
+  function handleRegisterClick(e) {
+    e.preventDefault();
+    let navigateOptions = {
+      state: '/admin/register'
+    };
+    navigate('/admin/register', navigateOptions);
+  }
+  const handleSuccess = async credentialResponse => {
+    // Handle the successful login here
+    const {
+      credential
+    } = credentialResponse;
+    //console.log('Google login successful', credentialResponse);
+    const resp = await axios.post('/admin/login/gmail_cb', undefined, {
+      params: {
+        credential: credential
+      }
+    });
+    if (resp.data) {
+      console.log("login/index/ resp.data", resp.data);
+      if (resp.data.redirectTo === '/admin') {
+        window.location.href = '/admin';
+      }
+    }
+  };
+  const handleError = () => {
+    // Handle login errors here
+
+    console.log('Google login failed');
+  };
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,
     variant: "grey",
@@ -118,7 +152,20 @@ export const Login = () => {
     textAlign: "center"
   }, /*#__PURE__*/React.createElement(Button, {
     variant: "contained"
-  }, translateComponent('Login.loginButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
+  }, translateComponent('Login.loginButton'))), /*#__PURE__*/React.createElement(Text, {
+    mt: "xl",
+    textAlign: "center"
+  }, /*#__PURE__*/React.createElement(GoogleLogin, {
+    onSuccess: handleSuccess,
+    onError: handleError
+  })), /*#__PURE__*/React.createElement(Text, {
+    mt: "xl",
+    textAlign: "center"
+  }, /*#__PURE__*/React.createElement(Button, {
+    type: "button",
+    onClick: handleRegisterClick,
+    variant: "contained"
+  }, translateComponent('Register.registerButton'))))), branding.withMadeWithLove ? /*#__PURE__*/React.createElement(Box, {
     mt: "xxl"
   }, /*#__PURE__*/React.createElement(MadeWithLove, null)) : null);
 };
