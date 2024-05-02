@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 
 import { useActionResponseHandler, useTranslation, useModal } from 'adminjs';
-import { ActionJSON, buildActionClickHandler } from 'adminjs';
+import { ActionJSON, buildActionClickHandler, useRecords } from 'adminjs';
 import { getActionElementCss, getResourceElementCss } from 'adminjs';
 import { Breadcrumbs } from 'adminjs';
 import { ActionHeaderProps } from 'adminjs';
@@ -38,6 +38,8 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
   const actionResponseHandler = useActionResponseHandler(actionPerformed);
   const modalFunctions = useModal();
   const { toggleFilter } = useFilterDrawer();
+  const { records} = useRecords(resource.id);
+
 
   if (action.hideActionHeader) {
     return null;
@@ -46,8 +48,9 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
   const resourceId = resource.id;
   const params = { resourceId, recordId: record?.id };
   // eslint-disable-next-line max-len
-  const handleActionClick = (event, sourceAction: ActionJSON): any | Promise<any> =>
-    buildActionClickHandler({
+  const handleActionClick = (event, sourceAction: ActionJSON): any | Promise<any> =>{
+    //console.log("action-header typeof buildActionClickHandler", typeof buildActionClickHandler)
+    const buildActionClickHandlerFunc = buildActionClickHandler ? buildActionClickHandler({
       action: sourceAction,
       params,
       actionResponseHandler,
@@ -55,7 +58,9 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
       location,
       translateFunctions,
       modalFunctions,
-    })(event);
+    }) : ()=>{} ;
+    return buildActionClickHandlerFunc(event);
+  }
 
   const actionButtons = actionsToButtonGroup({
     actions: record
@@ -99,13 +104,14 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
 
   //const contentTag = getActionElementCss(resourceId, action.name, 'action-header')
 
-  const Rack1Hoc = () => rack1hoc(Model);
+  const Rack1Hoc =  rack1hoc(Model);
 
   return (
     <Box className={cssClass('ActionHeader')} data-css={'contentTag'}>
-      <Box height="50vh">
+      {resourceId === "Prod" && (
+        <Box height="50vh">
         <Canvas>
-          <Rack1Hoc />
+          <Rack1Hoc records={records}/>
           <ambientLight intensity={Math.PI / 2} />
           <OrbitControls>
             minAzimuthAngle={-Math.PI / 4}
@@ -116,15 +122,17 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
           </OrbitControls>
           <GizmoHelper
             alignment="bottom-right" // widget alignment within scene
-            margin={[80, 80]} // widget margins (X, Y)
+            margin={[50, 50]} // widget margins (X, Y)
   
             renderPriority={1}
           >
-            <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
+            <GizmoViewport axisColors={['coral', 'lightgreen', 'darkcyan']} labelColor="black" />
             {/* alternative: <GizmoViewcube /> */}
           </GizmoHelper>  
         </Canvas>
       </Box>
+      )
+    }
       {!action.showInDrawer && (
         <Box flex flexDirection="row" px={['default', 0]}>
           <Breadcrumbs resource={resource} actionName={action.name} record={record} />

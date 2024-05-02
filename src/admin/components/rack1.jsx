@@ -8,6 +8,7 @@ import { useGLTF, PerspectiveCamera } from '@react-three/drei';
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('/rack1.gltf');
+  const { materialState, handleMaterial, products } = props;
   return (
     <group {...props} dispose={null}>
       <spotLight
@@ -22,7 +23,7 @@ export function Model(props) {
       />
       <PerspectiveCamera
         name="Camera"
-        makeDefault={false}
+        makeDefault={true}
         far={100}
         near={0.1}
         fov={22.895}
@@ -41,28 +42,28 @@ export function Model(props) {
       />
       <mesh
         name="Cube002"
-        onPointerOver={(event) => props.handleMaterial({ meshName: 'Cube002', type: 'hoverOver' })}
-        onPointerOut={(event) => props.handleMaterial({ meshName: 'Cube002', type: 'hoverOut' })}
-        onClick={(event) => props.handleMaterial({ meshName: 'Cube002', type: 'clicked' })}
+        onPointerOver={(event) => handleMaterial({ meshName: 'Cube002', type: 'hoverOver' })}
+        onPointerOut={(event) => handleMaterial({ meshName: 'Cube002', type: 'hoverOut' })}
+        onClick={(event) => handleMaterial({ meshName: 'Cube002', type: 'clicked' })}
         castShadow
         receiveShadow
         geometry={nodes.Cube002.geometry}
-        material={props.materialState.Cube002.material}
-        position={props.materialState.Cube002.position}
+        material={materialState.Cube002.material}
+        position={materialState.Cube002.position}
         scale={[1.647, 1.794, 1.882]}
       />
       <mesh
         name="Cube001"
-        onPointerOver={(event) => props.handleMaterial({ meshName: 'Cube001', type: 'hoverOver' })}
-        onPointerOut={(event) => props.handleMaterial({ meshName: 'Cube001', type: 'hoverOut' })}
-        onClick={(event) => props.handleMaterial({ meshName: 'Cube001', type: 'clicked' })}
+        onPointerOver={(event) => handleMaterial({ meshName: 'Cube001', type: 'hoverOver' })}
+        onPointerOut={(event) => handleMaterial({ meshName: 'Cube001', type: 'hoverOut' })}
+        onClick={(event) => handleMaterial({ meshName: 'Cube001', type: 'clicked' })}
         castShadow
         receiveShadow
         geometry={nodes.Cube001.geometry}
-        material={props.materialState.Cube001.material}
-        position={[props.materialState.Cube001.position.x,
-                  props.materialState.Cube001.position.y,
-                  props.materialState.Cube001.position.z]}
+        material={materialState.Cube001.material}
+        position={[materialState.Cube001.position.x,
+                  materialState.Cube001.position.y,
+                  materialState.Cube001.position.z]}
         scale={[1.647, 1.794, 1.882]}
       />
       <mesh
@@ -73,6 +74,7 @@ export function Model(props) {
         material={materials['Material.002']}
         scale={[0.021, 0.172, 0.018]}
       />
+      { products}
     </group>
   );
 }

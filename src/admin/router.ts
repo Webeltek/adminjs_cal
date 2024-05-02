@@ -159,7 +159,7 @@ export const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | nu
   const sessionStore = new ConnectSession({
     conObject: {
       connectionString: process.env.POSTGRES_DATABASE_URL,
-      ssl: process.env.NODE_ENV === 'production',
+      ssl: false /* process.env.NODE_ENV === 'production' */, // is replaced with false because true in production doesn't work
     },
     tableName: 'session',
     createTableIfMissing: true,

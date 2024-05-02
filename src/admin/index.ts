@@ -13,6 +13,7 @@ import { AdminModel } from '../sources/mongoose/models/index.js';
 import {
   CreateAdminResource,
   CreateArticleResource,
+  CreateProdResource,
   CreateCategoryResource,
   CreateCommentResource,
   CreateComplicatedResource,
@@ -88,6 +89,7 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
     CreateUserResource(),
     CreateCategoryResource(),
     CreateArticleResource(),
+    CreateProdResource(),
     CreateCommentResource(),
     CreateComplicatedResource(),
     /* // sequelize

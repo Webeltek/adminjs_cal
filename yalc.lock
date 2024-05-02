@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "adminjs": {
-      "signature": "4a849001763c84a0a9cd3fada1f6bd1a",
+      "signature": "29bce991a09788fed92c6c60c7f626ff",
       "file": true,
       "replaced": "^7.5.2"
     },
@@ -12,7 +12,7 @@
       "replaced": "^6.0.0"
     },
     "gltfjsx": {
-      "signature": "98d09f6929e1a543f98fa2f7a8fd8952",
+      "signature": "2e6c5cf71c4490cf5bff808baa24469b",
       "file": true,
       "replaced": "^6.2.16"
     }

@@ -163,12 +163,13 @@ function parse(gltf, { fileName = 'model', ...options } = {}) {
       // Write out geometry first
       if (obj.geometry && !obj.isInstancedMesh) {
         result += `geometry={${node}.geometry} `
+        result += `ref={ref} `
       }
 
       // Write out materials
       if (obj.material && !obj.isInstancedMesh && node!=='nodes.Cube') {
         if (obj.material.name) result += `material={ props.materialState.${obj.name}.material} `
-        else result += `material={  props.materialState.${obj.name}.material}`
+        else result += `material={ ${node}.material} `
       } else if (obj.material && !obj.isInstancedMesh && node==='nodes.Cube'){
         if (obj.material.name) result += `material={ materials${sanitizeName(obj.material.name)}} `
         else result += `material={ ${node}.material} `
