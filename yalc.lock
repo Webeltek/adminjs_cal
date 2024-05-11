@@ -2,12 +2,12 @@
   "version": "v1",
   "packages": {
     "adminjs": {
-      "signature": "29bce991a09788fed92c6c60c7f626ff",
+      "signature": "9cbf8ac3a86ccf648517b17812f0e095",
       "file": true,
       "replaced": "^7.5.2"
     },
     "@adminjs/express": {
-      "signature": "9394762e30bdf7420bc375c5d667d66c",
+      "signature": "67b3e28a5f863c3c109bf97179cdccdd",
       "file": true,
       "replaced": "^6.0.0"
     },

@@ -66,15 +66,6 @@ import {
     const { state } = location;
     if (state) { action = state;}
 
-    const [searchParams] = useSearchParams();
-    const parsedQuery = useMemo(
-      () => parse(searchParams.toString(), {
-        allowDots: true,
-      }),
-      [searchParams],
-    )
-    let error = parsedQuery.error;
-    if (error) { message = error};
     console.log("register message",message);
     
 

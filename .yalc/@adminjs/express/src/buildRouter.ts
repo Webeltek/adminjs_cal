@@ -44,7 +44,7 @@ export const initializeAdmin = (admin: AdminJS): void => {
 export const routeHandler =
   ({ admin, route }: RouteHandlerArgs): RequestHandler =>
   async (req, res, next) => {
-    console.log('buildRouter routeHandler req.session.adminUser',req.session.adminUser)
+    //console.log('buildRouter routeHandler req.session.adminUser',req.session.adminUser)
     try {
       const controller = new route.Controller(
         { admin },

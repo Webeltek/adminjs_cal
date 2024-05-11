@@ -62,7 +62,7 @@ export const initializeStore = async (
 
   store.dispatch(initializePages(pagesToStore(pages)))
   store.dispatch(initializePaths({ loginPath, logoutPath, rootPath, assetsCDN }))
-  store.dispatch(setCurrentAdmin(currentAdmin))
+  store.dispatch(setCurrentAdmin(currentAdmin)) //Initialize session: SessionInState
   store.dispatch(initializeDashboard(dashboard))
   store.dispatch(
     initializeVersions({

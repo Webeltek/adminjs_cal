@@ -14,8 +14,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ReduxState } from '../../store/store.js'
 import { dark, light, noSidebar } from '@adminjs/themes';
 import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
-import { appendForceRefresh } from '../actions/utils/append-force-refresh.js'
-import { combineStyles } from '@adminjs/design-system'
 
 export type Props = {
   versions: VersionProps;
@@ -43,13 +41,13 @@ const Version: React.FC<Props> = (props) => {
   const location = useLocation();
 
   async function changeTheme(themeConf){
-    const THEME_INITIALIZE = 'THEME_INITIALIZE'
+    /* const THEME_INITIALIZE = 'THEME_INITIALIZE'
     const initThemeResponseAction = {
       type: 'THEME_INITIALIZE',
       data: themeConf
     };
     //console.log("version initThemeAction",initThemeResponseAction);
-    dispatch(initThemeResponseAction);
+    dispatch(initThemeResponseAction); */
     if (session) session.theme = themeConf.id;
     dispatch({ 
       type: 'SESSION_INITIALIZE',
@@ -62,8 +60,8 @@ const Version: React.FC<Props> = (props) => {
       })
       .then((resp) => {
         if (resp.data){
-          //console.log("version resp.data",resp.data);
-          if (resp.data.redirectTo === '/admin'){
+          console.log("version resp.data",resp.data);
+          if (resp.data.themeSavedInSession === 'req.session.adminUser.theme'){
             window.location.href = location.pathname;
           }
         }

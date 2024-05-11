@@ -5,13 +5,12 @@ import { cssClass, Text, Box , DropDown, Button,
   DropDownTrigger, Icon } from '@adminjs/design-system'
 import { styled } from '@adminjs/design-system/styled-components'
 
-import { VersionProps } from '../../../adminjs-options.interface.js'
-import { useTranslation } from '../../hooks/index.js'
-import allowOverride from '../../hoc/allow-override.js'
+import { VersionProps } from 'adminjs'
+import { useTranslation } from 'adminjs'
 
 import { useNavigate , useLocation} from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
-import { ReduxState } from '../../store/store.js'
+import { ReduxState } from 'adminjs'
 import { dark, light, noSidebar } from '@adminjs/themes';
 import axios, { AxiosResponse, AxiosInstance, AxiosRequestConfig } from 'axios'
 
@@ -33,40 +32,18 @@ const Version: React.FC<Props> = (props) => {
   const { admin, app } = versions
 
   const { translateLabel } = useTranslation()
-  const dispatch = useDispatch();
-  const session = useSelector((state: ReduxState) => state.session);
-  const selectedTheme = useSelector((state: ReduxState) => state.theme);
-  const branding = useSelector((state: ReduxState) => state.branding);
   const themeConfigArr = [ dark, light, noSidebar];
   const location = useLocation();
 
   async function changeTheme(themeConf){
-    //no need to dispatch, store is initialized
-    // with store.dispatch(initializeTheme(theme))
-    // with theme taken from property currentAdmin.theme
-    // which is send as parameter to appController called from 
-    // express build route handler
-
-
-    /* const THEME_INITIALIZE = 'THEME_INITIALIZE'
-    const initThemeResponseAction = {
-      type: 'THEME_INITIALIZE',
-      data: themeConf
-    };
-    //console.log("version initThemeAction",initThemeResponseAction);
-    dispatch(initThemeResponseAction); */
-    /* if (session) session.theme = themeConf.id;
-    dispatch({ 
-      type: 'SESSION_INITIALIZE',
-      data: session
-    }) */
+    
     axios.post('/admin/login',
       { 
         theme : themeConf.id
       })
       .then((resp) => {
         if (resp.data){
-          console.log("version resp.data",resp.data);
+          //console.log("version resp.data",resp.data);
           if (resp.data.themeSavedInSession === 'req.session.adminUser.theme'){
             window.location.href = location.pathname;
           }
@@ -116,10 +93,5 @@ const Version: React.FC<Props> = (props) => {
   )
 }
 
-const OverridableVersion = allowOverride(Version, 'Version')
-
-export {
-  OverridableVersion as default,
-  OverridableVersion as Version,
-  Version as OriginalVersion,
-}
+export { Version };
+export default Version;

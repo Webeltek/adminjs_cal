@@ -43,6 +43,7 @@ const ResourceAction: React.FC<Props> = (props) => {
       </DrawerPortal>
     )
   }
+  //console.log("resource-action location")
 
   return (
     <Wrapper width={action.containerWidth} showFilter={action.showFilter}>

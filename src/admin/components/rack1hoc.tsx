@@ -2,7 +2,7 @@ import React, { useState, Component, useCallback, useReducer, useRef, useEffect 
 import ReactDOM from 'react-dom';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
+import {MeshStandardMaterial, Mesh, Vector3} from 'three';
 import { string } from 'prop-types';
 
 const productsMeshes = (props) => {
@@ -34,17 +34,18 @@ const productsMeshes = (props) => {
       scale={[1.647, 1.794, 1.882]}
     ></mesh>
   ));
+  
 };
 
 const threeMat = {
-  gray: new THREE.MeshStandardMaterial({ color: 'dimgray' }),
-  orange: new THREE.MeshStandardMaterial({ color: 'coral' }),
-  blue: new THREE.MeshStandardMaterial({ color: 'darkgreen' }),
+  gray: new MeshStandardMaterial({ color: 'dimgray' }),
+  orange: new MeshStandardMaterial({ color: 'coral' }),
+  blue: new MeshStandardMaterial({ color: 'darkgreen' }),
 };
 
 export const rack1hoc = (Model) => (props) => {
   const { nodes, materials } = useGLTF('/rack1.gltf');
-  const ref = useRef<THREE.Mesh>(null!);
+  const ref = useRef<Mesh>(null!);
   const { records } = props;
   const [products, setProducts] = useState();
   //console.log("rack1hoc records: ",records);
@@ -58,7 +59,7 @@ export const rack1hoc = (Model) => (props) => {
     //console.log("rack1hoc nodeNamesWithMat: ",nodeNamesWithMat);
     const initState: Record<
       string,
-      { material: THREE.MeshStandardMaterial; position: THREE.Vector3; isClicked: boolean; isHovered: boolean; ref? }
+      { material: MeshStandardMaterial; position: Vector3; isClicked: boolean; isHovered: boolean; ref? }
     > = {};
     nodeNamesWithMat.forEach((nodeName) => {
       initState[nodeName] = {
@@ -72,7 +73,7 @@ export const rack1hoc = (Model) => (props) => {
     records.forEach((record) => {
       initState[record.title] = {
         material: threeMat.blue,
-        position: new THREE.Vector3(record.params.positionX, record.params.positionY, record.params.positionZ),
+        position: new Vector3(record.params.positionX, record.params.positionY, record.params.positionZ),
         isClicked: false,
         isHovered: false,
         ref: null,
@@ -92,7 +93,7 @@ export const rack1hoc = (Model) => (props) => {
 
   function materialReducer(
     state,
-    action: { type: string; meshName: string; baseMaterial?: THREE.MeshStandardMaterial; position?: any },
+    action: { type: string; meshName: string; baseMaterial?: MeshStandardMaterial; position?: any },
   ) {
     switch (action.type) {
       case 'hoverOverProd':

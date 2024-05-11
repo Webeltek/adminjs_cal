@@ -18,7 +18,7 @@ export const initializeAdmin = (admin) => {
     });
 };
 export const routeHandler = ({ admin, route }) => async (req, res, next) => {
-    console.log('buildRouter routeHandler req.session.adminUser', req.session.adminUser);
+    //console.log('buildRouter routeHandler req.session.adminUser',req.session.adminUser)
     try {
         const controller = new route.Controller({ admin }, req.session && req.session.adminUser);
         const { params, query } = req;

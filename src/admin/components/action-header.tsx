@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Badge, Box, ButtonGroup, cssClass, H2, H3 } from '@adminjs/design-system';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 
 import { useActionResponseHandler, useTranslation, useModal } from 'adminjs';
@@ -11,11 +11,11 @@ import { ActionHeaderProps } from 'adminjs';
 import { actionsToButtonGroup } from 'adminjs';
 import { StyledBackButton } from 'adminjs';
 import { useFilterDrawer } from 'adminjs';
-import * as THREE from 'three';
-import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
-import { useGLTF, PerspectiveCamera, OrbitControls , GizmoHelper, GizmoViewport} from '@react-three/drei';
+import { Canvas, useFrame, ThreeElements , extend } from '@react-three/fiber';
+import { useGLTF, PerspectiveCamera, OrbitControls , GizmoHelper, GizmoViewport, Text} from '@react-three/drei';
 import { Model } from './rack1.js';
 import { rack1hoc } from './rack1hoc.js';
+
 
 /**
  * Header of an action. It renders Action name with buttons for all the actions.
@@ -100,7 +100,7 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
   const cssHeaderMT = action.showInDrawer ? '' : 'lg';
   const cssActionsMB = action.showInDrawer ? 'xl' : 'default';
   const CssHComponent = action.showInDrawer ? H3 : H2;
-  console.log('getActionElementCss', getActionElementCss);
+  //console.log('getActionElementCss', getActionElementCss);
 
   //const contentTag = getActionElementCss(resourceId, action.name, 'action-header')
 
@@ -108,31 +108,35 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
 
   return (
     <Box className={cssClass('ActionHeader')} data-css={'contentTag'}>
+      {resourceId === "ProdAR" && 
+        <Box height="50vh">
+        </Box>
+      }
       {resourceId === "Prod" && (
         <Box height="50vh">
-        <Canvas>
-          <Rack1Hoc records={records}/>
-          <ambientLight intensity={Math.PI / 2} />
-          <OrbitControls>
-            minAzimuthAngle={-Math.PI / 4}
-            maxAzimuthAngle={Math.PI / 4}
-            minPolarAngle={Math.PI / 6}
-            maxPolarAngle={Math.PI - Math.PI / 6}
-            makeDefault="true"
-          </OrbitControls>
-          <GizmoHelper
-            alignment="bottom-right" // widget alignment within scene
-            margin={[50, 50]} // widget margins (X, Y)
-  
-            renderPriority={1}
-          >
-            <GizmoViewport axisColors={['coral', 'lightgreen', 'darkcyan']} labelColor="black" />
-            {/* alternative: <GizmoViewcube /> */}
-          </GizmoHelper>  
-        </Canvas>
-      </Box>
-      )
-    }
+          <Canvas>
+            <Rack1Hoc records={records}/>
+            <ambientLight intensity={Math.PI / 2} />
+            <OrbitControls>
+              minAzimuthAngle={-Math.PI / 4}
+              maxAzimuthAngle={Math.PI / 4}
+              minPolarAngle={Math.PI / 6}
+              maxPolarAngle={Math.PI - Math.PI / 6}
+              makeDefault="true"
+            </OrbitControls>
+            <GizmoHelper
+              alignment="bottom-right" // widget alignment within scene
+              margin={[50, 50]} // widget margins (X, Y)
+    
+              renderPriority={1}
+            >
+              <GizmoViewport axisColors={['coral', 'lightgreen', 'darkcyan']} labelColor="black" />
+              {/* alternative: <GizmoViewcube /> */}
+            </GizmoHelper>  
+          </Canvas>
+        </Box>
+        )
+      }
       {!action.showInDrawer && (
         <Box flex flexDirection="row" px={['default', 0]}>
           <Breadcrumbs resource={resource} actionName={action.name} record={record} />

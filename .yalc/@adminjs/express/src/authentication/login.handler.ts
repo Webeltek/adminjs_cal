@@ -104,6 +104,13 @@ export const withLogin = (
     const context: AuthenticationContext = { req, res };
 
     let adminUser;
+    const { email, password , theme} = req.fields as {
+      email: string;
+      password: string;
+      theme?: string;
+
+    };
+    console.log("login.handler theme, req.session.adminUser",theme, req.session.adminUser)
     if (provider) {
       adminUser = await provider.handleLogin(
         {
@@ -115,12 +122,6 @@ export const withLogin = (
         context
       );
     } else {
-      const { email, password , theme} = req.fields as {
-        email: string;
-        password: string;
-        theme?: string;
-
-      };
       if(!theme){
         // "auth.authenticate" must always be defined if "auth.provider" isn't
         adminUser = await auth.authenticatePrismaUser!(email, password, theme);
@@ -128,7 +129,7 @@ export const withLogin = (
       
     }
 
-    if (adminUser) {
+    if (adminUser && !theme) {
       req.session.adminUser = adminUser;
       console.log("login.handler adminUser['user_email']",adminUser['user_email']);
       
@@ -142,12 +143,7 @@ export const withLogin = (
           return res.redirect(302, rootPath);
         }
       });
-    } else {
-      const {theme} = req.fields as {
-        theme?: string;
-
-      };
-      if (theme && req.session.adminUser){
+    } else if (req.session.adminUser && theme){
         req.session.adminUser.theme = theme;
         req.session.save((err) => {
           if (err) {
@@ -156,18 +152,17 @@ export const withLogin = (
           if (req.session.redirectTo) {
             return res.redirect(302, req.session.redirectTo);
           } else {
-            return res.redirect(302, "/admin");
+            return res.send({'themeSavedInSession':'req.session.adminUser.theme'});
           }
         });
-      } else {
-        const login = await admin.renderRegister({
-          action: admin.options.loginPath,
-          errorMessage: "invalidCredentials",
-          ...providerProps,
-        });
-  
-        return res.send(login);
-      }
+    } else {
+      const login = await admin.renderRegister({
+        action: admin.options.loginPath,
+        errorMessage: "invalidCredentials",
+        ...providerProps,
+      });
+
+      return res.send(login);
     }
   });
 

@@ -39,7 +39,7 @@ export const initializeStore = async (admin, currentAdmin) => {
     rootPath,
     assetsCDN
   }));
-  store.dispatch(setCurrentAdmin(currentAdmin));
+  store.dispatch(setCurrentAdmin(currentAdmin)); //Initialize session: SessionInState
   store.dispatch(initializeDashboard(dashboard));
   store.dispatch(initializeVersions({
     app: admin.options.version && admin.options.version.app,

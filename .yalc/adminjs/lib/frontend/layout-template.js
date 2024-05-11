@@ -26,7 +26,7 @@ const html = async (admin, currentAdmin, location = '/') => {
     locale,
     theme: selectedTheme
   } = reduxState;
-  console.log('adminjs layout-template theme:', selectedTheme);
+  //console.log('adminjs layout-template theme:',selectedTheme);
   const scripts = (assets?.scripts || []).map(s => `<script src="${s}"></script>`);
   const styles = (assets?.styles || []).map(l => `<link rel="stylesheet" type="text/css" href="${l}">`);
   const theme = combineStyles(branding.theme, selectedTheme?.overrides);

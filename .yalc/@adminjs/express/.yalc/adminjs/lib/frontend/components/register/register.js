@@ -1,13 +1,11 @@
 import { Box, Button, FormGroup, H2, H5, Illustration, Input, Label, MessageBox, Text } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { allowOverride } from '../../hoc/allow-override.js';
 import { useTranslation } from '../../hooks/index.js';
 import MadeWithLoveMod from './made-with-love-mod.js';
 import { useLocation } from 'react-router';
-import { useSearchParams } from 'react-router-dom';
-import { parse } from 'qs';
 const Wrapper = styled(Box)`
     align-items: center;
     justify-content: center;
@@ -52,15 +50,6 @@ export const Register = () => {
   if (state) {
     action = state;
   }
-  const [searchParams] = useSearchParams();
-  const parsedQuery = useMemo(() => parse(searchParams.toString(), {
-    allowDots: true
-  }), [searchParams]);
-  let error = parsedQuery.error;
-  if (error) {
-    message = error;
-  }
-  ;
   console.log("register message", message);
   return /*#__PURE__*/React.createElement(Wrapper, {
     flex: true,

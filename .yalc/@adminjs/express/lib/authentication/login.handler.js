@@ -70,6 +70,8 @@ export const withLogin = (router, admin, loginPath, gmailCallbackPath, auth) => 
         }
         const context = { req, res };
         let adminUser;
+        const { email, password, theme } = req.fields;
+        console.log("login.handler theme, req.session.adminUser", theme, req.session.adminUser);
         if (provider) {
             adminUser = await provider.handleLogin({
                 headers: req.headers,
@@ -79,13 +81,12 @@ export const withLogin = (router, admin, loginPath, gmailCallbackPath, auth) => 
             }, context);
         }
         else {
-            const { email, password, theme } = req.fields;
             if (!theme) {
                 // "auth.authenticate" must always be defined if "auth.provider" isn't
                 adminUser = await auth.authenticatePrismaUser(email, password, theme);
             }
         }
-        if (adminUser) {
+        if (adminUser && !theme) {
             req.session.adminUser = adminUser;
             console.log("login.handler adminUser['user_email']", adminUser['user_email']);
             req.session.save((err) => {
@@ -100,26 +101,23 @@ export const withLogin = (router, admin, loginPath, gmailCallbackPath, auth) => 
                 }
             });
         }
+        else if (req.session.adminUser && theme) {
+            req.session.adminUser.theme = theme;
+            req.session.save((err) => {
+                if (err) {
+                    return next(err);
+                }
+                if (req.session.redirectTo) {
+                    return res.redirect(302, req.session.redirectTo);
+                }
+                else {
+                    return res.send({ 'themeSavedInSession': 'req.session.adminUser.theme' });
+                }
+            });
+        }
         else {
-            const { theme } = req.fields;
-            if (theme && req.session.adminUser) {
-                req.session.adminUser.theme = theme;
-                req.session.save((err) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    if (req.session.redirectTo) {
-                        return res.redirect(302, req.session.redirectTo);
-                    }
-                    else {
-                        return res.redirect(302, "/admin");
-                    }
-                });
-            }
-            else {
-                const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
-                return res.send(login);
-            }
+            const login = await admin.renderRegister(Object.assign({ action: admin.options.loginPath, errorMessage: "invalidCredentials" }, providerProps));
+            return res.send(login);
         }
     });
     router.post(suffixGmailCallbackPath, async (req, res, next) => {

@@ -18,6 +18,7 @@ import {
   CreateCommentResource,
   CreateComplicatedResource,
   CreateUserResource,
+  CreateProdARResource,
 } from '../sources/mongoose/resources/index.js';
 import {
   CreateNfEventResource,
@@ -90,6 +91,7 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
     CreateCategoryResource(),
     CreateArticleResource(),
     CreateProdResource(),
+    CreateProdARResource(),
     CreateCommentResource(),
     CreateComplicatedResource(),
     /* // sequelize

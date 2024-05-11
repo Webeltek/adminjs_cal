@@ -32,9 +32,8 @@ services:
     image : webeltek2017/repo24:test
     container_name: adminjs-example-app-master
     environment:
-      POSTGRES_DATABASE_URL_FILE: /run/secrets/postgres_database_url
-    secrets:
-      - postgres_database_url
+      POSTGRES_DATABASE_URL: ${POSTGRES_DATABASE_URL_CONT}
+      MONGO_DATABASE_URL: ${MONGO_DATABASE_URL_CONT}
     ports: 
       - "3001:3000"
     depends_on:
@@ -124,3 +123,5 @@ secrets:
     file: postgres_password.txt
   postgres_database_url:
     file: postgres_database_url.txt
+  mongo_database_url:
+    file: mongo_database_url.txt  

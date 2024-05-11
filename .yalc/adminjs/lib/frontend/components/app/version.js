@@ -32,25 +32,30 @@ const Version = props => {
   const themeConfigArr = [dark, light, noSidebar];
   const location = useLocation();
   async function changeTheme(themeConf) {
-    const THEME_INITIALIZE = 'THEME_INITIALIZE';
+    //no need to dispatch, store is initialized
+    // with store.dispatch(initializeTheme(theme))
+    // with theme taken from property currentAdmin.theme
+    // which is send as parameter to appController called from 
+    // express build route handler
+
+    /* const THEME_INITIALIZE = 'THEME_INITIALIZE'
     const initThemeResponseAction = {
       type: 'THEME_INITIALIZE',
       data: themeConf
     };
     //console.log("version initThemeAction",initThemeResponseAction);
-    dispatch(initThemeResponseAction);
-    if (session) session.theme = themeConf.id;
-    dispatch({
+    dispatch(initThemeResponseAction); */
+    /* if (session) session.theme = themeConf.id;
+    dispatch({ 
       type: 'SESSION_INITIALIZE',
       data: session
-    });
-    console.log("version currAdmin/session.theme", session?.theme);
+    }) */
     axios.post('/admin/login', {
       theme: themeConf.id
     }).then(resp => {
       if (resp.data) {
-        //console.log("version resp.data",resp.data);
-        if (resp.data.redirectTo === '/admin') {
+        console.log("version resp.data", resp.data);
+        if (resp.data.themeSavedInSession === 'req.session.adminUser.theme') {
           window.location.href = location.pathname;
         }
       }
