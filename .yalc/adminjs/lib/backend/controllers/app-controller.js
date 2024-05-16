@@ -2,6 +2,7 @@
 import ViewHelpers from '../utils/view-helpers/view-helpers.js';
 import componentsBundler from '../bundler/user-components-bundler.js';
 import layoutTemplate from '../../frontend/layout-template.js';
+import prodArTemplate from '../../frontend/prod-ar-template.js';
 export default class AppController {
   constructor({
     admin
@@ -55,6 +56,10 @@ export default class AppController {
     const href = this.h.resourceUrl({
       resourceId
     });
+    console.log("app-controller resourceId", resourceId);
+    if (resourceId === 'ProdAR') {
+      return prodArTemplate(this._admin, this.currentAdmin, href);
+    }
     return layoutTemplate(this._admin, this.currentAdmin, href);
   }
   async recordAction({

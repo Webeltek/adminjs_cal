@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "adminjs": {
-      "signature": "9cbf8ac3a86ccf648517b17812f0e095",
+      "signature": "75f19f6b5a9b499df18381e0bb15882d",
       "file": true,
       "replaced": "^7.5.2"
     },

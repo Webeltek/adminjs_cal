@@ -110,6 +110,7 @@ const ActionHeader: React.FC<ActionHeaderProps> = (props) => {
     <Box className={cssClass('ActionHeader')} data-css={'contentTag'}>
       {resourceId === "ProdAR" && 
         <Box height="50vh">
+          
         </Box>
       }
       {resourceId === "Prod" && (

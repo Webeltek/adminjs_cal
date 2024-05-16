@@ -10,7 +10,7 @@ import * as AppComponents from './components/app/index.js';
 import * as ActionComponents from './components/actions/index.js';
 import App, { OriginalApp } from './components/application.js';
 import { AppLoader } from './components/index.js';
-import Login from './components/login/index.js';
+//import Login from './components/login/index.js'
 import Register from './components/register/index_old.js';
 import BasePropertyComponent, { CleanPropertyComponent } from './components/property-type/index.js';
 import withNotice from './hoc/with-notice.js';

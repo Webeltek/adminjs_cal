@@ -2,6 +2,7 @@
 import ViewHelpers from '../utils/view-helpers/view-helpers.js'
 import componentsBundler from '../bundler/user-components-bundler.js'
 import layoutTemplate from '../../frontend/layout-template.js'
+import prodArTemplate from '../../frontend/prod-ar-template.js'
 import { ActionRequest } from '../actions/action.interface.js'
 import AdminJS from '../../adminjs.js'
 import { CurrentAdmin } from '../../current-admin.interface.js'
@@ -25,7 +26,7 @@ export default class AppController {
 
   async resourceAction({ params }: ActionRequest): Promise<string> {
     const { resourceId, actionName } = params
-    const href = this.h.resourceActionUrl({ resourceId, actionName })
+    const href = this.h.resourceActionUrl({ resourceId, actionName });
     return layoutTemplate(this._admin, this.currentAdmin, href)
   }
 
@@ -43,6 +44,11 @@ export default class AppController {
   async resource({ params }: ActionRequest): Promise<string> {
     const { resourceId } = params
     const href = this.h.resourceUrl({ resourceId })
+    console.log("app-controller resourceId", resourceId);
+    
+    if (resourceId === 'ProdAR') {
+      return prodArTemplate(this._admin, this.currentAdmin, href);
+    }
     return layoutTemplate(this._admin, this.currentAdmin, href)
   }
 
